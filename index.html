@@ -195,6 +195,7 @@
     <label>一张它的照片（可选，只存本机，挂在小屋墙上）</label>
     <input type="file" id="regPhoto" accept="image/*">
     <div style="margin-top:8px"><img id="photoPreview" alt=""></div>
+    <p id="photoColorHint" style="display:none;font-size:12px;color:#7a6a3a;margin-top:6px"></p>
     <label>想对它说的一句话（写在碑上）</label>
     <input type="text" id="regLine" placeholder="比如：慢慢来，我们不赶时间" maxlength="30">
     <button class="big" id="btnRegister">建档，进园子</button>
@@ -903,7 +904,7 @@ function enterHouse(pet){
   document.getElementById("houseName").textContent = pet.name+" 的小屋" + (pet.id===S.myPetId ? "（自家）" : "（客访）");
   document.getElementById("houseDesc").textContent = pet.dates+" · "+pet.line + (pet.status==="memorial" ? " · 它以灵魂体的样子住在这里" : " · 它正在院子里过日子");
   document.getElementById("btnDress").style.display = pet.id===S.myPetId ? "" : "none";
-  document.getElementById("btnCoat").style.display = (pet.id===S.myPetId && (pet.species==="cat"||pet.species==="dog")) ? "" : "none";
+  document.getElementById("btnCoat").style.display = (pet.id===S.myPetId && !pet.photo && (pet.species==="cat"||pet.species==="dog")) ? "" : "none"; // 有照片的宠物：颜色以照片为准，不给换
   document.querySelector('#houseActions button[data-act="pray"]').textContent = pet.status==="alive" ? "🙏 为它祈福" : "🙏 祈福";
   refreshBlessBar();
   refreshHouseStats(); save();
@@ -1158,7 +1159,22 @@ function drawSoul(pet){
 
 /* ============ 注册 ============ */
 const regOverlay = document.getElementById("regOverlay");
-let regPhotoData = null;
+let regPhotoData = null, regPhotoColor = null;
+const COAT_SNAP = [ ["#f2ede4","奶白"], ["#e8e0d0","米白"], ["#d9a45b","橘"], ["#b8b0a8","灰"], ["#8a6642","棕"], ["#33333a","黑"], ["#7fb6d9","蓝"] ];
+function snapCoatFromCanvas(cv){
+  const cx = cv.getContext("2d"), W = cv.width, H = cv.height;
+  const d = cx.getImageData(Math.round(W*0.25), Math.round(H*0.25), Math.round(W*0.5), Math.round(H*0.5)).data;
+  let r = 0, g = 0, b = 0, n = 0;
+  for(let i = 0; i < d.length; i += 16){ r += d[i]; g += d[i+1]; b += d[i+2]; n++; }
+  r /= n; g /= n; b /= n;
+  let best = COAT_SNAP[0], bd = 1e18;
+  for(const c of COAT_SNAP){
+    const p = parseInt(c[0].slice(1), 16), dr = r-((p>>16)&255), dg = g-((p>>8)&255), db = b-(p&255);
+    const dd = dr*dr + dg*dg + db*db;
+    if(dd < bd){ bd = dd; best = c; }
+  }
+  return best;
+}
 document.getElementById("regPhoto").addEventListener("change", e=>{
   const f = e.target.files[0]; if(!f) return;
   const reader = new FileReader();
@@ -1169,6 +1185,11 @@ document.getElementById("regPhoto").addEventListener("change", e=>{
       const cv = document.createElement("canvas"); cv.width = Math.max(1, Math.round(im.width*sc)); cv.height = Math.max(1, Math.round(im.height*sc));
       cv.getContext("2d").drawImage(im, 0, 0, cv.width, cv.height);
       regPhotoData = cv.toDataURL("image/jpeg", .85); // 报告1：先压缩再存，大照片不再撑爆存档
+      const snap = snapCoatFromCanvas(cv); regPhotoColor = snap[0]; // 毛色按照片自动定
+      document.getElementById("regColor").value = snap[0];
+      const hint = document.getElementById("photoColorHint");
+      hint.style.display = "block";
+      hint.textContent = "🎨 毛色已按照片定成「" + snap[1] + "」——它是什么颜色，园子里就是什么颜色，不用手选、也不会被改掉。";
       const img = document.getElementById("photoPreview"); img.src = regPhotoData; img.style.display="block";
     };
     im.src = reader.result;
@@ -1179,7 +1200,7 @@ document.getElementById("btnRegister").onclick = ()=>{
   const name = document.getElementById("regName").value.trim() || "小满";
   const species = document.getElementById("regSpecies").value;
   const status = document.getElementById("regStatus").value;
-  const color = document.getElementById("regColor").value;
+  const color = (regPhotoData && regPhotoColor) ? regPhotoColor : document.getElementById("regColor").value; // 有照片：毛色以照片为准
   const line = document.getElementById("regLine").value.trim() || "慢慢来，我们不赶时间";
   const mine = mkPet(name, species, status, color, status==="memorial"? 950:560, status==="memorial"? 600:1470, status==="memorial" ? "它先回星星那儿了" : "今天起，它在园子里有个家", line);
   mine.photo = regPhotoData;
