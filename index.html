@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>赛博墓园 · 原型 v0.5（彩虹桥小园）</title>
+<title>赛博墓园 · 原型 v0.6（彩虹桥小园）</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body { font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; background:#1c2b22; color:#2c3a2e; }
@@ -20,7 +20,7 @@
   button:disabled { opacity:.45; cursor:not-allowed; }
   #mapWrap { position:relative; }
   canvas#map { display:block; width:100%; height:62vh; background:#9cc184; touch-action:none; }
-  #toast { position:absolute; left:50%; top:14px; transform:translateX(-50%); background:rgba(30,45,32,.92); color:#fff; padding:8px 16px; border-radius:999px; font-size:13px; opacity:0; transition:opacity .25s; pointer-events:none; max-width:92%; text-align:center; z-index:5; }
+  #toast { position:fixed; left:50%; top:14px; transform:translateX(-50%); background:rgba(30,45,32,.94); color:#fff; padding:8px 16px; border-radius:999px; font-size:13px; opacity:0; transition:opacity .25s; pointer-events:none; max-width:92%; text-align:center; z-index:80; }
   #infoPanel { padding:10px 14px; background:#fffdf4; border-top:1px solid #e4dfc2; display:none; }
   #infoPanel.show { display:block; }
   #infoPanel h3 { font-size:15px; margin-bottom:4px; }
@@ -32,6 +32,14 @@
   #convertCard h2 { font-size:17px; margin-bottom:8px; }
   #convertCard p { font-size:13.5px; color:#5a6a58; line-height:1.7; }
   #convertCard .row { margin-top:16px; display:flex; gap:8px; }
+  #resetOverlay { position:fixed; inset:0; background:rgba(20,32,22,.72); display:none; align-items:center; justify-content:center; z-index:70; }
+  #resetOverlay.show { display:flex; }
+  #resetCard { background:#fffdf6; border-radius:16px; padding:22px; width:calc(100% - 48px); max-width:420px; }
+  #resetCard h2 { font-size:17px; margin-bottom:8px; }
+  #resetCard p { font-size:13.5px; color:#5a6a58; line-height:1.7; }
+  #resetCard .row { margin-top:16px; display:flex; gap:8px; }
+  #blessBar { padding:10px 14px; display:none; flex-wrap:wrap; gap:8px; align-items:center; background:#fdf6e0; border-top:1px solid #eee0b3; font-size:13px; color:#6a5a2e; }
+  #blessBar.show { display:flex; }
   #ceremony { position:fixed; inset:0; z-index:60; display:none; pointer-events:none; }
   #ceremony.show { display:block; }
   #cerFade { position:absolute; inset:0; background:#fff6e2; opacity:0; transition:opacity .9s; }
@@ -68,7 +76,7 @@
 <body>
 <div id="app">
   <header>
-    <h1>🌈 彩虹桥小园 · 赛博墓园原型 v0.5</h1>
+    <h1>🌈 彩虹桥小园 · 赛博墓园原型 v0.6</h1>
     <span class="badge" id="pioneerBadge">先行者 No.0001 · 创始园民</span>
   </header>
 
@@ -98,6 +106,17 @@
       <div class="row">
         <button class="ghost" id="btnConvertCancel">再陪陪它</button>
         <button id="btnConvertGo">送它过桥</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="resetOverlay">
+    <div id="resetCard">
+      <h2>🧹 清空存档重来？</h2>
+      <p>会清掉：它的档案和照片、背包里的东西、累计心意和里程碑、先行者序号——<b>清空后找不回来</b>。园子里其他小伙伴（样例宠物）会恢复成最初的样子。</p>
+      <div class="row">
+        <button class="ghost" id="btnResetCancel">再想想</button>
+        <button id="btnResetGo">确认清空</button>
       </div>
     </div>
   </div>
@@ -138,11 +157,19 @@
       <button data-act="dress" id="btnDress">🧣 换装（主人）</button>
       <button data-act="coat" id="btnCoat">🎨 换毛色（主人）</button>
     </div>
+    <div id="blessBar">
+      <span>🙏 给 <b id="blessName"></b> 送一句祝福：</span>
+      <button class="ghost" data-wish="健健康康">🌿 健健康康</button>
+      <button class="ghost" data-wish="平平安安">🍀 平平安安</button>
+      <button class="ghost" data-wish="长命百岁">🎋 长命百岁</button>
+      <button class="ghost" data-wish="天天开心">☀️ 天天开心</button>
+      <span id="blessInfo"></span>
+    </div>
   </div>
 
   <div id="hint">
     玩法：点地图或用 WASD/方向键走动 · 走过发光的小东西就能捡（全园共享、先到先得，捡完会慢慢再刷）· 走近墓碑/小院看介绍，点「进小屋」· 河南岸是生活区，河北岸是纪念区，中间过彩虹桥 · 任何人的小屋都能进、都能喂——只有换装是主人专属。<br>
-    原型说明（v0.5）：新增「过桥转纪念」仪式（创作者 2026-11-17 点选）——自家在养宠物的碑旁面板多一个「🌈 送它过桥」：先弹确认层（不误触），确认后进入约 15 秒仪式：黄昏渐起，你陪它走上彩虹桥，桥上虹光与金色光尘升起、它渐渐透着暖光；过桥后走到北岸林间，碑在光里立起来，它化作光尘。仪式结束数据落盘：状态转纪念、住到北岸（950,600），小屋与照顾记录都在。仪式可跳过（右下按钮），跳过同样完成转换。视觉路线不变：整幅手绘原画＋每种动物单独素材包（v0.4 定版）。</div>
+    原型说明（v0.6）：按哈克试玩报告逐项修复——①照片入库前压缩到 480px、存档失败会出声提醒，画像真贴进画框；②食盆改按时间戳结算（每 20 秒吃一格，刷新也不卡满）；③toast 提到顶层，小屋里能看见提示和背包余量；④「今日已捡」跨天清零、捡拾物绝不刷进河里且多刷在你附近；⑤登录礼包每天只能领一次；⑥陪玩/祈福每日计前 3 次，陪伴本身不限；⑦建档选「已经离开了」会补一场立碑仪式；⑧重置存档改成讲清后果的确认层；⑨小院和碑有了碰撞（爬不上房顶）、走近面板更容易触发、名字标签不被边缘切；⑩换毛色不再说开发术语。新玩法：在养宠物可以「祈福」了——每天在小屋里送它一句祝福（健健康康/平平安安/长命百岁/天天开心），祝福攒满 7/30/100 句得祈福牌、长寿结、金铃铛，过桥后这些宝贝会一直陪着它。</div>
 </div>
 
 <div id="regOverlay">
@@ -181,9 +208,30 @@ const SAVE_KEY = "cyberCemeteryProtoV1";
 const SPECIES_EMOJI = { cat:"🐱", dog:"🐶", bird:"🐦", other:"🐰" };
 const FOOD_LABEL = { cat:"猫粮", dog:"狗粮", bird:"鸟食", other:"小食" };
 let S = load() || freshState();
+function todayStr(){ const d = new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
+/* 食盆按时间戳结算（报告2）：每 20 秒吃掉一格，刷新/重进都按真实时间算 */
+function settleBowl(pet){
+  if(pet.bowl > 0){
+    if(!pet.bowlAt) pet.bowlAt = Date.now();
+    const dec = Math.floor((Date.now()-pet.bowlAt)/20000);
+    if(dec > 0){ pet.bowl = Math.max(0, pet.bowl-dec); pet.bowlAt = pet.bowl > 0 ? pet.bowlAt + dec*20000 : 0; }
+  }
+}
+function rollDay(){ const t = todayStr(); if(S.pickDate !== t){ S.pickDate = t; S.pickToday = 0; } }
+(function normalizeSave(){
+  S.lastGiftDate = S.lastGiftDate || ""; S.pickDate = S.pickDate || "";
+  for(const p of S.pets){
+    p.counts.bless = p.counts.bless || 0; p.keepsakes = p.keepsakes || [];
+    p.daily = p.daily || { d:"", pray:0, play:0 }; p.bowlAt = p.bowlAt || 0;
+    p.lastBlessDate = p.lastBlessDate || ""; p.blessWish = p.blessWish || "";
+    delete p._img; delete p._imgSrc; // 运行时图片缓存绝不能进存档（v0.5 画像纯色的根因）
+    settleBowl(p);
+  }
+  rollDay();
+})();
 function freshState(){
   return {
-    playerTotal:0, loginDays:0, pickToday:0,
+    playerTotal:0, loginDays:0, pickToday:0, lastGiftDate:"", pickDate:"",
     inv:{ food:3, candle:3, flower:2, toy:0, clothes:0 },
     claimed:{ loginSession:false, pioneer:false },
     milestonesHit:[], petMilestonesHit:[],
@@ -199,16 +247,17 @@ function freshState(){
 }
 function mkPet(name,species,status,color,x,y,dates,line){
   return { id:"p"+Math.random().toString(36).slice(2,9), name, species, status, color, x, y, dates, line,
-           photo:null, outfit:null, bowl:0, counts:{fed:0,candle:0,flower:0,pray:0,interact:0,visits:0} };
+           photo:null, outfit:null, bowl:0, bowlAt:0, keepsakes:[], daily:{ d:"", pray:0, play:0 }, lastBlessDate:"", blessWish:"",
+           counts:{fed:0,candle:0,flower:0,pray:0,interact:0,visits:0,bless:0} };
 }
 function load(){ try{ const s = JSON.parse(localStorage.getItem(SAVE_KEY)); return s && s.pets ? s : null; }catch(e){ return null; } }
-function save(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }catch(e){} }
+function save(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); return true; }catch(e){ const now = Date.now(); if(now-(window._saveWarnAt||0) > 10000){ window._saveWarnAt = now; toast("⚠️ 存档没存上：浏览器存储空间不够（照片太大最常见），这次进度刷新后可能会丢"); } return false; } }
 
 /* ============ 里程碑表（方案 §9.4 低门槛版） ============ */
 const PLAYER_MS = [
   { n:5,   reward:{flower:3,candle:3}, label:"鲜花×3＋蜡烛×3" },
   { n:15,  reward:{toy:1},             label:"玩具一件" },
-  { n:30,  reward:{clothes:1},         label:"围巾（第一件衣服）" },
+  { n:30, reward:{clothes:1},         label:"里程碑纪念围巾（第一件衣服）" },
   { n:50,  reward:{candle:5},          label:"星星烛×5＋称号「常来看看的人」" },
   { n:100, reward:{clothes:2},         label:"衣服套装一套" },
   { n:200, reward:{toy:2},             label:"稀有玩具" },
@@ -232,6 +281,13 @@ function checkMilestones(){
     for(const c of checks){
       if(c.ok && !S.petMilestonesHit.includes(c.key)){
         S.petMilestonesHit.push(c.key); grantReward(c.reward); toast("🏡 自家宝贝里程碑："+c.label);
+      }
+    }
+    const blessTiers = [ [7,"bless7","祈福牌"], [30,"bless30","长寿结"], [100,"bless100","金铃铛"] ];
+    for(const bt of blessTiers){
+      if((mine.counts.bless||0) >= bt[0] && !S.petMilestonesHit.includes(bt[1])){
+        S.petMilestonesHit.push(bt[1]); mine.keepsakes = mine.keepsakes || []; mine.keepsakes.push(bt[2]);
+        toast("🎐 祝福满 "+bt[0]+" 句，"+mine.name+" 得到了「"+bt[2]+"」——会一直陪着它");
       }
     }
   }
@@ -286,13 +342,19 @@ function spawnPickup(){
   const totalW = PICK_TYPES.reduce((a,t)=>a+t.w,0);
   let r = Math.random()*totalW, kind = PICK_TYPES[0];
   for(const t of PICK_TYPES){ if((r-=t.w)<=0){ kind=t; break; } }
-  let x,y,tries=0;
-  do { x = 60+Math.random()*(WORLD.w-120); y = 60+Math.random()*(WORLD.h-120); tries++; }
-  while(y>WORLD.riverY-30 && y<WORLD.riverY+WORLD.riverH+30 && tries<12);
+  let x = 0, y = 0, ok = false;
+  for(let tries=0; tries<40 && !ok; tries++){
+    if(Math.random() < 0.5){ // 一半刷在玩家不太远的地方，逛园子总有收获
+      x = clamp(player.x + (Math.random()*2-1)*620, 60, WORLD.w-60);
+      y = clamp(player.y + (Math.random()*2-1)*460, 60, WORLD.h-60);
+    } else { x = 60+Math.random()*(WORLD.w-120); y = 60+Math.random()*(WORLD.h-120); }
+    ok = !(y > WORLD.riverY-46 && y < WORLD.riverY+WORLD.riverH+46); // 报告13：绝不刷进河里/桥面
+  }
+  if(!ok){ x = 260+Math.random()*400; y = 1230+Math.random()*220; }
   pickups.push({ x, y, type:kind.type, emoji:kind.emoji, born:Date.now() });
 }
-for(let i=0;i<26;i++) spawnPickup();
-setInterval(()=>{ if(pickups.length<26 && document.visibilityState==="visible") spawnPickup(); }, 4000);
+for(let i=0;i<32;i++) spawnPickup();
+setInterval(()=>{ if(pickups.length<32 && document.visibilityState==="visible") spawnPickup(); }, 3000);
 
 /* ============ 绘制（真素材：Sprout Lands 像素包（Cup Nooble，免费版·非商用·署名）+ Kenney 角色（CC0）；v0.3.2 灵魂体 = 猫专属定制素材包（自生成原画 + forge 后处理）+ 狗 LPC 母版占位（bluecarrot16，CC-BY 3.0）+ Sprout 小鸡） ============ */
 const PX = 1; // v0.4：手绘原画全分辨率平滑渲染（原 PX=3 最近邻放大即“平面像素”来源，已废）贴入
@@ -555,14 +617,15 @@ function draw(){
     ctx.font = "600 12px sans-serif";
     ctx.strokeStyle = "rgba(255,255,255,.88)"; ctx.lineWidth = 3.5;
     const label = pet.status==="memorial" ? pet.name : pet.name+"的小院";
-    ctx.strokeText(label, sx, sy+34); ctx.fillStyle = "#3c5231"; ctx.fillText(label, sx, sy+34);
-    if(pet.id===S.myPetId){ ctx.font = "11px sans-serif"; ctx.strokeText("♥ 自家", sx, sy-62); ctx.fillStyle = "#d6544e"; ctx.fillText("♥ 自家", sx, sy-62); }
+    const lx = clamp(sx, 48, view.w-48); // 报告15：名字标签不被画布边缘切掉
+    ctx.strokeText(label, lx, sy+34); ctx.fillStyle = "#3c5231"; ctx.fillText(label, lx, sy+34);
+    if(pet.id===S.myPetId){ ctx.font = "11px sans-serif"; ctx.strokeText("♥ 自家", lx, sy-62); ctx.fillStyle = "#d6544e"; ctx.fillText("♥ 自家", lx, sy-62); }
   }
   ctx.font = "11px sans-serif"; ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.lineWidth = 3;
   ctx.strokeText("我", player.x-cam.x, player.y+32-cam.y); ctx.fillStyle = "#33523d"; ctx.fillText("我", player.x-cam.x, player.y+32-cam.y);
 }
 function drawStone(pet){
-  const near = Math.hypot(player.x-pet.x, player.y-pet.y) < 110;
+  const near = Math.hypot(player.x-pet.x, player.y-pet.y) < 150;
   const x = pet.x, y = pet.y;
   const mem = pet.status==="memorial";
   btx.fillStyle = "rgba(60,50,20,.16)";
@@ -612,6 +675,17 @@ function loop(t){
     const onBridge = player.x>BRIDGE.x0 && player.x<BRIDGE.x1;
     if(inRiver && !onBridge){ player.y = player.y < WORLD.riverY+WORLD.riverH/2 ? WORLD.riverY+2 : WORLD.riverY+WORLD.riverH-2; player.ty = player.y; }
     player.x = clamp(player.x, 24, WORLD.w-24); player.y = clamp(player.y, 24, WORLD.h-24);
+    // 小院/碑体碰撞（报告14）：不能爬上房顶、不能穿过碑身
+    for(const pet of S.pets){
+      const r = pet.status==="memorial" ? { x0:pet.x-26, x1:pet.x+26, y0:pet.y-88, y1:pet.y-6 } : { x0:pet.x-54, x1:pet.x+54, y0:pet.y-116, y1:pet.y-34 };
+      if(player.x>r.x0 && player.x<r.x1 && player.y>r.y0 && player.y<r.y1){
+        const pl = player.x-r.x0, pr = r.x1-player.x, pt = player.y-r.y0, pb = r.y1-player.y;
+        const m = Math.min(pl, pr, pt, pb);
+        if(m===pb){ player.y = r.y1; player.ty = player.y; } else if(m===pt){ player.y = r.y0; player.ty = player.y; }
+        else if(m===pl){ player.x = r.x0; player.tx = player.x; } else { player.x = r.x1; player.tx = player.x; }
+      }
+    }
+    rollDay(); // 报告4：「今日已捡」跨天自动清零
     // 捡拾
     for(let i=pickups.length-1;i>=0;i--){ const p = pickups[i];
       if(Math.hypot(player.x-p.x, player.y-p.y) < 30){
@@ -619,7 +693,7 @@ function loop(t){
         else { S.inv[p.type]++; S.pickToday++; pickups.splice(i,1); toast("捡到 "+p.emoji+"（已放进背包）"); refreshHUD(); save(); }
       } }
     // 最近的碑
-    nearestPet = null; let best = 110;
+    nearestPet = null; let best = 150;
     for(const pet of S.pets){ const d = Math.hypot(player.x-pet.x, player.y-pet.y); if(d<best){ best=d; nearestPet=pet; } }
     updateInfoPanel();
     if(ceremony) ceremonyTick(t);
@@ -636,8 +710,10 @@ function updateInfoPanel(){
     infoPanel.classList.add("show");
     document.getElementById("infoName").textContent = SPECIES_EMOJI[nearestPet.species]+" "+nearestPet.name + (nearestPet.status==="memorial" ? " 的纪念碑" : " 的小院") + (nearestPet.id===S.myPetId ? "（自家）":"");
     const c = nearestPet.counts;
-    document.getElementById("infoText").textContent = nearestPet.dates+" · "+nearestPet.line+
-      " ｜ 被投喂 "+c.fed+" 次 · 被点烛 "+c.candle+" 次 · 被祈福 "+c.pray+" 次 · 来访 "+c.visits+" 次";
+    const stats = "被投喂 "+c.fed+" 次 · 被点烛 "+c.candle+" 次 · 被献花 "+(c.flower||0)+" 次 · 被祈福 "+c.pray+" 次 · 被陪玩 "+(c.interact||0)+" 次"+((c.bless||0)>0 ? " · 被祝福 "+c.bless+" 次" : "")+" · 来访 "+c.visits+" 次";
+    document.getElementById("infoText").textContent = nearestPet.status==="memorial"
+      ? nearestPet.dates+" · 它住在北岸了｜你写给它的话：「"+nearestPet.line+"」｜"+stats
+      : nearestPet.dates+" · "+nearestPet.line+"｜"+stats;
     document.getElementById("btnConvert").style.display = (nearestPet.id===S.myPetId && nearestPet.status==="alive") ? "" : "none";
   } else infoPanel.classList.remove("show");
 }
@@ -665,7 +741,7 @@ document.getElementById("btnConvertGo").onclick = ()=>{
 };
 document.getElementById("btnSkipCer").onclick = ()=>{ if(ceremony) finishCeremony(); };
 function startCeremony(pet){
-  ceremony = { pet, t0: performance.now(), motes: [], petPos:{ x:1136, y:1126, pose:"stand" }, petDir:1, petAlpha:1, glow:0.4, dusk:0, rainbow:0, stoneScale:0 };
+  ceremony = { pet, mode:"bridge", t0: performance.now(), motes: [], petPos:{ x:1136, y:1126, pose:"stand" }, petDir:1, petAlpha:1, glow:0.4, dusk:0, rainbow:0, stoneScale:0 };
   player.x = 1182; player.y = 1120; player.tx = 1182; player.ty = 1120; player.face = "up"; player.moving = false;
   infoPanel.classList.remove("show");
   document.getElementById("ceremony").classList.add("show");
@@ -678,6 +754,7 @@ function cerSeg(t, a, b){ if(t<=a) return 0; if(t>=b) return 1; const u = (t-a)/
 function cerLerp(p, q, u){ return { x: p.x + (q.x-p.x)*u, y: p.y + (q.y-p.y)*u }; }
 function ceremonyTick(now){
   const cer = ceremony; if(!cer) return;
+  if(cer.mode === "memorial"){ memorialTick(now); return; }
   const pet = cer.pet, t = (now - cer.t0)/1000;
   const walkPose = (base)=> pet.species==="bird" ? ["side0","hop"][Math.floor(now/200)%2] : ["stand","walk1","stand","walk2"][Math.floor(now/170)%4];
   let pp, pt, moving = false;
@@ -727,16 +804,49 @@ function drawCeremonyPet(now){
 function finishCeremony(){
   if(!ceremony) return;
   const pet = ceremony.pet;
+  const cerMode = ceremony.mode;
   pet.status = "memorial"; pet.x = CER_PLOT.x; pet.y = CER_PLOT.y;
   save();
   ceremony = null; cerTextKey = "";
   document.getElementById("ceremony").classList.remove("show");
   player.tx = player.x; player.ty = player.y;
-  toast("🌈 " + pet.name + " 住到北岸了。想它的时候，过桥来看看。");
+  if(cerMode === "memorial") toast("🕯️ 碑立好了。" + pet.name + " 在北岸安顿下来了——想它的时候，就来看看。");
+  else toast("🌈 " + pet.name + " 住到北岸了。想它的时候，过桥来看看。");
   refreshHUD();
 }
 
 document.getElementById("btnGuide").onclick = ()=>{ if(nearestPet){ player.tx = nearestPet.x; player.ty = nearestPet.y+56; toast("🦋 蝴蝶带你去找 "+nearestPet.name); } };
+
+/* 立碑仪式（报告9）：建档时已经离开的宝贝，也要有一场仪式——它在碑旁等你走近，碑在光里立起来 */
+function startMemorialCeremony(pet){
+  ceremony = { pet, mode:"memorial", t0: performance.now(), motes: [], petPos:{ x:950, y:614, pose:"stand" }, petDir:1, petAlpha:0, glow:0.4, dusk:0, rainbow:0, stoneScale:0 };
+  player.x = 1182; player.y = 806; player.tx = 1182; player.ty = 806; player.face = "up"; player.moving = false;
+  infoPanel.classList.remove("show");
+  document.getElementById("ceremony").classList.add("show");
+  const f = document.getElementById("cerFade");
+  f.style.transition = "none"; f.style.opacity = 1;
+  requestAnimationFrame(()=>{ f.style.transition = "opacity .9s"; f.style.opacity = 0; });
+  cerTextKey = ""; cerSetText("m1", "它已经先一步过桥了。");
+}
+function memorialTick(now){
+  const cer = ceremony; if(!cer) return;
+  const pet = cer.pet, t = (now - cer.t0)/1000;
+  let pp;
+  if(t < 1){ pp = {x:1182,y:806}; player.moving = false; }
+  else if(t < 4.5){ const u = cerSeg(t,1,4.5); pp = cerLerp({x:1182,y:806},{x:988,y:670},u); player.moving = u>0&&u<1; player.face = "left"; }
+  else { pp = {x:988,y:670}; player.moving = false; }
+  player.x = pp.x; player.y = pp.y; player.tx = pp.x; player.ty = pp.y;
+  cer.petAlpha = t < 4.5 ? 0.85*cerSeg(t,0.8,3) : 0.85*(1-cerSeg(t,7.5,9.8));
+  cer.glow = 0.6 + 0.8*cerSeg(t,1,4.5);
+  cer.stoneScale = cerSeg(t,4.8,7.2);
+  cer.dusk = Math.min(1, t/3) * (t > 9.8 ? Math.max(0, 1-(t-9.8)/1.0) : 1);
+  if(t>1 && t<9.8 && Math.random()<0.6) cer.motes.push({ x: 950 + (Math.random()*80-40), y: 614 - Math.random()*26, vy: -(0.3+Math.random()*0.6), vx: (Math.random()-0.5)*0.3, life: 1 });
+  for(let i=cer.motes.length-1;i>=0;i--){ const m = cer.motes[i]; m.x += m.vx; m.y += m.vy; m.life -= 0.012; if(m.life<=0) cer.motes.splice(i,1); }
+  if(t < 3) cerSetText("m1", "它已经先一步过桥了。");
+  else if(t < 7.5) cerSetText("m2", "「" + pet.line + "」");
+  else cerSetText("m3", "");
+  if(t >= 10.8) finishCeremony();
+}
 
 function refreshHUD(){
   document.getElementById("invFood").textContent = S.inv.food;
@@ -757,8 +867,9 @@ function refreshHUD(){
   document.getElementById("btnPioneer").textContent = S.claimed.pioneer ? "创始礼包已领 ✓" : "领创始礼包（前20名档）";
 }
 document.getElementById("btnLoginGift").onclick = ()=>{
-  S.loginDays++; S.inv.food+=2; S.inv.candle+=2; S.inv.flower+=1;
-  toast("🎁 累计登录 "+S.loginDays+" 天礼包：粮×2 烛×2 花×1（原型为点击模拟）");
+  if(S.lastGiftDate === todayStr()){ toast("今天的登录礼包已经领过啦，明天再来 🎁（累计登录 "+S.loginDays+" 天）"); return; }
+  S.lastGiftDate = todayStr(); S.loginDays++; S.inv.food+=2; S.inv.candle+=2; S.inv.flower+=1;
+  toast("🎁 登录礼包：粮×2 烛×2 花×1（累计登录 "+S.loginDays+" 天）");
   refreshHUD(); save();
 };
 document.getElementById("btnPioneer").onclick = ()=>{
@@ -767,10 +878,11 @@ document.getElementById("btnPioneer").onclick = ()=>{
   toast("🌟 创始园民礼包：初园套装＋粮烛各×20＋限定碑形（原型示意）");
   refreshHUD(); save();
 };
-document.getElementById("btnReset").onclick = ()=>{
-  if(confirm("清空原型存档重新来？")){ localStorage.removeItem(SAVE_KEY); location.reload(); }
-};
+document.getElementById("btnReset").onclick = ()=> document.getElementById("resetOverlay").classList.add("show");
+document.getElementById("btnResetCancel").onclick = ()=> document.getElementById("resetOverlay").classList.remove("show");
+document.getElementById("btnResetGo").onclick = ()=>{ localStorage.removeItem(SAVE_KEY); location.reload(); };
 
+document.body.appendChild(document.getElementById("toast")); // 报告3：toast 提到 body 顶层，小屋里也看得见
 let toastTimer = null;
 function toast(msg){
   const el = document.getElementById("toast"); el.textContent = msg; el.style.opacity = 1;
@@ -792,6 +904,8 @@ function enterHouse(pet){
   document.getElementById("houseDesc").textContent = pet.dates+" · "+pet.line + (pet.status==="memorial" ? " · 它以灵魂体的样子住在这里" : " · 它正在院子里过日子");
   document.getElementById("btnDress").style.display = pet.id===S.myPetId ? "" : "none";
   document.getElementById("btnCoat").style.display = (pet.id===S.myPetId && (pet.species==="cat"||pet.species==="dog")) ? "" : "none";
+  document.querySelector('#houseActions button[data-act="pray"]').textContent = pet.status==="alive" ? "🙏 为它祈福" : "🙏 祈福";
+  refreshBlessBar();
   refreshHouseStats(); save();
   startSoul(pet);
   window.scrollTo({ top:0, behavior:"smooth" });
@@ -806,11 +920,14 @@ function leaveHouse(){
 document.getElementById("btnLeave").onclick = leaveHouse;
 function refreshHouseStats(){
   if(!housePet) return; const c = housePet.counts;
+  settleBowl(housePet);
   document.getElementById("houseStats").innerHTML =
+    '<span class="chip">🎒 粮 '+S.inv.food+' · 烛 '+S.inv.candle+' · 花 '+S.inv.flower+' · 玩具 '+S.inv.toy+' · 衣服 '+S.inv.clothes+'</span>'+
     '<span class="chip">🍖 食盆 '+housePet.bowl+'/3</span>'+
     '<span class="chip">被投喂 <b>'+c.fed+'</b></span><span class="chip">被点烛 <b>'+c.candle+'</b></span>'+
     '<span class="chip">被献花 <b>'+c.flower+'</b></span><span class="chip">被祈福 <b>'+c.pray+'</b></span>'+
-    '<span class="chip">被陪玩 <b>'+c.interact+'</b></span>'+
+    '<span class="chip">被陪玩 <b>'+c.interact+'</b></span><span class="chip">被祝福 <b>'+(c.bless||0)+'</b></span>'+
+    (housePet.keepsakes && housePet.keepsakes.length ? '<span class="chip">🎐 它的宝贝：'+housePet.keepsakes.join(" · ")+'</span>' : '')+
     (housePet.outfit ? '<span class="chip">🧣 正在穿：'+housePet.outfit+'</span>' : '');
 }
 document.querySelectorAll("#houseActions button[data-act]").forEach(btn=>{
@@ -819,13 +936,39 @@ document.querySelectorAll("#houseActions button[data-act]").forEach(btn=>{
 function bump(kind){
   housePet.counts[kind]++; S.playerTotal++; checkMilestones(); refreshHUD(); refreshHouseStats(); save();
 }
+/* 每日计次（报告6）：陪玩/祈福每天每只计前 3 次，陪伴本身不限 */
+function countedToday(pet, kind){
+  const t = todayStr();
+  if(!pet.daily || pet.daily.d !== t) pet.daily = { d:t, pray:0, play:0 };
+  return pet.daily[kind] || 0;
+}
+/* 在养宠物祈福（新玩法）：每天送一句祝福，第一句记心意，祝福数攒里程碑信物 */
+function refreshBlessBar(){
+  const bar = document.getElementById("blessBar");
+  if(!housePet || housePet.status !== "alive"){ bar.classList.remove("show"); return; }
+  bar.classList.add("show");
+  document.getElementById("blessName").textContent = housePet.name;
+  document.getElementById("blessInfo").textContent = housePet.lastBlessDate === todayStr()
+    ? "今天的祝福已经送到了 ✓ 它一共收到 "+(housePet.counts.bless||0)+" 句"
+    : "它已经收到 "+(housePet.counts.bless||0)+" 句祝福，今天的还没送";
+}
+function doBless(wish){
+  if(!housePet || housePet.status !== "alive") return;
+  if(housePet.lastBlessDate === todayStr()){ toast("今天的祝福已经送到啦，它收到了 💛 明天再来给它攒一句"); return; }
+  housePet.lastBlessDate = todayStr(); housePet.blessWish = wish; housePet.counts.bless = (housePet.counts.bless||0)+1;
+  S.playerTotal++; checkMilestones(); soulReact("glow");
+  toast("🙏 愿 "+housePet.name+" "+wish+"——第 "+housePet.counts.bless+" 句祝福，它收到了");
+  refreshHUD(); refreshHouseStats(); refreshBlessBar(); save();
+}
+document.querySelectorAll("#blessBar button[data-wish]").forEach(b=>{ b.onclick = ()=> doBless(b.dataset.wish); });
 function houseAction(act){
   if(!housePet) return;
   if(act==="feed"){
+    settleBowl(housePet);
     if(housePet.bowl>=3) return toast("食盆满啦，等它吃一会儿再来 🍖");
     if(S.inv.food<=0) return toast("背包里没粮了，去园子里捡一点，或领登录礼包");
+    if(housePet.bowl===0) housePet.bowlAt = Date.now();
     S.inv.food--; housePet.bowl++; bump("fed"); soulReact("eat"); toast("给 "+housePet.name+" 添了 "+FOOD_LABEL[housePet.species]+" 🍖");
-    setTimeout(()=>{ if(housePet && housePet.bowl>0){ housePet.bowl--; refreshHouseStats(); save(); } }, 20000);
   }
   if(act==="candle"){
     if(S.inv.candle<=0) return toast("没有蜡烛了，去园子里捡或领礼包吧");
@@ -835,17 +978,22 @@ function houseAction(act){
     if(S.inv.flower<=0) return toast("没有鲜花了，园子里花丛边常能捡到");
     S.inv.flower--; bump("flower"); toast("在 "+housePet.name+" 碑前放了一束花 🌸");
   }
-  if(act==="pray"){ bump("pray"); soulReact("glow"); toast("🙏 默默为 "+housePet.name+" 祈福（心意 +1）"); }
+  if(act==="pray"){
+    if(housePet.status==="alive"){ refreshBlessBar(); document.getElementById("blessBar").scrollIntoView({ behavior:"smooth", block:"nearest" }); toast("给 "+housePet.name+" 选一句祝福吧 👇 每天第一句记入心意"); }
+    else if(countedToday(housePet,"pray") >= 3){ soulReact("glow"); toast("今天为 "+housePet.name+" 祈的福已经记满啦（每日计 3 次），心意不会少 💛"); }
+    else { housePet.daily.pray++; bump("pray"); soulReact("glow"); toast("🙏 默默为 "+housePet.name+" 祈福（心意 +1）"); }
+  }
   if(act==="play"){
     if(S.inv.toy<=0) return toast("还没有玩具，园子里偶尔能捡到 🧸");
-    bump("interact"); soulReact("play"); toast("陪 "+housePet.name+" 玩了一会儿 🧸");
+    if(countedToday(housePet,"play") >= 3){ soulReact("play"); toast("今天陪 "+housePet.name+" 玩的心意已经记满啦（每日计 3 次），陪伴本身不打折 💛"); return; }
+    housePet.daily.play++; bump("interact"); soulReact("play"); toast("陪 "+housePet.name+" 玩了一会儿 🧸");
   }
   if(act==="coat"){
     if(housePet.id!==S.myPetId) return;
     const coats = [["#f2ede4","奶白"],["#d9a45b","橘"],["#8a6642","棕"],["#33333a","黑"]];
     let ci = coats.findIndex(k=> k[0]===housePet.color); ci = (ci+1)%coats.length;
     housePet.color = coats[ci][0];
-    toast("给 "+housePet.name+" 换了毛色："+coats[ci][1]+" 🎨（同一张母版，掩码换色）"); save();
+    toast("给 "+housePet.name+" 换上了"+coats[ci][1]+"色的毛 🎨"); save();
   }
   if(act==="dress"){
     if(housePet.id!==S.myPetId) return;
@@ -929,7 +1077,15 @@ function drawSoulLegacy(c, pet, x, y, now){
   }
   c.restore();
 }
+const photoImgs = {}; // 照片 Image 缓存只放内存，绝不挂在 pet 上（会被存档序列化坏掉）
+function petImg(pet){
+  if(!pet.photo) return null;
+  let im = photoImgs[pet.id];
+  if(!im || im._src !== pet.photo){ im = new Image(); im._src = pet.photo; im.src = pet.photo; photoImgs[pet.id] = im; }
+  return (im.complete && im.naturalWidth) ? im : null;
+}
 function drawSoul(pet){
+  settleBowl(pet);
   const W = soulCanvas.width, H = soulCanvas.height, now = performance.now();
   const SPX = 1;
   sbuf.width = W/SPX; sbuf.height = H/SPX;
@@ -939,7 +1095,14 @@ function drawSoul(pet){
   else { stx.fillStyle = "#f7e8c3"; stx.fillRect(0,0,W,H); }
   // 画像框（照片在叠加层贴真图；无照片时画像素小脸）
   pR(stx, 24, 20, 108, 108, "#a9834f"); pR(stx, 31, 27, 94, 94, "#fff8e6");
-  if(!pet.photo){
+  if(pet.photo){
+    const pim = petImg(pet);
+    if(pim){
+      const iw = pim.naturalWidth, ih = pim.naturalHeight, sc = Math.max(94/iw, 94/ih);
+      const sw = 94/sc, sh = 94/sc;
+      stx.drawImage(pim, (iw-sw)/2, (ih-sh)/2, sw, sh, 31, 27, 94, 94); // 报告1b：照片在缓冲层按画框裁剪贴入
+    }
+  } else {
     pR(stx, 55, 58, 46, 40, pet.color); pR(stx, 58, 44, 9, 14, pet.color); pR(stx, 89, 44, 9, 14, pet.color);
     pR(stx, 66, 72, 5, 7, "#333"); pR(stx, 86, 72, 5, 7, "#333"); pR(stx, 76, 84, 5, 4, "#e88ca0");
     pR(stx, 40, 106, 76, 8, shade(pet.color,.8));
@@ -979,17 +1142,13 @@ function drawSoul(pet){
   sctx.clearRect(0,0,W,H);
   sctx.drawImage(sbuf, 0, 0, W, H);
   // ===== 叠加层（清晰）：真照片、状态小字 =====
-  if(pet.photo){
-    if(!pet._img){ pet._img = new Image(); pet._img.src = pet.photo; }
-    if(pet._img.complete && pet._img.naturalWidth) sctx.drawImage(pet._img, 31, 27, 94, 94);
-  }
-  sctx.fillStyle="#6a7a66"; sctx.font="12px sans-serif"; sctx.textAlign="center"; sctx.fillText("食盆 "+pet.bowl+"/3", 600, H-22);
-  sctx.fillStyle="#5a5142"; sctx.font="14px sans-serif";
-  if(soulState.mode==="sleep") sctx.fillText("💤 它睡着了", x, y-58);
+  sctx.fillStyle="#6a7a66"; sctx.font="12px sans-serif"; sctx.textAlign="center"; sctx.textAlign="right"; sctx.fillText("食盆 "+pet.bowl+"/3", W-16, H-22); sctx.textAlign="left";
+  sctx.fillStyle="#5a5142"; sctx.font="14px sans-serif"; sctx.textAlign="center";
+  if(soulState.mode==="sleep") sctx.fillText("💤 它睡着了", W/2, 26);
   if(now < soulState.reactUntil){
-    if(soulState.react==="eat") sctx.fillText("🍖 吧唧吧唧…", x, y-58);
-    if(soulState.react==="play") sctx.fillText("✨ 开心地蹦跶", x, y-58);
-    if(soulState.react==="glow") sctx.fillText("🕯️ 光落在它身上", x, y-58);
+    if(soulState.react==="eat") sctx.fillText("🍖 吧唧吧唧…", W/2, 26);
+    if(soulState.react==="play") sctx.fillText("✨ 开心地蹦跶", W/2, 26);
+    if(soulState.react==="glow") sctx.fillText("🕯️ 光落在它身上", W/2, 26);
   }
   if(pet.outfit){ sctx.fillStyle="#c2504e"; sctx.font="13px sans-serif"; sctx.fillText("🧣 "+pet.outfit, x, y+52); }
   sctx.fillStyle="#8a7f63"; sctx.font="12px sans-serif"; sctx.textAlign="left";
@@ -1003,8 +1162,17 @@ let regPhotoData = null;
 document.getElementById("regPhoto").addEventListener("change", e=>{
   const f = e.target.files[0]; if(!f) return;
   const reader = new FileReader();
-  reader.onload = ()=>{ regPhotoData = reader.result;
-    const img = document.getElementById("photoPreview"); img.src = regPhotoData; img.style.display="block"; };
+  reader.onload = ()=>{
+    const im = new Image();
+    im.onload = ()=>{
+      const MAX = 480, sc = Math.min(1, MAX/Math.max(im.width, im.height));
+      const cv = document.createElement("canvas"); cv.width = Math.max(1, Math.round(im.width*sc)); cv.height = Math.max(1, Math.round(im.height*sc));
+      cv.getContext("2d").drawImage(im, 0, 0, cv.width, cv.height);
+      regPhotoData = cv.toDataURL("image/jpeg", .85); // 报告1：先压缩再存，大照片不再撑爆存档
+      const img = document.getElementById("photoPreview"); img.src = regPhotoData; img.style.display="block";
+    };
+    im.src = reader.result;
+  };
   reader.readAsDataURL(f);
 });
 document.getElementById("btnRegister").onclick = ()=>{
@@ -1018,7 +1186,8 @@ document.getElementById("btnRegister").onclick = ()=>{
   S.pets.push(mine); S.myPetId = mine.id; S.inv.toy += 1; // 新手包：玩具×1，第一天就能陪它玩
   player.x = mine.x; player.y = mine.y + 70; player.tx = player.x; player.ty = player.y;
   save(); regOverlay.style.display = "none"; refreshHUD();
-  toast("🌿 "+name+" 的档案建好了，它在"+(status==="memorial"?"北岸纪念区":"南岸生活区")+"等你");
+  if(status==="memorial"){ startMemorialCeremony(mine); } // 报告9：建档时已离开的，也给一场立碑仪式
+  else toast("🌿 "+name+" 的档案建好了，它在南岸生活区等你（背包里备了粮、烛、花和一个玩具，第一天就能陪它玩）");
 };
 if(S.myPetId){ regOverlay.style.display = "none"; const mine = S.pets.find(p=>p.id===S.myPetId); if(mine){ player.x=mine.x; player.y=mine.y+70; player.tx=player.x; player.ty=player.y; } }
 
