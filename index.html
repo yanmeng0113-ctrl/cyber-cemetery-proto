@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>彩虹桥小园 · 原型 v0.14</title>
+<title>彩虹桥小园 · 原型 v0.15</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body { font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; background:#1c2b22; color:#2c3a2e; }
@@ -88,7 +88,7 @@
 <body>
 <div id="app">
   <header>
-    <h1>🌈 彩虹桥小园 · 原型 v0.14</h1>
+    <h1>🌈 彩虹桥小园 · 原型 v0.15</h1>
     <span class="badge" id="pioneerBadge">先行者 No.0001 · 创始园民</span>
   </header>
 
@@ -196,7 +196,7 @@
     玩法：点地图或用 WASD/方向键走动 · 走过发光的小东西就能捡（全园共享、先到先得，捡完会慢慢再刷）· 走近墓碑/小院看介绍，点「进小屋」· 河南岸是生活区，河北岸是纪念区，中间过彩虹桥 · 任何人的小屋都能进、都能喂——只有换装是主人专属。<br>
   </div>
   <details id="changelog"><summary>📖 原型说明与更新日志（点开看）</summary><div class="changelogBody">
-    原型说明（v0.14）：🔧 <b>按外部代码审查逐项修了一批</b>——静音键真的能静音了；点河对岸会自动绕桥过去；方向键不再滚屏、窗口失焦不会自己乱走；照片传错格式会出声告诉你；过桥前要输入它的名字才能确认；里程碑的称号（常来看看的人／守烛人）现在真的会发；手机上按钮更好点、提示不再盖住标题、更新日志折叠了；页脚补了素材署名；两张场景底图换成无损 WebP，页面轻了约三成。另说清一句：照片专属形象目前是<b>演示包</b>（以一只布偶猫的照片生成的那一套），正式版会按每只宠物自己的照片单独生成。<br>原型说明（v0.13）：📦 <b>全园素材包化</b>——按「所有素材必须做素材包、不许简单贴画」的纪律清了一轮：地上的捡拾物不再是 emoji，是手绘物品图集（肉腿/蜡烛/花束/小熊/围巾）；小屋的蜡烛、食盆、画像框都换成专属素材包（蜡烛两帧火焰、食盆空/满两态、画像框带爪印款）；连祈福星光、睡觉 Z 符、捡拾火花这三件特效，也离线烘焙成了精灵图集，不再用运行时贴片。场景里看得见的东西，件件有原画、有图集。<br>原型说明（v0.12）：🏮 <b>墙上的信物换成手绘的了</b>——上一版是代码画的扁平图形，跟房间的手绘墙面不搭；这版三件信物（木福牌、长寿结、金铃铛）是专门生成的手绘原画，跟房间、供品同一套工艺，挂在墙上是一体的了。<br>原型说明（v0.11）：🔊 <b>游戏有声音了</b>——捡东西叮咚、祈福有铃声、点烛有轻响、驱散团子有消散声、仪式结束有风铃，全是代码现场合成的，没有录音素材；右上角可以关。🏮 <b>祈福信物上墙了</b>——攒到的祈福牌、长寿结、金铃铛会挂进小屋画像右边的墙上。🕯️ <b>仪式有了收尾</b>——过桥或立碑之后，可以亲手为它点上第一支烛。🐾 没传照片的画像改成了爪印剪影，不再是像素小脸。<br>原型说明（v0.10）：🐾 <b>自家猫真走路了</b>——带照片建档的猫，走路不再是两帧静态图加浮动，而是一套 8 帧真步态循环（agent-sprite-forge 管线：站姿帧→图生视频→软抠图→自动挑循环），小屋里散步、去食盆、过桥仪式里走路都是这套；站立、睡觉、吃饭还是原来的姿势图。<br>原型说明（v0.9）：✨ <b>光点特效接入</b>——祈福时有星光落在它身上（pixelfx blessing）、睡着时头顶飘 Z 符、捡到东西时有小火花；👻 <b>新玩法：驱散阴影团子</b>——园子里会飘来灰黑小团子偷光吵闹，走近点它（或点它让守园人走过去），灯光一照就化作光尘，团子叼走的东西有几率掉回来（每天最多 3 件，每天最多来 5 只）。<br>原型说明（v0.8）：🏠 <b>房间变大了</b>——新内景更高更宽敞，画像挂到正墙中央；🎁 <b>献上玩具</b>——背包里的玩具献给它之后，就永久留在它房间的地板上（第一个是线团），它闲逛时自己会跑去扑着玩。<br>原型说明（v0.7）：✨ <b>照片专属形象上线</b>——带照片建档的猫，园子里的形象就是拿它的照片生成的那一套（白身、奶油色鞍纹、灰蓝耳朵、大蓬尾巴都是它本尊的），不再是通用猫换色，颜色也锁死以照片为准。旧存档里带照片的自家猫打开即自动换上。<br>原型说明（v0.6）：按哈克试玩报告逐项修复——①照片入库前压缩到 480px、存档失败会出声提醒，画像真贴进画框；②食盆改按时间戳结算（每 20 秒吃一格，刷新也不卡满）；③toast 提到顶层，小屋里能看见提示和背包余量；④「今日已捡」跨天清零、捡拾物绝不刷进河里且多刷在你附近；⑤登录礼包每天只能领一次；⑥陪玩/祈福每日计前 3 次，陪伴本身不限；⑦建档选「已经离开了」会补一场立碑仪式；⑧重置存档改成讲清后果的确认层；⑨小院和碑有了碰撞（爬不上房顶）、走近面板更容易触发、名字标签不被边缘切；⑩换毛色不再说开发术语。新玩法：在养宠物可以「祈福」了——每天在小屋里送它一句祝福（健健康康/平平安安/长命百岁/天天开心），祝福攒满 7/30/100 句得祈福牌、长寿结、金铃铛，过桥后这些宝贝会一直陪着它。</div>
+    原型说明（v0.15）：🐾 <b>访客的宠物换成它自己的了</b>——带照片建档的猫/狗/鸟，现在直接在浏览器里用它自己的照片现场生成形象（照片做纹理、姿势图集裁形、描边和眼睛回到原位），不再套演示包；那套 AI 生成的布偶猫专属包只保留给最早建档的那只。正式版会升级为后台 AI 按每只照片单独生成的高清专属包。<br>原型说明（v0.14）：🔧 <b>按外部代码审查逐项修了一批</b>——静音键真的能静音了；点河对岸会自动绕桥过去；方向键不再滚屏、窗口失焦不会自己乱走；照片传错格式会出声告诉你；过桥前要输入它的名字才能确认；里程碑的称号（常来看看的人／守烛人）现在真的会发；手机上按钮更好点、提示不再盖住标题、更新日志折叠了；页脚补了素材署名；两张场景底图换成无损 WebP，页面轻了约三成。另说清一句：照片专属形象目前是<b>演示包</b>（以一只布偶猫的照片生成的那一套），正式版会按每只宠物自己的照片单独生成。<br>原型说明（v0.13）：📦 <b>全园素材包化</b>——按「所有素材必须做素材包、不许简单贴画」的纪律清了一轮：地上的捡拾物不再是 emoji，是手绘物品图集（肉腿/蜡烛/花束/小熊/围巾）；小屋的蜡烛、食盆、画像框都换成专属素材包（蜡烛两帧火焰、食盆空/满两态、画像框带爪印款）；连祈福星光、睡觉 Z 符、捡拾火花这三件特效，也离线烘焙成了精灵图集，不再用运行时贴片。场景里看得见的东西，件件有原画、有图集。<br>原型说明（v0.12）：🏮 <b>墙上的信物换成手绘的了</b>——上一版是代码画的扁平图形，跟房间的手绘墙面不搭；这版三件信物（木福牌、长寿结、金铃铛）是专门生成的手绘原画，跟房间、供品同一套工艺，挂在墙上是一体的了。<br>原型说明（v0.11）：🔊 <b>游戏有声音了</b>——捡东西叮咚、祈福有铃声、点烛有轻响、驱散团子有消散声、仪式结束有风铃，全是代码现场合成的，没有录音素材；右上角可以关。🏮 <b>祈福信物上墙了</b>——攒到的祈福牌、长寿结、金铃铛会挂进小屋画像右边的墙上。🕯️ <b>仪式有了收尾</b>——过桥或立碑之后，可以亲手为它点上第一支烛。🐾 没传照片的画像改成了爪印剪影，不再是像素小脸。<br>原型说明（v0.10）：🐾 <b>自家猫真走路了</b>——带照片建档的猫，走路不再是两帧静态图加浮动，而是一套 8 帧真步态循环（agent-sprite-forge 管线：站姿帧→图生视频→软抠图→自动挑循环），小屋里散步、去食盆、过桥仪式里走路都是这套；站立、睡觉、吃饭还是原来的姿势图。<br>原型说明（v0.9）：✨ <b>光点特效接入</b>——祈福时有星光落在它身上（pixelfx blessing）、睡着时头顶飘 Z 符、捡到东西时有小火花；👻 <b>新玩法：驱散阴影团子</b>——园子里会飘来灰黑小团子偷光吵闹，走近点它（或点它让守园人走过去），灯光一照就化作光尘，团子叼走的东西有几率掉回来（每天最多 3 件，每天最多来 5 只）。<br>原型说明（v0.8）：🏠 <b>房间变大了</b>——新内景更高更宽敞，画像挂到正墙中央；🎁 <b>献上玩具</b>——背包里的玩具献给它之后，就永久留在它房间的地板上（第一个是线团），它闲逛时自己会跑去扑着玩。<br>原型说明（v0.7）：✨ <b>照片专属形象上线</b>——带照片建档的猫，园子里的形象就是拿它的照片生成的那一套（白身、奶油色鞍纹、灰蓝耳朵、大蓬尾巴都是它本尊的），不再是通用猫换色，颜色也锁死以照片为准。旧存档里带照片的自家猫打开即自动换上。<br>原型说明（v0.6）：按哈克试玩报告逐项修复——①照片入库前压缩到 480px、存档失败会出声提醒，画像真贴进画框；②食盆改按时间戳结算（每 20 秒吃一格，刷新也不卡满）；③toast 提到顶层，小屋里能看见提示和背包余量；④「今日已捡」跨天清零、捡拾物绝不刷进河里且多刷在你附近；⑤登录礼包每天只能领一次；⑥陪玩/祈福每日计前 3 次，陪伴本身不限；⑦建档选「已经离开了」会补一场立碑仪式；⑧重置存档改成讲清后果的确认层；⑨小院和碑有了碰撞（爬不上房顶）、走近面板更容易触发、名字标签不被边缘切；⑩换毛色不再说开发术语。新玩法：在养宠物可以「祈福」了——每天在小屋里送它一句祝福（健健康康/平平安安/长命百岁/天天开心），祝福攒满 7/30/100 句得祈福牌、长寿结、金铃铛，过桥后这些宝贝会一直陪着它。</div>
   </details>
   <div id="credits">素材与鸣谢：园内场景、宠物与物品均为本项目自制素材包（AI 生成原画＋forge 图集）；灵魂体加载兜底图集含 [LPC] Cats and Dogs（bluecarrot16，CC-BY 3.0）与 Sprout Lands 小鸡（Cup Nooble，免费版·非商用，商用前替换）；特效帧由 patch-gg/pixelfx（MIT）离线烘焙；动画生产管线 agent-sprite-forge（MIT）。</div>
 </div>
@@ -259,7 +259,7 @@ function rollDay(){ const t = todayStr(); if(S.pickDate !== t){ S.pickDate = t; 
     p.lastBlessDate = p.lastBlessDate || ""; p.blessWish = p.blessWish || "";
     p.offerings = p.offerings || []; // v0.8：献供陈设
     delete p._img; delete p._imgSrc; // 运行时图片缓存绝不能进存档（v0.5 画像纯色的根因）
-    if(p.id === S.myPetId && p.species === "cat" && p.photo) p.pack = "photo"; // v0.7：自家带照片的猫用照片专属形象（旧存档自动生效）
+    // v0.15：不再自动套演示专属包；已存档的 pack="photo" 是真专属包（布偶猫），保留不动
     settleBowl(p);
   }
   rollDay();
@@ -514,9 +514,47 @@ function walkLoopCanvas(i){
   _walkCache[i] = src; return src;
 }
 
+/* ===== v0.15 访客照片现场生成：宠物自己的照片做纹理、物种姿势图集裁形，浏览器内即时生成专属形象 ===== */
+function petPhotoImg(pet){
+  let im = photoImgs[pet.id];
+  if(!im || im._src !== pet.photo){ im = new Image(); im._src = pet.photo; im.src = pet.photo; photoImgs[pet.id] = im; }
+  return im;
+}
+const _texCache = {};
+function photoTexCanvas(pet, atlas, rects, pose){
+  const r = rects[pose]; if(!r || !atlas.complete || !atlas.naturalWidth) return null;
+  const img = petPhotoImg(pet); if(!img.complete || !img.naturalWidth) return null;
+  const key = pet.id + "|" + pose;
+  if(_texCache[key]) return _texCache[key];
+  const src = document.createElement("canvas"); src.width = r[2]; src.height = r[3];
+  const sx = src.getContext("2d");
+  const zw = img.naturalWidth/1.3, zh = img.naturalHeight/1.3, zx = (img.naturalWidth-zw)/2, zy = (img.naturalHeight-zh)/2;
+  const sc = Math.max(r[2]/zw, r[3]/zh);
+  const dw = zw*sc, dh = zh*sc;
+  sx.drawImage(img, zx, zy, zw, zh, (r[2]-dw)/2, (r[3]-dh)/2, dw, dh);
+  sx.globalCompositeOperation = "destination-in";
+  sx.drawImage(atlas, r[0], r[1], r[2], r[3], 0, 0, r[2], r[3]);
+  // 描边与五官：只取姿势图的暗部（描边/眼睛/鼻子）盖回，不带母版毛色
+  const dk = document.createElement("canvas"); dk.width = r[2]; dk.height = r[3];
+  const dx2 = dk.getContext("2d"); dx2.drawImage(atlas, r[0], r[1], r[2], r[3], 0, 0, r[2], r[3]);
+  try{
+    const idata = dx2.getImageData(0, 0, r[2], r[3]), d = idata.data;
+    for(let i=0;i<d.length;i+=4){
+      if(d[i+3]===0) continue;
+      const lum = 0.2126*d[i] + 0.7152*d[i+1] + 0.0722*d[i+2];
+      if(lum < 110){ d[i]=58; d[i+1]=44; d[i+2]=32; d[i+3] = Math.min(d[i+3], Math.round((110-lum)/110*235)); }
+      else d[i+3] = 0;
+    }
+    dx2.putImageData(idata, 0, 0);
+    sx.globalCompositeOperation = "source-over";
+    sx.drawImage(dk, 0, 0);
+  }catch(e){ /* 暗部提取失败就只用纹理版 */ }
+  _texCache[key] = src; return src;
+}
 function catCanvasFor(pet, pose){
   if(pet.pack === "photo" && (pose === "walk1" || pose === "walk2")){ const wf = walkLoopCanvas(Math.floor(Date.now()/125)%8); if(wf) return [wf, WALK_RECT]; }
   if(pet.pack === "photo"){ const cv = photoCatCanvas(pose); if(cv) return [cv, PCATR[pose]]; }
+  if(pet.photo){ const tv = photoTexCanvas(pet, ATLAS3, CATR, pose); if(tv) return [tv, CATR[pose]]; }
   const cv = recoloredCat(pose, pet.color); return cv ? [cv, CATR[pose]] : null;
 }
 function drawCatSprite(c, pet, x, y, now){
@@ -577,7 +615,7 @@ function drawDogSprite(c, pet, x, y, now){
   else if(m==="eat") pose = "eat";
   else if(m==="walk" || m==="toBowl") pose = ["stand","walk1","stand","walk2"][Math.floor(now/170)%4];
   else if(Math.floor(now/5000)%2===1) pose = "standUp";
-  const cv = recoloredDog(pose, pet.color);
+  const cv = (pet.photo && photoTexCanvas(pet, ATLAS4, DOGR, pose)) || recoloredDog(pose, pet.color);
   if(!cv){ drawPetSprite(c, pet, x, y, now); return; }
   const r = DOGR[pose], K = 120/96;
   c.save(); c.translate(x, y); if(soulState.dir<0) c.scale(-1,1);
@@ -598,7 +636,7 @@ function drawBirdSprite(c, pet, x, y, now){
   else if(m==="eat") pose = "peck";
   else if(m==="walk" || m==="toBowl") pose = ["side0","hop"][Math.floor(now/200)%2];
   else if(Math.floor(now/5000)%2===1) pose = "sit";
-  const cv = recoloredBird(pose, pet.color);
+  const cv = (pet.photo && photoTexCanvas(pet, ATLAS5, BIRDR, pose)) || recoloredBird(pose, pet.color);
   if(!cv){ drawSoulLegacy(c, pet, x, y, now); return; }
   const r = BIRDR[pose], K = 96/80;
   const side = (pose==="side0" || pose==="hop" || pose==="peck");
@@ -866,8 +904,8 @@ function drawCeremonyPet(now){
   btx.translate(pos.x, pos.y); if(cer.petDir<0) btx.scale(-1,1);
   let cv = null, r = null, K = 66/96;
   if(pet.species==="cat"){ const cc = catCanvasFor(pet, pos.pose); cv = cc ? cc[0] : null; r = cc ? cc[1] : null; }
-  else if(pet.species==="dog"){ cv = recoloredDog(pos.pose, pet.color); r = DOGR[pos.pose]; }
-  else if(pet.species==="bird"){ cv = recoloredBird(pos.pose, pet.color); r = BIRDR[pos.pose]; K = 54/80; }
+  else if(pet.species==="dog"){ cv = (pet.photo && photoTexCanvas(pet, ATLAS4, DOGR, pos.pose)) || recoloredDog(pos.pose, pet.color); r = DOGR[pos.pose]; }
+  else if(pet.species==="bird"){ cv = (pet.photo && photoTexCanvas(pet, ATLAS5, BIRDR, pos.pose)) || recoloredBird(pos.pose, pet.color); r = BIRDR[pos.pose]; K = 54/80; }
   if(cv && r) btx.drawImage(cv, -r[2]*K/2, -r[4]*K, r[2]*K, r[3]*K);
   else { btx.fillStyle = "rgba(255,236,190,.95)"; btx.beginPath(); btx.arc(0, -26, 15, 0, 7); btx.fill(); }
   btx.restore();
@@ -1549,7 +1587,7 @@ document.getElementById("regPhoto").addEventListener("change", e=>{
       document.getElementById("regColor").value = snap[0];
       const hint = document.getElementById("photoColorHint");
       hint.style.display = "block";
-      hint.textContent = "🎨 毛色已按照片定成「" + snap[1] + "」——它是什么颜色，园子里就是什么颜色，不用手选、也不会被改掉。";
+      hint.textContent = "🐾 已用它的照片生成专属形象——园子里跑的就是它自己的模样（花纹、毛色都来自这张照片），照片也会挂进小屋的画框。";
       const img = document.getElementById("photoPreview"); img.src = regPhotoData; img.style.display="block";
     };
     im.src = reader.result;
@@ -1564,7 +1602,7 @@ document.getElementById("btnRegister").onclick = ()=>{
   const line = document.getElementById("regLine").value.trim() || "慢慢来，我们不赶时间";
   const mine = mkPet(name, species, status, color, status==="memorial"? 950:560, status==="memorial"? 600:1470, status==="memorial" ? "它先回星星那儿了" : "今天起，它在园子里有个家", line);
   mine.photo = regPhotoData;
-  if(species === "cat" && regPhotoData) mine.pack = "photo"; // v0.7：带照片建档的猫，形象按照片生成的那一套
+  // v0.15：带照片建档不再套演示专属包——形象由它自己的照片在浏览器内现场生成（photoTexCanvas）；演示包只属于最早那只已存档的猫
   S.pets.push(mine); S.myPetId = mine.id; S.inv.toy += 1; // 新手包：玩具×1，第一天就能陪它玩
   player.x = mine.x; player.y = mine.y + 70; player.tx = player.x; player.ty = player.y;
   save(); regOverlay.style.display = "none"; refreshHUD();
