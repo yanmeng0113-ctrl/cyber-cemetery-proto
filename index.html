@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>赛博墓园 · 原型 v0.10（彩虹桥小园）</title>
+<title>赛博墓园 · 原型 v0.11（彩虹桥小园）</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body { font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; background:#1c2b22; color:#2c3a2e; }
@@ -33,6 +33,12 @@
   #convertCard p { font-size:13.5px; color:#5a6a58; line-height:1.7; }
   #convertCard .row { margin-top:16px; display:flex; gap:8px; }
   #resetOverlay { position:fixed; inset:0; background:rgba(20,32,22,.72); display:none; align-items:center; justify-content:center; z-index:70; }
+  #firstCandle { position:fixed; inset:0; background:rgba(20,32,22,.55); display:none; align-items:center; justify-content:center; z-index:75; padding:16px; }
+  #firstCandle.show { display:flex; }
+  #firstCandle .fcCard { background:#fffaf0; border-radius:16px; padding:22px 20px; max-width:340px; text-align:center; box-shadow:0 12px 40px rgba(0,0,0,.35); }
+  #firstCandle .fcCard h3 { margin:0 0 8px; font-size:17px; color:#4a3b28; }
+  #firstCandle .fcCard p { margin:0 0 16px; font-size:13.5px; line-height:1.65; color:#6b5a41; }
+  #firstCandle .fcCard button { margin:0 4px; }
   #resetOverlay.show { display:flex; }
   #resetCard { background:#fffdf6; border-radius:16px; padding:22px; width:calc(100% - 48px); max-width:420px; }
   #resetCard h2 { font-size:17px; margin-bottom:8px; }
@@ -76,7 +82,7 @@
 <body>
 <div id="app">
   <header>
-    <h1>🌈 彩虹桥小园 · 赛博墓园原型 v0.10</h1>
+    <h1>🌈 彩虹桥小园 · 赛博墓园原型 v0.11</h1>
     <span class="badge" id="pioneerBadge">先行者 No.0001 · 创始园民</span>
   </header>
 
@@ -89,6 +95,7 @@
     <span class="chip">💗 心意 <b id="playerTotal">0</b> 次</span>
     <span class="chip">🎁 今日已捡 <b id="pickToday">0</b>/10</span>
     <span class="chip">👻 已驱散团子 <b id="disperseTotal">0</b></span>
+    <span class="chip" id="btnMute" style="cursor:pointer">🔊 声音开</span>
     <div class="msRow"><span id="msText">里程碑</span><div id="milestoneBar"><div id="milestoneFill"></div></div></div>
     <button class="ghost" id="btnLoginGift">登录礼包（累计 <span id="loginDays">0</span> 天）</button>
     <button class="ghost" id="btnPioneer">领创始礼包</button>
@@ -119,6 +126,15 @@
         <button class="ghost" id="btnResetCancel">再想想</button>
         <button id="btnResetGo">确认清空</button>
       </div>
+    </div>
+  </div>
+
+  <div id="firstCandle">
+    <div class="fcCard">
+      <h3>🕯️ 为 <span id="fcName">它</span> 点第一支烛</h3>
+      <p>新家安顿好了。点上第一支烛，告诉它：这边灯亮着，路好走，我会常来。</p>
+      <button class="ghost" id="btnFirstCandle">点上第一支烛</button>
+      <button class="ghost" id="btnFirstCandleSkip">以后再说</button>
     </div>
   </div>
 
@@ -171,7 +187,7 @@
 
   <div id="hint">
     玩法：点地图或用 WASD/方向键走动 · 走过发光的小东西就能捡（全园共享、先到先得，捡完会慢慢再刷）· 走近墓碑/小院看介绍，点「进小屋」· 河南岸是生活区，河北岸是纪念区，中间过彩虹桥 · 任何人的小屋都能进、都能喂——只有换装是主人专属。<br>
-    原型说明（v0.10）：🐾 <b>自家猫真走路了</b>——带照片建档的猫，走路不再是两帧静态图加浮动，而是一套 8 帧真步态循环（agent-sprite-forge 管线：站姿帧→图生视频→软抠图→自动挑循环），小屋里散步、去食盆、过桥仪式里走路都是这套；站立、睡觉、吃饭还是原来的姿势图。<br>原型说明（v0.9）：✨ <b>光点特效接入</b>——祈福时有星光落在它身上（pixelfx blessing）、睡着时头顶飘 Z 符、捡到东西时有小火花；👻 <b>新玩法：驱散阴影团子</b>——园子里会飘来灰黑小团子偷光吵闹，走近点它（或点它让守园人走过去），灯光一照就化作光尘，团子叼走的东西有几率掉回来（每天最多 3 件，每天最多来 5 只）。<br>原型说明（v0.8）：🏠 <b>房间变大了</b>——新内景更高更宽敞，画像挂到正墙中央；🎁 <b>献上玩具</b>——背包里的玩具献给它之后，就永久留在它房间的地板上（第一个是线团），它闲逛时自己会跑去扑着玩。<br>原型说明（v0.7）：✨ <b>照片专属形象上线</b>——带照片建档的猫，园子里的形象就是拿它的照片生成的那一套（白身、奶油色鞍纹、灰蓝耳朵、大蓬尾巴都是它本尊的），不再是通用猫换色，颜色也锁死以照片为准。旧存档里带照片的自家猫打开即自动换上。<br>原型说明（v0.6）：按哈克试玩报告逐项修复——①照片入库前压缩到 480px、存档失败会出声提醒，画像真贴进画框；②食盆改按时间戳结算（每 20 秒吃一格，刷新也不卡满）；③toast 提到顶层，小屋里能看见提示和背包余量；④「今日已捡」跨天清零、捡拾物绝不刷进河里且多刷在你附近；⑤登录礼包每天只能领一次；⑥陪玩/祈福每日计前 3 次，陪伴本身不限；⑦建档选「已经离开了」会补一场立碑仪式；⑧重置存档改成讲清后果的确认层；⑨小院和碑有了碰撞（爬不上房顶）、走近面板更容易触发、名字标签不被边缘切；⑩换毛色不再说开发术语。新玩法：在养宠物可以「祈福」了——每天在小屋里送它一句祝福（健健康康/平平安安/长命百岁/天天开心），祝福攒满 7/30/100 句得祈福牌、长寿结、金铃铛，过桥后这些宝贝会一直陪着它。</div>
+    原型说明（v0.11）：🔊 <b>游戏有声音了</b>——捡东西叮咚、祈福有铃声、点烛有轻响、驱散团子有消散声、仪式结束有风铃，全是代码现场合成的，没有录音素材；右上角可以关。🏮 <b>祈福信物上墙了</b>——攒到的祈福牌、长寿结、金铃铛会挂进小屋画像右边的墙上。🕯️ <b>仪式有了收尾</b>——过桥或立碑之后，可以亲手为它点上第一支烛。🐾 没传照片的画像改成了爪印剪影，不再是像素小脸。<br>原型说明（v0.10）：🐾 <b>自家猫真走路了</b>——带照片建档的猫，走路不再是两帧静态图加浮动，而是一套 8 帧真步态循环（agent-sprite-forge 管线：站姿帧→图生视频→软抠图→自动挑循环），小屋里散步、去食盆、过桥仪式里走路都是这套；站立、睡觉、吃饭还是原来的姿势图。<br>原型说明（v0.9）：✨ <b>光点特效接入</b>——祈福时有星光落在它身上（pixelfx blessing）、睡着时头顶飘 Z 符、捡到东西时有小火花；👻 <b>新玩法：驱散阴影团子</b>——园子里会飘来灰黑小团子偷光吵闹，走近点它（或点它让守园人走过去），灯光一照就化作光尘，团子叼走的东西有几率掉回来（每天最多 3 件，每天最多来 5 只）。<br>原型说明（v0.8）：🏠 <b>房间变大了</b>——新内景更高更宽敞，画像挂到正墙中央；🎁 <b>献上玩具</b>——背包里的玩具献给它之后，就永久留在它房间的地板上（第一个是线团），它闲逛时自己会跑去扑着玩。<br>原型说明（v0.7）：✨ <b>照片专属形象上线</b>——带照片建档的猫，园子里的形象就是拿它的照片生成的那一套（白身、奶油色鞍纹、灰蓝耳朵、大蓬尾巴都是它本尊的），不再是通用猫换色，颜色也锁死以照片为准。旧存档里带照片的自家猫打开即自动换上。<br>原型说明（v0.6）：按哈克试玩报告逐项修复——①照片入库前压缩到 480px、存档失败会出声提醒，画像真贴进画框；②食盆改按时间戳结算（每 20 秒吃一格，刷新也不卡满）；③toast 提到顶层，小屋里能看见提示和背包余量；④「今日已捡」跨天清零、捡拾物绝不刷进河里且多刷在你附近；⑤登录礼包每天只能领一次；⑥陪玩/祈福每日计前 3 次，陪伴本身不限；⑦建档选「已经离开了」会补一场立碑仪式；⑧重置存档改成讲清后果的确认层；⑨小院和碑有了碰撞（爬不上房顶）、走近面板更容易触发、名字标签不被边缘切；⑩换毛色不再说开发术语。新玩法：在养宠物可以「祈福」了——每天在小屋里送它一句祝福（健健康康/平平安安/长命百岁/天天开心），祝福攒满 7/30/100 句得祈福牌、长寿结、金铃铛，过桥后这些宝贝会一直陪着它。</div>
 </div>
 
 <div id="regOverlay">
@@ -2038,7 +2054,7 @@ function rollDay(){ const t = todayStr(); if(S.pickDate !== t){ S.pickDate = t; 
 })();
 function freshState(){
   return {
-    playerTotal:0, loginDays:0, pickToday:0, lastGiftDate:"", pickDate:"", disperseTotal:0, blobDate:"", blobSpawned:0, blobDrops:0,
+    playerTotal:0, loginDays:0, pickToday:0, lastGiftDate:"", pickDate:"", disperseTotal:0, blobDate:"", blobSpawned:0, blobDrops:0, muted:false,
     inv:{ food:3, candle:3, flower:2, toy:0, clothes:0 },
     claimed:{ loginSession:false, pioneer:false },
     milestonesHit:[], petMilestonesHit:[],
@@ -2538,7 +2554,7 @@ function loop(t){
     for(let i=pickups.length-1;i>=0;i--){ const p = pickups[i];
       if(Math.hypot(player.x-p.x, player.y-p.y) < 30){
         if(!p.fromBlob && S.pickToday>=10){ if(!p.warned){ p.warned = true; toast("今天捡满 10 件啦，留些给别人吧 🌿"); } }
-        else { S.inv[p.type]++; if(!p.fromBlob) S.pickToday++; FXM.spawn("collectBurst", p.x, p.y-6, 2.2, "park", 0); pickups.splice(i,1); toast(p.fromBlob ? "捡回了 "+p.emoji+"（团子叼走的东西）" : "捡到 "+p.emoji+"（已放进背包）"); refreshHUD(); save(); }
+        else { S.inv[p.type]++; if(!p.fromBlob) S.pickToday++; FXM.spawn("collectBurst", p.x, p.y-6, 2.2, "park", 0); SFX.pickup(); pickups.splice(i,1); toast(p.fromBlob ? "捡回了 "+p.emoji+"（团子叼走的东西）" : "捡到 "+p.emoji+"（已放进背包）"); refreshHUD(); save(); }
       } }
     // 最近的碑
     nearestPet = null; let best = 150;
@@ -2661,9 +2677,28 @@ function finishCeremony(){
   if(cerMode === "memorial") toast("🕯️ 碑立好了。" + pet.name + " 在北岸安顿下来了——想它的时候，就来看看。");
   else toast("🌈 " + pet.name + " 住到北岸了。想它的时候，过桥来看看。");
   refreshHUD();
+  SFX.chime(); offerFirstCandle(pet);
 }
 
 document.getElementById("btnGuide").onclick = ()=>{ if(nearestPet){ player.tx = nearestPet.x; player.ty = nearestPet.y+56; toast("🦋 蝴蝶带你去找 "+nearestPet.name); } };
+const btnMute = document.getElementById("btnMute");
+function syncMute(){ btnMute.textContent = S.muted ? "🔇 声音关" : "🔊 声音开"; }
+btnMute.onclick = ()=>{ S.muted = !S.muted; syncMute(); save(); if(!S.muted) SFX.pickup(); };
+syncMute();
+window.addEventListener("pointerdown", ()=> SFX.unlock());
+document.getElementById("btnFirstCandle").onclick = ()=>{
+  const pet = S.pets.find(q=> q.id === firstCandlePetId);
+  document.getElementById("firstCandle").classList.remove("show");
+  if(!pet) return;
+  pet.counts.candle++; S.playerTotal++; checkMilestones();
+  FXM.spawn("blessing", pet.x, pet.y - 10, 2.3, "park", 3.2);
+  SFX.candle(); save(); refreshHUD();
+  toast("🕯️ 第一支烛点上了——" + pet.name + " 在北岸的家，灯亮着。");
+};
+document.getElementById("btnFirstCandleSkip").onclick = ()=>{
+  document.getElementById("firstCandle").classList.remove("show");
+  toast("好，什么时候想点，进它的小屋点烛也一样 🕯️");
+};
 
 /* 立碑仪式（报告9）：建档时已经离开的宝贝，也要有一场仪式——它在碑旁等你走近，碑在光里立起来 */
 function startMemorialCeremony(pet){
@@ -2806,7 +2841,7 @@ function doBless(wish){
   if(!housePet || housePet.status !== "alive") return;
   if(housePet.lastBlessDate === todayStr()){ toast("今天的祝福已经送到啦，它收到了 💛 明天再来给它攒一句"); return; }
   housePet.lastBlessDate = todayStr(); housePet.blessWish = wish; housePet.counts.bless = (housePet.counts.bless||0)+1;
-  S.playerTotal++; checkMilestones(); soulReact("glow"); FXM.spawn("blessing", soulState.x, soulCanvas.height-80, 2.3, "house", 3.2);
+  S.playerTotal++; checkMilestones(); soulReact("glow"); FXM.spawn("blessing", soulState.x, soulCanvas.height-80, 2.3, "house", 3.2); SFX.bless();
   toast("🙏 愿 "+housePet.name+" "+wish+"——第 "+housePet.counts.bless+" 句祝福，它收到了");
   refreshHUD(); refreshHouseStats(); refreshBlessBar(); save();
 }
@@ -2818,11 +2853,11 @@ function houseAction(act){
     if(housePet.bowl>=3) return toast("食盆满啦，等它吃一会儿再来 🍖");
     if(S.inv.food<=0) return toast("背包里没粮了，去园子里捡一点，或领登录礼包");
     if(housePet.bowl===0) housePet.bowlAt = Date.now();
-    S.inv.food--; housePet.bowl++; bump("fed"); soulReact("eat"); toast("给 "+housePet.name+" 添了 "+FOOD_LABEL[housePet.species]+" 🍖");
+    S.inv.food--; housePet.bowl++; bump("fed"); soulReact("eat"); SFX.feed(); toast("给 "+housePet.name+" 添了 "+FOOD_LABEL[housePet.species]+" 🍖");
   }
   if(act==="candle"){
     if(S.inv.candle<=0) return toast("没有蜡烛了，去园子里捡或领礼包吧");
-    S.inv.candle--; bump("candle"); soulReact("glow"); FXM.spawn("blessing", soulState.x, soulCanvas.height-80, 2.3, "house", 3.2); toast("为 "+housePet.name+" 点了一盏烛 🕯️ 愿它那边不黑");
+    S.inv.candle--; bump("candle"); soulReact("glow"); SFX.candle(); FXM.spawn("blessing", soulState.x, soulCanvas.height-80, 2.3, "house", 3.2); toast("为 "+housePet.name+" 点了一盏烛 🕯️ 愿它那边不黑");
   }
   if(act==="flower"){
     if(S.inv.flower<=0) return toast("没有鲜花了，园子里花丛边常能捡到");
@@ -3016,6 +3051,7 @@ function disperseBlob(b){
   b.state = "startle"; b.t = 0;
 }
 function finishDisperse(b){
+  SFX.disperse();
   S.disperseTotal = (S.disperseTotal || 0) + 1;
   FXM.spawn("collectBurst", b.x, b.y - 12, 2.4, "park", 0);
   let dropped = null;
@@ -3088,6 +3124,44 @@ function drawBlobs(now){
 }
 if((S.blobSpawned || 0) < 5){ spawnBlob(); spawnBlob(); }
 
+
+/* ============ v0.11 合成音效（WebAudio 现场合成，无素材；首次点按后启用） ============ */
+const SFX = (()=>{
+  let actx = null;
+  function ac(){ if(!actx){ try{ actx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ actx = null; } } if(actx && actx.state === "suspended") actx.resume(); return actx; }
+  function tone(f0, f1, dur, type, vol, delay){
+    if(window.S && S.muted) return;
+    const c = ac(); if(!c) return;
+    const t0 = c.currentTime + (delay || 0);
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = type || "sine";
+    o.frequency.setValueAtTime(Math.max(30, f0), t0);
+    if(f1 && f1 !== f0) o.frequency.exponentialRampToValueAtTime(Math.max(30, f1), t0 + dur);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(vol, t0 + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(c.destination);
+    o.start(t0); o.stop(t0 + dur + 0.05);
+  }
+  return {
+    unlock(){ ac(); },
+    pickup(){ tone(880, 880, .12, "sine", .11); tone(1318, 1318, .22, "sine", .09, .07); },
+    bless(){ tone(1568, 1568, .8, "sine", .07); tone(2093, 2093, .9, "sine", .045, .02); tone(1175, 1175, .7, "sine", .035, .05); },
+    candle(){ tone(392, 392, .5, "triangle", .06); tone(587, 587, .65, "sine", .045, .06); },
+    disperse(){ tone(620, 140, .45, "sine", .08); tone(1240, 300, .3, "sine", .028, .03); },
+    chime(){ [523, 659, 784, 1047].forEach((f, i)=> tone(f, f, .7, "sine", .055, i * .13)); },
+    feed(){ tone(520, 380, .12, "triangle", .06); tone(440, 330, .12, "triangle", .05, .09); }
+  };
+})();
+
+/* ============ v0.11 仪式收尾：点第一支烛 ============ */
+let firstCandlePetId = null;
+function offerFirstCandle(pet){
+  firstCandlePetId = pet.id;
+  document.getElementById("fcName").textContent = pet.name;
+  document.getElementById("firstCandle").classList.add("show");
+}
+
 const photoImgs = {}; // 照片 Image 缓存只放内存，绝不挂在 pet 上（会被存档序列化坏掉）
 function petImg(pet){
   if(!pet.photo) return null;
@@ -3114,9 +3188,46 @@ function drawSoul(pet){
       stx.drawImage(pim, (iw-sw)/2, (ih-sh)/2, sw, sh, 292, 36, 136, 136); // 照片在缓冲层按画框裁剪贴入
     }
   } else {
-    pR(stx, 337, 92, 46, 40, pet.color); pR(stx, 340, 78, 9, 14, pet.color); pR(stx, 371, 78, 9, 14, pet.color);
-    pR(stx, 348, 106, 5, 7, "#333"); pR(stx, 368, 106, 5, 7, "#333"); pR(stx, 358, 118, 5, 4, "#e88ca0");
+    /* v0.11：无照片画像改爪印剪影（原像素小脸与手绘底板打架，已废） */
+    const pcx = 360, pcy = 104;
+    const grd = stx.createRadialGradient(pcx, pcy, 8, pcx, pcy, 68);
+    grd.addColorStop(0, "rgba(255,246,218,.95)"); grd.addColorStop(1, "rgba(255,246,218,0)");
+    stx.fillStyle = grd; stx.fillRect(292, 36, 136, 136);
+    stx.save(); stx.globalAlpha = .85; stx.fillStyle = shade(pet.color, .78);
+    stx.beginPath(); stx.ellipse(pcx, pcy + 24, 21, 16, 0, 0, 7); stx.fill();
+    [[-27,-4],[-9,-13],[9,-13],[27,-4]].forEach(tp => { stx.beginPath(); stx.ellipse(pcx + tp[0], pcy + tp[1], 7.5, 10, tp[0] * .012, 0, 7); stx.fill(); });
+    stx.restore();
     pR(stx, 322, 144, 76, 8, shade(pet.color,.8));
+  }
+  // 祈福信物上墙（v0.11：攒下的宝贝挂在画像右边的墙上）
+  if(pet.keepsakes && pet.keepsakes.length){
+    const kSlots = [492, 566, 640], kTop = 62;
+    const rrPath = (c, x, y, w, h, r)=>{ c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); };
+    pet.keepsakes.slice(0, 3).forEach((kname, ki)=>{
+      const kx = kSlots[ki];
+      stx.fillStyle = "rgba(90,60,30,.16)"; stx.beginPath(); stx.ellipse(kx, kTop + 66, 20, 5, 0, 0, 7); stx.fill();
+      stx.strokeStyle = "#8a4b3a"; stx.lineWidth = 2; stx.beginPath(); stx.moveTo(kx, kTop - 15); stx.lineTo(kx, kTop); stx.stroke();
+      stx.fillStyle = "#6b4a2f"; stx.beginPath(); stx.arc(kx, kTop - 16, 3, 0, 7); stx.fill();
+      if(kname === "祈福牌"){
+        stx.fillStyle = "#b08954"; rrPath(stx, kx - 17, kTop, 34, 44, 5); stx.fill();
+        stx.strokeStyle = "#7d5f36"; stx.lineWidth = 2; rrPath(stx, kx - 17, kTop, 34, 44, 5); stx.stroke();
+        stx.fillStyle = "#f3e3bd"; rrPath(stx, kx - 11, kTop + 7, 22, 30, 3); stx.fill();
+        stx.fillStyle = "#c2504e"; stx.beginPath(); stx.arc(kx, kTop + 22, 6, 0, 7); stx.fill();
+      } else if(kname === "长寿结"){
+        stx.save(); stx.translate(kx, kTop + 16); stx.rotate(Math.PI / 4);
+        stx.fillStyle = "#c2504e"; stx.fillRect(-13, -13, 26, 26);
+        stx.strokeStyle = "#8e2f2c"; stx.lineWidth = 2; stx.strokeRect(-8, -8, 16, 16);
+        stx.restore();
+        stx.strokeStyle = "#c2504e"; stx.lineWidth = 2;
+        for(let txi = -8; txi <= 8; txi += 4){ stx.beginPath(); stx.moveTo(kx + txi, kTop + 34); stx.lineTo(kx + txi, kTop + 50); stx.stroke(); }
+      } else if(kname === "金铃铛"){
+        stx.fillStyle = "#e8b64c"; stx.beginPath(); stx.arc(kx, kTop + 20, 16, 0, 7); stx.fill();
+        stx.fillStyle = "#f6d67c"; stx.beginPath(); stx.arc(kx - 5, kTop + 14, 6, 0, 7); stx.fill();
+        stx.fillStyle = "#b57e2c"; stx.fillRect(kx - 16, kTop + 24, 32, 4);
+        stx.fillStyle = "#7d5a1e"; stx.beginPath(); stx.arc(kx, kTop + 32, 3.5, 0, 7); stx.fill();
+        stx.strokeStyle = "#b57e2c"; stx.lineWidth = 2; stx.beginPath(); stx.arc(kx, kTop + 2, 5, Math.PI, 0); stx.stroke();
+      }
+    });
   }
   // 烛光（按点烛次数最多 5 盏）
   const candles = Math.min(5, pet.counts.candle);
