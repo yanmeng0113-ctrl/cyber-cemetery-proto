@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>星星小园 · 原型 v0.33</title>
+<title>星星小园 · 原型 v0.34</title>
 <style>
   :root { --paper:#f5efe1; --card:#fffdf7; --ink:#2a3a2e; --ink2:#5d7057; --pine:#33523d; --gold:#a8842c; --goldsoft:#e7d6a4; --line:#ded2b4; --chip:#fbf7ea; --serif:"Songti SC","STSong","Noto Serif SC","SimSun",serif; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -139,7 +139,7 @@
 <body>
 <div id="app">
   <header>
-    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.33</span></h1>
+    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.34</span></h1>
   </header>
 
   <div id="hud">
@@ -170,6 +170,7 @@
     <details><summary>玩法说明</summary><div class="hintText">点地图、拖左下角的圆盘摇杆，或用 WASD/方向键走动；迷路了就打开背包里的「全园地图」 · 看到发光的小东西，点它一下就会走过去捡起来（全园共享、先到先得，每天最多捡 10 件）；灰黑的阴影团子点一下就会追上去驱散净化，它叼走的东西会掉出来· 走近墓碑看介绍，点「进小屋」· 全园都是纪念区：北岸是草甸墓园，南岸是花园墓园，中间过彩虹桥 · 园里有一间祈福小屋，在家的宝贝预登记后可以去那儿祈福 · 任何人的小屋都能进、都能喂——只有换装是主人专属。（注：原型存档只存在你这台设备里，「全园共享」要等正式版联网后才开放。）</div></details>
     <div class="drawerLabel">关于</div>
     <details id="changelog"><summary>原型说明与更新日志（点开看）</summary><div class="changelogBody">
+    原型说明（v0.34）：<b>复测试玩修掉一个真 bug</b>——登记第二只宝贝之后，第一只的小屋会被误判成「客访」：标题变客访、换装/换家具/换毛色按钮全消失，碑上的「自家」标记也只认最后登记的那只。根源是进屋判定还在认「最后登记的那只」（myPetId），没跟上「每人可登记 2 只」的所有权口径。已统一改走 isMine（登记时打的归属标记）：两只自家宝贝进屋都是自家、按钮都在、碑上都挂自家标记。0666 复测全流程（首入登记→完整仪式→过桥→名录→祈福屋上香→预登记+上限→小屋喂食→刷新存档）零报错顺带验过。<br>
     原型说明（v0.33）：<b>手机实玩反馈批</b>——①背包里新增「全园地图」：整园缩略图上标出 50 个碑位、自家与园友的碑（点金点直接走过去）、祈福小屋和你当前的位置，第一次进园不再迷路。②左下角加<b>圆盘摇杆</b>：拖着走，推多远走多快，手机上不用再戳小格子。③右下角加<b>情境动作键</b>：靠近道具亮「捡起」、靠近团子亮「驱散」，不用再精准点中那个小东西。④<b>睡姿/食姿尺寸归一化</b>：按图集里站姿的宽度自动缩放躺姿与吃姿，睡觉的团子不再比站着大一圈（猫狗鸟与新物种、照片包一视同仁）。⑤页面下方堆着的更新日志与鸣谢<b>收进背包抽屉</b>（「关于」组），页面只剩园子。⑥修好小屋「祈福」按钮图标被进屋时覆盖掉的老毛病。<br>
     原型说明（v0.32）：<b>实玩修复批＋交互批</b>——①出生点与过桥仪式集合点移到桥南头桥面上（不再站在池塘里），过桥贴桥面中线斜走，仪式终段与立碑仪式走位改绕桥（跨岸不直线趟水）；池塘碰撞北界上移到画出来的水岸（2140）；仪式期间藏起桥名/区域标签，不再与字幕叠字。②道具改<b>点选拾取</b>：点哪件走过去捡哪件，走过不再自动捡，被点的道具亮金圈；阴影团子改<b>追赶驱散</b>：点中后人物会追着漂移的团子跑，追上才净化，团子亮金圈。③新增守护统计：净化团子总数＋守护天数（当天净化过就算守了一天），在背包抽屉里看。④碑名录按钮去掉残留 emoji。<br>
     原型说明（v0.31）：<b>全园真碑＋一园五十碑位</b>——底图重画了一张干净的（画里不再有假碑），河道按新图重测；全园设 50 个碑位、每块带门牌号（一园 · N 号），空碑位淡色小碑立着、块块能点：走近空碑出「未登记」面板，可直接登记到这个碑位；登记过的碑在面板、碑名录、祈福牌上都标门牌号。登记默认按号从小到大填，老存档的宠物自动就近落到新碑位。地图模型定案：一园 50 碑位，满园后开新园（多园切换是正式版后端的活）。<br>
@@ -882,7 +883,7 @@ function draw(){
     const label = pet.status==="memorial" ? pet.name : pet.name+"的小院";
     const lx = clamp(sx, 48, view.w-48); // 报告15：名字标签不被画布边缘切掉
     ctx.strokeText(label, lx, sy+34); ctx.fillStyle = "#3c5231"; ctx.fillText(label, lx, sy+34);
-    if(pet.id===S.myPetId){ ctx.font = "11px sans-serif"; ctx.strokeText("♥ 自家", lx, sy-62); ctx.fillStyle = "#d6544e"; ctx.fillText("♥ 自家", lx, sy-62); }
+    if(isMine(pet)){ ctx.font = "11px sans-serif"; ctx.strokeText("♥ 自家", lx, sy-62); ctx.fillStyle = "#d6544e"; ctx.fillText("♥ 自家", lx, sy-62); }
   }
   ctx.font = "11px sans-serif"; ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.lineWidth = 3;
   ctx.strokeText("我", (player.x-cam.x)*ZOOM, (player.y-cam.y)*ZOOM+32); ctx.fillStyle = "#33523d"; ctx.fillText("我", (player.x-cam.x)*ZOOM, (player.y-cam.y)*ZOOM+32);
@@ -1287,11 +1288,11 @@ function enterHouse(pet){
   av.innerHTML = "";
   if(pet.photo && pet.photo.indexOf("data:image/")===0){ const im = document.createElement("img"); im.src = pet.photo; im.style.cssText = "width:64px;height:64px;border-radius:12px;object-fit:cover;border:2px solid #e7d9a8"; av.appendChild(im); }
   else { const sp = document.createElement("span"); sp.className = "emojiAvatar"; sp.textContent = SPECIES_EMOJI[pet.species]; av.appendChild(sp); }
-  document.getElementById("houseName").textContent = pet.name+" 的小屋" + (pet.id===S.myPetId ? "（自家）" : "（客访）");
+  document.getElementById("houseName").textContent = pet.name+" 的小屋" + (isMine(pet) ? "（自家）" : "（客访）");
   document.getElementById("houseDesc").textContent = pet.dates+" · "+pet.line + (pet.status==="memorial" ? " · 它以灵魂体的样子住在这里" : " · 它正在院子里过日子");
-  document.getElementById("btnDress").style.display = pet.id===S.myPetId ? "" : "none";
-  document.getElementById("btnFurn").style.display = pet.id===S.myPetId ? "" : "none";
-  document.getElementById("btnCoat").style.display = (pet.id===S.myPetId && !pet.photo && (pet.species==="cat"||pet.species==="dog")) ? "" : "none"; // 有照片的宠物：颜色以照片为准，不给换
+  document.getElementById("btnDress").style.display = isMine(pet) ? "" : "none";
+  document.getElementById("btnFurn").style.display = isMine(pet) ? "" : "none";
+  document.getElementById("btnCoat").style.display = (isMine(pet) && !pet.photo && (pet.species==="cat"||pet.species==="dog")) ? "" : "none"; // 有照片的宠物：颜色以照片为准，不给换
   /* 祈福按钮文案固定（v0.33：旧代码用 textContent 覆盖会把图标抹掉，已去掉） */
   refreshBlessBar();
   refreshHouseStats(); save();
@@ -1391,14 +1392,14 @@ function houseAction(act){
     toast("🧶 献上了"+({yarn:"一个线团",mouse:"一只玩具鼠",bell:"一个金铃铛",basket:"一个小篮子"})[kind]+"——它就留在 "+housePet.name+" 的房间里，它玩耍时自己会去扑");
   }
   if(act==="coat"){
-    if(housePet.id!==S.myPetId) return;
+    if(!isMine(housePet)) return;
     const coats = [["#f2ede4","奶白"],["#d9a45b","橘"],["#8a6642","棕"],["#33333a","黑"]];
     let ci = coats.findIndex(k=> k[0]===housePet.color); ci = (ci+1)%coats.length;
     housePet.color = coats[ci][0];
     toast("给 "+housePet.name+" 换上了"+coats[ci][1]+"色的毛 🎨"); save();
   }
   if(act==="dress"){
-    if(housePet.id!==S.myPetId) return;
+    if(!isMine(housePet)) return;
     if(S.inv.clothes<=0) return toast("还没有衣服，捡拾和里程碑会给 🧣");
     const outfits = ["围巾","小帽子","毛衣","星星背饰"];
     const cur = outfits.indexOf(housePet.outfit);
@@ -1814,7 +1815,7 @@ function checkFurnUnlocks(mine){
 const _checkMilestonesV20 = checkMilestones;
 checkMilestones = function(){ _checkMilestonesV20(); const mine = S.pets.find(p=>p.id===S.myPetId); if(mine) checkFurnUnlocks(mine); };
 function openFurnPanel(){
-  const pet = housePet; if(!pet || pet.id !== S.myPetId) return;
+  const pet = housePet; if(!pet || !isMine(pet)) return;
   const f = furnishOf(pet), ct = careTotal(pet);
   let html = "";
   for(const slot of ["A","B"]){
