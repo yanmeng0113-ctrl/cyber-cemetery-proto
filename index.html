@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>彩虹桥小园 · 原型 v0.26</title>
+<title>彩虹桥小园 · 原型 v0.27</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body { font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; background:#1c2b22; color:#2c3a2e; }
@@ -108,7 +108,7 @@
 <body>
 <div id="app">
   <header>
-    <h1>🌈 彩虹桥小园 · 原型 v0.26</h1>
+    <h1>🌈 彩虹桥小园 · 原型 v0.27</h1>
     <span class="badge" id="pioneerBadge">先行者 No.0001 · 创始园民（序号仅本地演示）</span>
   </header>
 
@@ -224,7 +224,7 @@
       <span class="emojiAvatar">🛕</span>
       <div>
         <h3>祈福小屋</h3>
-        <p>墙上挂着每一位登记过的宝贝的祈福牌。点一块牌子看看它；香炉里的香，是给满屋牌位的。</p>
+        <p>墙上挂着每一位登记过的宝贝的祈福牌，淡色的空牌位还没登记，点开看看。每位玩家最多登记 2 个；香炉里的香，是给满屋牌位的。</p>
       </div>
     </div>
     <canvas id="blessCanvas" width="880" height="500"></canvas>
@@ -244,7 +244,7 @@
     </div>
   </div>
   <details id="changelog"><summary>📖 原型说明与更新日志（点开看）</summary><div class="changelogBody">
-    原型说明（v0.26）：🪨 <b>墓碑落地、牌子真挂</b>——①墓碑包重做：旧抠图把碑座抠成半透明渐隐是"漂"的根源，这次用 AI 抠图模型（本地 BiRefNet 备选/u2net）＋alpha 硬化，碑体硬边贴地，接触阴影直接烤进素材包，不再代码现画；②祈福牌换新包：长长的红绳圈是真素材，牌子改小、不写名字，绳圈套过墙上的横杆挂着，每块带一点自然倾斜，垂影也烤在包里。<br>原型说明（v0.25）：📱 <b>移动体验批</b>——①顶栏收成一行（🎒背包按钮＋库存速览＋心意＋声音），其余家当（里程碑、礼包、碑名录、重置存档等）都收进背包抽屉，点开才展开；②过桥/立碑仪式<b>全屏</b>：仪式一开始页头、顶栏、说明全部让开，地图占满整屏，结束自动恢复；③<b>视野缩放</b>：窄屏自动拉远（手机上能看到更宽的园子，不再是 1:1 贴脸），桌面不变；④两处标注说实话了：先行者序号标明「仅本地演示」，玩法里注明全园共享要等正式版联网。<br>原型说明（v0.24）：🛕 <b>祈福小屋有了里面</b>——点小屋能进内景了：三面木架墙上挂着每一位登记过的宝贝的<b>祈福牌</b>（登记就自动上墙，牌面写名字，自家的牌子带红点），点任意一块牌子能看它的信息（主人、品种、年岁、祝福与香火）；屋里香炉可以<b>给所有牌位上香</b>（每天一炷，全屋牌子各添一炷香火）。自家预登记宝贝的祝福和送它过桥，也都搬进了它的牌子里。<br>原型说明（v0.23）：🛕 <b>祈福小屋专属素材包＋迁址</b>——原来的通用小木屋道具撤掉，换成按全图画风单独生成的祈福小屋原画（苔顶木屋、祈福牌架、灯笼、石板地基）做成的专属图集；位置从南岸西侧迁到<b>园子右下角的大樱花树旁</b>，碑位分配会避开小屋周边，小屋本身也有实体碰撞，不会再像贴纸浮在草地上。<br>原型说明（v0.22）：🗺️ <b>地图翻倍＋纪念为主</b>——园子扩到 4800×3200、换了全纪念园新底图（两岸都是碑地，碑容量约 140）；登记改为纪念为主：走了的立碑入园，还在家的只作预登记（不占位、不挂照片），园里南边新立一间<b>祈福小屋</b>，为在家的宝贝祈福；南岸生活区和过桥转化那套撤了（转纪念改从祈福小屋里送它过桥）。另加了<b>碑名录</b>，碑多了能搜名字让蝴蝶带路。老存档自动迁移（坐标翻倍、在养转预登记）。<br>原型说明（v0.21）：🕯️ <b>蜡烛只在墓碑前</b>——小屋里不再摆烛排了；它被点过的烛，现在亮在公园里它的墓碑脚下（最多排五支，火苗会轻轻晃）。在小屋里点烛照样计数，等它过桥之后，烛光就在碑前等它。<br>原型说明（v0.20）：🪑 <b>家具能换了</b>——它被照顾的次数攒够了，就能解锁更好看的替换家具（满 15 次解锁窝位替换款、满 40 次解锁架子位替换款），在小屋点「换家具（主人）」就能换上；被照顾满 200 次添一棵纪念小树、满 500 次添一盏长明小灯，自动出现在小屋右角。替换款一样能玩：双层爬架照样上、玩具箱照样扑、花藤秋千照样晃。<br>原型说明（v0.19）：🐰 <b>新物种来了：兔、仓鼠、龟、蜥蜴</b>——每个物种一张专属形象包（站/走/睡/吃/坐六个姿势）、一套基础家具（兔：草架＋草窝；仓鼠：跑轮＋小木屋；龟：浅水池＋晒台；蜥蜴：晒灯栖木＋躲避洞），还各有能玩的活动：兔子去草架前吃草、仓鼠上跑轮撒欢、乌龟泡池子和上晒台晒背、蜥蜴爬栖木在晒灯下取暖；点家具也能指派。带照片的照旧用它自己的照片生成形象。<br>原型说明（v0.18）：🧭 <b>摆放修正</b>——复查发现 A 槽（爬架/站架/玩具篮）钉在左侧墙的墙面上、高大家具像挂在墙上，食盆也落在墙角墙面。整排右移进后墙地板带：A 槽到墙角地板（避开窗户），食盆、水盆居中成喂食区，烛台靠右，供品回地毯一带。物种扩容顺延 v0.19。<br>原型说明（v0.17）：🏠 <b>小屋变大了，家具能玩了</b>——房间放大到 880×500；基础配置全部可互动：灵魂体会自己去爬架上玩（猫）、在玩具篮边扑咬（狗）、上秋千晃/站架子上看风景（鸟）、去水盆喝水、食盆有粮时自己去吃；你也可以直接点家具、食盆、水盆，指派它过去。物种扩容顺延到 v0.18。<br>原型说明（v0.16）：🛋️ <b>小屋改成「空房＋家具槽位」</b>——底图只剩墙、窗、地板和地毯，家具是一件件独立素材包摆进槽位；每只宠物开局发本物种的基础套件（猫：基础猫爬架＋布猫窝；狗：玩具篮＋狗窝垫；鸟：站架＋秋千架），记在它自己的档案里，以后靠里程碑添置、替换。灵魂体困了会自己走到窝边再躺下。建档新增<b>品种</b>（猫/狗可选，记在档案和小屋里）。<br>原型说明（v0.15）：🐾 <b>访客的宠物换成它自己的了</b>——带照片建档的猫/狗/鸟，现在直接在浏览器里用它自己的照片现场生成形象（照片做纹理、姿势图集裁形、描边和眼睛回到原位），不再套演示包；那套 AI 生成的布偶猫专属包只保留给最早建档的那只。正式版会升级为后台 AI 按每只照片单独生成的高清专属包。<br>原型说明（v0.14）：🔧 <b>按外部代码审查逐项修了一批</b>——静音键真的能静音了；点河对岸会自动绕桥过去；方向键不再滚屏、窗口失焦不会自己乱走；照片传错格式会出声告诉你；过桥前要输入它的名字才能确认；里程碑的称号（常来看看的人／守烛人）现在真的会发；手机上按钮更好点、提示不再盖住标题、更新日志折叠了；页脚补了素材署名；两张场景底图换成无损 WebP，页面轻了约三成。另说清一句：照片专属形象目前是<b>演示包</b>（以一只布偶猫的照片生成的那一套），正式版会按每只宠物自己的照片单独生成。<br>原型说明（v0.13）：📦 <b>全园素材包化</b>——按「所有素材必须做素材包、不许简单贴画」的纪律清了一轮：地上的捡拾物不再是 emoji，是手绘物品图集（肉腿/蜡烛/花束/小熊/围巾）；小屋的蜡烛、食盆、画像框都换成专属素材包（蜡烛两帧火焰、食盆空/满两态、画像框带爪印款）；连祈福星光、睡觉 Z 符、捡拾火花这三件特效，也离线烘焙成了精灵图集，不再用运行时贴片。场景里看得见的东西，件件有原画、有图集。<br>原型说明（v0.12）：🏮 <b>墙上的信物换成手绘的了</b>——上一版是代码画的扁平图形，跟房间的手绘墙面不搭；这版三件信物（木福牌、长寿结、金铃铛）是专门生成的手绘原画，跟房间、供品同一套工艺，挂在墙上是一体的了。<br>原型说明（v0.11）：🔊 <b>游戏有声音了</b>——捡东西叮咚、祈福有铃声、点烛有轻响、驱散团子有消散声、仪式结束有风铃，全是代码现场合成的，没有录音素材；右上角可以关。🏮 <b>祈福信物上墙了</b>——攒到的祈福牌、长寿结、金铃铛会挂进小屋画像右边的墙上。🕯️ <b>仪式有了收尾</b>——过桥或立碑之后，可以亲手为它点上第一支烛。🐾 没传照片的画像改成了爪印剪影，不再是像素小脸。<br>原型说明（v0.10）：🐾 <b>自家猫真走路了</b>——带照片建档的猫，走路不再是两帧静态图加浮动，而是一套 8 帧真步态循环（agent-sprite-forge 管线：站姿帧→图生视频→软抠图→自动挑循环），小屋里散步、去食盆、过桥仪式里走路都是这套；站立、睡觉、吃饭还是原来的姿势图。<br>原型说明（v0.9）：✨ <b>光点特效接入</b>——祈福时有星光落在它身上（pixelfx blessing）、睡着时头顶飘 Z 符、捡到东西时有小火花；👻 <b>新玩法：驱散阴影团子</b>——园子里会飘来灰黑小团子偷光吵闹，走近点它（或点它让守园人走过去），灯光一照就化作光尘，团子叼走的东西有几率掉回来（每天最多 3 件，每天最多来 5 只）。<br>原型说明（v0.8）：🏠 <b>房间变大了</b>——新内景更高更宽敞，画像挂到正墙中央；🎁 <b>献上玩具</b>——背包里的玩具献给它之后，就永久留在它房间的地板上（第一个是线团），它闲逛时自己会跑去扑着玩。<br>原型说明（v0.7）：✨ <b>照片专属形象上线</b>——带照片建档的猫，园子里的形象就是拿它的照片生成的那一套（白身、奶油色鞍纹、灰蓝耳朵、大蓬尾巴都是它本尊的），不再是通用猫换色，颜色也锁死以照片为准。旧存档里带照片的自家猫打开即自动换上。<br>原型说明（v0.6）：按哈克试玩报告逐项修复——①照片入库前压缩到 480px、存档失败会出声提醒，画像真贴进画框；②食盆改按时间戳结算（每 20 秒吃一格，刷新也不卡满）；③toast 提到顶层，小屋里能看见提示和背包余量；④「今日已捡」跨天清零、捡拾物绝不刷进河里且多刷在你附近；⑤登录礼包每天只能领一次；⑥陪玩/祈福每日计前 3 次，陪伴本身不限；⑦建档选「已经离开了」会补一场立碑仪式；⑧重置存档改成讲清后果的确认层；⑨小院和碑有了碰撞（爬不上房顶）、走近面板更容易触发、名字标签不被边缘切；⑩换毛色不再说开发术语。新玩法：在养宠物可以「祈福」了——每天在小屋里送它一句祝福（健健康康/平平安安/长命百岁/天天开心），祝福攒满 7/30/100 句得祈福牌、长寿结、金铃铛，过桥后这些宝贝会一直陪着它。</div>
+    原型说明（v0.27）：🧱 <b>牌位墙改槽位制</b>——每面墙固定 27 个位置（9 列 × 3 排），紧凑挂满；登记了的点开看信息，没登记的挂一块淡牌，点开显示「未登记」；每位玩家最多登记 2 个宝贝（登记入口到上限就拦）。正式版上共享后端后，这面墙就是所有玩家共用的同一面墙。<br>原型说明（v0.26）：🪨 <b>墓碑落地、牌子真挂</b>——①墓碑包重做：旧抠图把碑座抠成半透明渐隐是"漂"的根源，这次用 AI 抠图模型（本地 BiRefNet 备选/u2net）＋alpha 硬化，碑体硬边贴地，接触阴影直接烤进素材包，不再代码现画；②祈福牌换新包：长长的红绳圈是真素材，牌子改小、不写名字，绳圈套过墙上的横杆挂着，每块带一点自然倾斜，垂影也烤在包里。<br>原型说明（v0.25）：📱 <b>移动体验批</b>——①顶栏收成一行（🎒背包按钮＋库存速览＋心意＋声音），其余家当（里程碑、礼包、碑名录、重置存档等）都收进背包抽屉，点开才展开；②过桥/立碑仪式<b>全屏</b>：仪式一开始页头、顶栏、说明全部让开，地图占满整屏，结束自动恢复；③<b>视野缩放</b>：窄屏自动拉远（手机上能看到更宽的园子，不再是 1:1 贴脸），桌面不变；④两处标注说实话了：先行者序号标明「仅本地演示」，玩法里注明全园共享要等正式版联网。<br>原型说明（v0.24）：🛕 <b>祈福小屋有了里面</b>——点小屋能进内景了：三面木架墙上挂着每一位登记过的宝贝的<b>祈福牌</b>（登记就自动上墙，牌面写名字，自家的牌子带红点），点任意一块牌子能看它的信息（主人、品种、年岁、祝福与香火）；屋里香炉可以<b>给所有牌位上香</b>（每天一炷，全屋牌子各添一炷香火）。自家预登记宝贝的祝福和送它过桥，也都搬进了它的牌子里。<br>原型说明（v0.23）：🛕 <b>祈福小屋专属素材包＋迁址</b>——原来的通用小木屋道具撤掉，换成按全图画风单独生成的祈福小屋原画（苔顶木屋、祈福牌架、灯笼、石板地基）做成的专属图集；位置从南岸西侧迁到<b>园子右下角的大樱花树旁</b>，碑位分配会避开小屋周边，小屋本身也有实体碰撞，不会再像贴纸浮在草地上。<br>原型说明（v0.22）：🗺️ <b>地图翻倍＋纪念为主</b>——园子扩到 4800×3200、换了全纪念园新底图（两岸都是碑地，碑容量约 140）；登记改为纪念为主：走了的立碑入园，还在家的只作预登记（不占位、不挂照片），园里南边新立一间<b>祈福小屋</b>，为在家的宝贝祈福；南岸生活区和过桥转化那套撤了（转纪念改从祈福小屋里送它过桥）。另加了<b>碑名录</b>，碑多了能搜名字让蝴蝶带路。老存档自动迁移（坐标翻倍、在养转预登记）。<br>原型说明（v0.21）：🕯️ <b>蜡烛只在墓碑前</b>——小屋里不再摆烛排了；它被点过的烛，现在亮在公园里它的墓碑脚下（最多排五支，火苗会轻轻晃）。在小屋里点烛照样计数，等它过桥之后，烛光就在碑前等它。<br>原型说明（v0.20）：🪑 <b>家具能换了</b>——它被照顾的次数攒够了，就能解锁更好看的替换家具（满 15 次解锁窝位替换款、满 40 次解锁架子位替换款），在小屋点「换家具（主人）」就能换上；被照顾满 200 次添一棵纪念小树、满 500 次添一盏长明小灯，自动出现在小屋右角。替换款一样能玩：双层爬架照样上、玩具箱照样扑、花藤秋千照样晃。<br>原型说明（v0.19）：🐰 <b>新物种来了：兔、仓鼠、龟、蜥蜴</b>——每个物种一张专属形象包（站/走/睡/吃/坐六个姿势）、一套基础家具（兔：草架＋草窝；仓鼠：跑轮＋小木屋；龟：浅水池＋晒台；蜥蜴：晒灯栖木＋躲避洞），还各有能玩的活动：兔子去草架前吃草、仓鼠上跑轮撒欢、乌龟泡池子和上晒台晒背、蜥蜴爬栖木在晒灯下取暖；点家具也能指派。带照片的照旧用它自己的照片生成形象。<br>原型说明（v0.18）：🧭 <b>摆放修正</b>——复查发现 A 槽（爬架/站架/玩具篮）钉在左侧墙的墙面上、高大家具像挂在墙上，食盆也落在墙角墙面。整排右移进后墙地板带：A 槽到墙角地板（避开窗户），食盆、水盆居中成喂食区，烛台靠右，供品回地毯一带。物种扩容顺延 v0.19。<br>原型说明（v0.17）：🏠 <b>小屋变大了，家具能玩了</b>——房间放大到 880×500；基础配置全部可互动：灵魂体会自己去爬架上玩（猫）、在玩具篮边扑咬（狗）、上秋千晃/站架子上看风景（鸟）、去水盆喝水、食盆有粮时自己去吃；你也可以直接点家具、食盆、水盆，指派它过去。物种扩容顺延到 v0.18。<br>原型说明（v0.16）：🛋️ <b>小屋改成「空房＋家具槽位」</b>——底图只剩墙、窗、地板和地毯，家具是一件件独立素材包摆进槽位；每只宠物开局发本物种的基础套件（猫：基础猫爬架＋布猫窝；狗：玩具篮＋狗窝垫；鸟：站架＋秋千架），记在它自己的档案里，以后靠里程碑添置、替换。灵魂体困了会自己走到窝边再躺下。建档新增<b>品种</b>（猫/狗可选，记在档案和小屋里）。<br>原型说明（v0.15）：🐾 <b>访客的宠物换成它自己的了</b>——带照片建档的猫/狗/鸟，现在直接在浏览器里用它自己的照片现场生成形象（照片做纹理、姿势图集裁形、描边和眼睛回到原位），不再套演示包；那套 AI 生成的布偶猫专属包只保留给最早建档的那只。正式版会升级为后台 AI 按每只照片单独生成的高清专属包。<br>原型说明（v0.14）：🔧 <b>按外部代码审查逐项修了一批</b>——静音键真的能静音了；点河对岸会自动绕桥过去；方向键不再滚屏、窗口失焦不会自己乱走；照片传错格式会出声告诉你；过桥前要输入它的名字才能确认；里程碑的称号（常来看看的人／守烛人）现在真的会发；手机上按钮更好点、提示不再盖住标题、更新日志折叠了；页脚补了素材署名；两张场景底图换成无损 WebP，页面轻了约三成。另说清一句：照片专属形象目前是<b>演示包</b>（以一只布偶猫的照片生成的那一套），正式版会按每只宠物自己的照片单独生成。<br>原型说明（v0.13）：📦 <b>全园素材包化</b>——按「所有素材必须做素材包、不许简单贴画」的纪律清了一轮：地上的捡拾物不再是 emoji，是手绘物品图集（肉腿/蜡烛/花束/小熊/围巾）；小屋的蜡烛、食盆、画像框都换成专属素材包（蜡烛两帧火焰、食盆空/满两态、画像框带爪印款）；连祈福星光、睡觉 Z 符、捡拾火花这三件特效，也离线烘焙成了精灵图集，不再用运行时贴片。场景里看得见的东西，件件有原画、有图集。<br>原型说明（v0.12）：🏮 <b>墙上的信物换成手绘的了</b>——上一版是代码画的扁平图形，跟房间的手绘墙面不搭；这版三件信物（木福牌、长寿结、金铃铛）是专门生成的手绘原画，跟房间、供品同一套工艺，挂在墙上是一体的了。<br>原型说明（v0.11）：🔊 <b>游戏有声音了</b>——捡东西叮咚、祈福有铃声、点烛有轻响、驱散团子有消散声、仪式结束有风铃，全是代码现场合成的，没有录音素材；右上角可以关。🏮 <b>祈福信物上墙了</b>——攒到的祈福牌、长寿结、金铃铛会挂进小屋画像右边的墙上。🕯️ <b>仪式有了收尾</b>——过桥或立碑之后，可以亲手为它点上第一支烛。🐾 没传照片的画像改成了爪印剪影，不再是像素小脸。<br>原型说明（v0.10）：🐾 <b>自家猫真走路了</b>——带照片建档的猫，走路不再是两帧静态图加浮动，而是一套 8 帧真步态循环（agent-sprite-forge 管线：站姿帧→图生视频→软抠图→自动挑循环），小屋里散步、去食盆、过桥仪式里走路都是这套；站立、睡觉、吃饭还是原来的姿势图。<br>原型说明（v0.9）：✨ <b>光点特效接入</b>——祈福时有星光落在它身上（pixelfx blessing）、睡着时头顶飘 Z 符、捡到东西时有小火花；👻 <b>新玩法：驱散阴影团子</b>——园子里会飘来灰黑小团子偷光吵闹，走近点它（或点它让守园人走过去），灯光一照就化作光尘，团子叼走的东西有几率掉回来（每天最多 3 件，每天最多来 5 只）。<br>原型说明（v0.8）：🏠 <b>房间变大了</b>——新内景更高更宽敞，画像挂到正墙中央；🎁 <b>献上玩具</b>——背包里的玩具献给它之后，就永久留在它房间的地板上（第一个是线团），它闲逛时自己会跑去扑着玩。<br>原型说明（v0.7）：✨ <b>照片专属形象上线</b>——带照片建档的猫，园子里的形象就是拿它的照片生成的那一套（白身、奶油色鞍纹、灰蓝耳朵、大蓬尾巴都是它本尊的），不再是通用猫换色，颜色也锁死以照片为准。旧存档里带照片的自家猫打开即自动换上。<br>原型说明（v0.6）：按哈克试玩报告逐项修复——①照片入库前压缩到 480px、存档失败会出声提醒，画像真贴进画框；②食盆改按时间戳结算（每 20 秒吃一格，刷新也不卡满）；③toast 提到顶层，小屋里能看见提示和背包余量；④「今日已捡」跨天清零、捡拾物绝不刷进河里且多刷在你附近；⑤登录礼包每天只能领一次；⑥陪玩/祈福每日计前 3 次，陪伴本身不限；⑦建档选「已经离开了」会补一场立碑仪式；⑧重置存档改成讲清后果的确认层；⑨小院和碑有了碰撞（爬不上房顶）、走近面板更容易触发、名字标签不被边缘切；⑩换毛色不再说开发术语。新玩法：在养宠物可以「祈福」了——每天在小屋里送它一句祝福（健健康康/平平安安/长命百岁/天天开心），祝福攒满 7/30/100 句得祈福牌、长寿结、金铃铛，过桥后这些宝贝会一直陪着它。</div>
   </details>
   <div id="credits">素材与鸣谢：园内场景、宠物与物品均为本项目自制素材包（AI 生成原画＋forge 图集）；灵魂体加载兜底图集含 [LPC] Cats and Dogs（bluecarrot16，CC-BY 3.0）与 Sprout Lands 小鸡（Cup Nooble，免费版·非商用，商用前替换）；特效帧由 patch-gg/pixelfx（MIT）离线烘焙；动画生产管线 agent-sprite-forge（MIT）。</div>
 </div>
@@ -1900,6 +1900,7 @@ document.getElementById("regPhoto").addEventListener("change", e=>{
   reader.readAsDataURL(f);
 });
 document.getElementById("btnRegister").onclick = ()=>{
+  if(myPets().length >= 2){ toast("每位玩家最多登记 2 个宝贝——先陪好现在这两位吧 💛"); return; }
   const name = document.getElementById("regName").value.trim() || "小满";
   const species = document.getElementById("regSpecies").value;
   const breed = BREEDS[species] ? (document.getElementById("regBreed").value || "") : "";
@@ -1910,7 +1911,7 @@ document.getElementById("btnRegister").onclick = ()=>{
   if(status==="memorial"){ const pl = allocPlot(); spawnX = pl.x; spawnY = pl.y; CER_PLOT.x = pl.x; CER_PLOT.y = pl.y; }
   const mine = mkPet(name, species, status, color, spawnX, spawnY, status==="memorial" ? "它先回星星那儿了" : "还在家里，活蹦乱跳", line);
   mine.photo = status==="memorial" ? regPhotoData : null; // 预登记不收照片（创作者定：祈福不挂照片）
-  mine.breed = breed;
+  mine.breed = breed; mine.mine = true;
   // v0.15：带照片建档不再套演示专属包——形象由它自己的照片在浏览器内现场生成（photoTexCanvas）；演示包只属于最早那只已存档的猫
   S.pets.push(mine); S.myPetId = mine.id; S.inv.toy += 1; // 新手包：玩具×1，第一天就能陪它玩
   if(status==="memorial"){ player.x = mine.x; player.y = mine.y + 70; player.tx = player.x; player.ty = player.y; }
@@ -1918,7 +1919,7 @@ document.getElementById("btnRegister").onclick = ()=>{
   if(status==="memorial"){ startMemorialCeremony(mine); } // 报告9：建档时已离开的，也给一场立碑仪式
   else toast("📝 "+name+" 预登记好了，祈福小屋的墙上也给它挂上了牌子。它还在家里陪着你。去园子右下角樱花树旁的祈福小屋，可以为它祈福攒福气；将来真到了那一天，在小屋里送它过桥，这份档案就转成纪念档。");
 };
-if(S.myPetId){ regOverlay.style.display = "none"; const mine = S.pets.find(p=>p.id===S.myPetId); if(mine && mine.status==="memorial"){ player.x=mine.x; player.y=mine.y+70; player.tx=player.x; player.ty=player.y; } }
+if(S.myPetId){ regOverlay.style.display = "none"; const mine = S.pets.find(p=>p.id===S.myPetId); if(mine) mine.mine = true; if(mine && mine.status==="memorial"){ player.x=mine.x; player.y=mine.y+70; player.tx=player.x; player.ty=player.y; } }
 
 /* ============ v0.22：祈福小屋＋碑名录＋地块分配 ============ */
 const BLESS_HOUSE = { x:4380, y:2940 }; // v0.23：迁到园子右下角、大樱花树旁
@@ -1976,8 +1977,8 @@ function renderBlessPanel(){
   cb.onclick = () => { const pl = allocPlot(); CER_PLOT.x = pl.x; CER_PLOT.y = pl.y; document.getElementById("blessOverlay").classList.remove("show"); nearestPet = mine; document.getElementById("btnConvert").onclick(); };
   conv.appendChild(cb); list.appendChild(conv);
 }
-function blessWish(wish){
-  const mine = S.pets.find(p => p.id === S.myPetId);
+function blessWish(wish, pet){
+  const mine = pet || S.pets.find(p => p.id === S.myPetId);
   if(!mine || mine.status !== "prereg") return;
   if(mine.lastBlessDate === todayStr()){ toast("今天的祝福已经送到啦，它收到了 💛 明天再来给它攒一句"); return; }
   mine.lastBlessDate = todayStr(); mine.blessWish = wish; mine.counts.bless = (mine.counts.bless || 0) + 1;
@@ -2014,7 +2015,7 @@ ATLAS_PLAQUE.src = "data:image/webp;base64,UklGRkYDAQBXRUJQVlA4WAoAAAAQAAAAmAEAh
 const PLAQUER = [0, 0, 409, 904];
 const blessCanvas = document.getElementById("blessCanvas");
 const bctx = blessCanvas.getContext("2d");
-let blessTimer = null, selPlaque = null, wallPage = 0, plaqueRects = [], incenseFxT0 = 0;
+let blessTimer = null, selPlaque = null, selSlot = -1, wallPage = 0, plaqueRects = [], incenseFxT0 = 0;
 function enterBlessRoom(){
   document.getElementById("hud").style.display = "none";
   document.getElementById("mapWrap").style.display = "none";
@@ -2032,30 +2033,33 @@ function leaveBlessRoom(){
   document.getElementById("mapWrap").style.display = "";
 }
 function wallPets(){ return S.pets; }
+function isMine(pet){ return !!pet && (pet.mine === true || pet.id === S.myPetId); }
+function myPets(){ return S.pets.filter(isMine); }
 function drawBlessRoom(){
   const W = 880, H = 500;
   if(BLESS_PLATE.complete && BLESS_PLATE.naturalWidth) bctx.drawImage(BLESS_PLATE, 0, 0, W, H);
   else { bctx.fillStyle = "#e8dcc0"; bctx.fillRect(0, 0, W, H); }
-  const pets = wallPets(), per = 18, pages = Math.max(1, Math.ceil(pets.length / per));
+  const pets = wallPets(), per = 27, pages = Math.max(1, Math.ceil(pets.length / per));
   if(wallPage >= pages) wallPage = pages - 1;
   document.getElementById("btnWallPrev").style.display = pages > 1 ? "" : "none";
   document.getElementById("btnWallNext").style.display = pages > 1 ? "" : "none";
   const rails = [76, 166, 256];
   plaqueRects = [];
-  const slice = pets.slice(wallPage * per, wallPage * per + per);
-  slice.forEach((pet, i) => {
-    const row = Math.floor(i / 6), col = i % 6;
-    // v0.26：牌子改小（总高 64）、不写名字；绳圈套过横杆真挂——以杆为轴、每块带一点自然倾斜，垂影烤在包里
-    const cx = 250 + col * 84, top = rails[row] - 12, ph = 64, pw = ph * PLAQUER[2] / PLAQUER[3];
+  // v0.27：固定槽位制——每面墙 9 列 × 3 排 = 27 个位置，紧凑挂满；没登记的位置挂一块淡牌，点开显示「未登记」
+  for(let i = 0; i < per; i++){
+    const pet = pets[wallPage * per + i] || null, slot = wallPage * per + i;
+    const row = Math.floor(i / 9), col = i % 9;
+    const cx = 205 + col * 60, top = rails[row] - 12, ph = 64, pw = ph * PLAQUER[2] / PLAQUER[3];
     if(ATLAS_PLAQUE.complete && ATLAS_PLAQUE.naturalWidth){
-      bctx.save(); bctx.translate(cx, rails[row]); bctx.rotate(((i * 37) % 5 - 2) * 0.008);
+      bctx.save(); if(!pet) bctx.globalAlpha = 0.35;
+      bctx.translate(cx, rails[row]); bctx.rotate(((i * 37) % 5 - 2) * 0.008);
       bctx.drawImage(ATLAS_PLAQUE, PLAQUER[0], PLAQUER[1], PLAQUER[2], PLAQUER[3], -pw / 2, -12, pw, ph);
       bctx.restore();
     }
-    if(pet === selPlaque){ bctx.strokeStyle = "rgba(255,196,64,.95)"; bctx.lineWidth = 3; bctx.beginPath(); bctx.ellipse(cx, top + ph / 2, pw / 2 + 6, ph / 2 + 4, 0, 0, 7); bctx.stroke(); }
-    if(pet.id === S.myPetId){ bctx.fillStyle = "#c8432b"; bctx.beginPath(); bctx.arc(cx + pw * 0.32, top + ph * 0.60, 3, 0, 7); bctx.fill(); }
-    plaqueRects.push({ pet, x: cx - pw / 2 - 4, y: top, w: pw + 8, h: ph });
-  });
+    if((pet && pet === selPlaque) || (!pet && slot === selSlot)){ bctx.strokeStyle = "rgba(255,196,64,.95)"; bctx.lineWidth = 3; bctx.beginPath(); bctx.ellipse(cx, top + ph / 2, pw / 2 + 6, ph / 2 + 4, 0, 0, 7); bctx.stroke(); }
+    if(pet && isMine(pet)){ bctx.fillStyle = "#c8432b"; bctx.beginPath(); bctx.arc(cx + pw * 0.32, top + ph * 0.60, 3, 0, 7); bctx.fill(); }
+    plaqueRects.push({ pet, slot, x: cx - pw / 2 - 4, y: top, w: pw + 8, h: ph });
+  }
   if(incenseFxT0 && Date.now() - incenseFxT0 < 2600 && ATLAS_FXB.complete && ATLAS_FXB.naturalWidth){
     const sh = FXSHEETS.blessing, u = (Date.now() - incenseFxT0) / 2600;
     const fr = Math.floor((Date.now() - incenseFxT0) / 100) % sh.frames;
@@ -2064,19 +2068,32 @@ function drawBlessRoom(){
     bctx.globalAlpha = 1;
   }
   bctx.font = "13px sans-serif"; bctx.textAlign = "center"; bctx.fillStyle = "rgba(90,70,50,.75)";
-  bctx.fillText("第 " + (wallPage + 1) + " 面墙 · 共 " + pets.length + " 块牌子", 440, 486);
+  bctx.fillText("第 " + (wallPage + 1) + " 面墙 · 已登记 " + pets.length + " 块 · 每面墙 " + per + " 个位置", 440, 486);
 }
-document.getElementById("btnWallPrev").onclick = () => { wallPage = Math.max(0, wallPage - 1); selPlaque = null; renderPlaqueInfo(null); };
-document.getElementById("btnWallNext").onclick = () => { wallPage++; selPlaque = null; renderPlaqueInfo(null); };
+document.getElementById("btnWallPrev").onclick = () => { wallPage = Math.max(0, wallPage - 1); selPlaque = null; selSlot = -1; renderPlaqueInfo(null); };
+document.getElementById("btnWallNext").onclick = () => { wallPage++; selPlaque = null; selSlot = -1; renderPlaqueInfo(null); };
 blessCanvas.addEventListener("pointerdown", e => {
   const r = blessCanvas.getBoundingClientRect();
   const lx = (e.clientX - r.left) * 880 / r.width, ly = (e.clientY - r.top) * 500 / r.height;
-  for(const pr of plaqueRects){ if(lx >= pr.x && lx <= pr.x + pr.w && ly >= pr.y && ly <= pr.y + pr.h){ selPlaque = pr.pet; renderPlaqueInfo(pr.pet); SFX.pickup(); return; } }
+  for(const pr of plaqueRects){ if(lx >= pr.x && lx <= pr.x + pr.w && ly >= pr.y && ly <= pr.y + pr.h){ if(pr.pet){ selPlaque = pr.pet; selSlot = -1; renderPlaqueInfo(pr.pet); } else { selPlaque = null; selSlot = pr.slot; renderEmptySlot(pr.slot); } SFX.pickup(); return; } }
 });
+function renderEmptySlot(slot){
+  const box = document.getElementById("plaqueInfo"); box.innerHTML = "";
+  const head = document.createElement("p"); head.style.margin = "2px 0";
+  const b = document.createElement("b"); b.textContent = "🪵 第 " + (slot + 1) + " 号牌位 · 未登记"; head.appendChild(b); box.appendChild(head);
+  const sub = document.createElement("p"); sub.className = "sub"; sub.style.margin = "2px 0";
+  const mc = myPets().length;
+  sub.textContent = mc >= 2 ? "这个位置还空着，等一位宝贝来登记。每位玩家最多登记 2 个宝贝，你的两个名额已经用上了。" : "这个位置还空着，等一位宝贝来登记。每位玩家最多登记 2 个，你还可以登记 " + (2 - mc) + " 个。";
+  box.appendChild(sub);
+  if(mc < 2){ const row = document.createElement("div"); row.className = "row";
+    const g = document.createElement("button"); g.textContent = "✏️ 去登记一个宝贝";
+    g.onclick = () => { leaveBlessRoom(); regOverlay.style.display = "flex"; };
+    row.appendChild(g); box.appendChild(row); }
+}
 function renderPlaqueInfo(pet){
   const box = document.getElementById("plaqueInfo"); box.innerHTML = "";
   if(!pet){ const p = document.createElement("p"); p.className = "sub"; p.textContent = "点墙上任意一块牌子，看看它是谁家的宝贝。"; box.appendChild(p); return; }
-  const mine = pet.id === S.myPetId;
+  const mine = isMine(pet);
   const head = document.createElement("p"); head.style.margin = "2px 0";
   const b = document.createElement("b"); b.textContent = (SPECIES_EMOJI[pet.species] || "🐾") + " " + pet.name; head.appendChild(b);
   head.appendChild(document.createTextNode(" · 主人：" + (mine ? "我" : "园友") + " · 品种：" + (pet.breed || "—") + " · 年岁：" + (pet.dates || "—")));
@@ -2093,7 +2110,7 @@ function renderPlaqueInfo(pet){
   if(mine && pet.status === "prereg"){
     for(const w of ["健健康康", "平平安安", "长命百岁", "天天开心"]){
       const wb = document.createElement("button"); wb.textContent = "🙏 " + w;
-      wb.onclick = () => blessWish(w); row.appendChild(wb);
+      wb.onclick = () => blessWish(w, pet); row.appendChild(wb);
     }
     const cb = document.createElement("button"); cb.className = "ghost"; cb.textContent = "🌈 送它过桥（转纪念）";
     cb.onclick = () => { const pl = allocPlot(); CER_PLOT.x = pl.x; CER_PLOT.y = pl.y; leaveBlessRoom(); nearestPet = pet; document.getElementById("btnConvert").onclick(); };
