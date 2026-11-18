@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>彩虹桥小园 · 原型 v0.17</title>
+<title>彩虹桥小园 · 原型 v0.18</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body { font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; background:#1c2b22; color:#2c3a2e; }
@@ -88,7 +88,7 @@
 <body>
 <div id="app">
   <header>
-    <h1>🌈 彩虹桥小园 · 原型 v0.17</h1>
+    <h1>🌈 彩虹桥小园 · 原型 v0.18</h1>
     <span class="badge" id="pioneerBadge">先行者 No.0001 · 创始园民</span>
   </header>
 
@@ -196,7 +196,7 @@
     玩法：点地图或用 WASD/方向键走动 · 走过发光的小东西就能捡（全园共享、先到先得，捡完会慢慢再刷）· 走近墓碑/小院看介绍，点「进小屋」· 河南岸是生活区，河北岸是纪念区，中间过彩虹桥 · 任何人的小屋都能进、都能喂——只有换装是主人专属。<br>
   </div>
   <details id="changelog"><summary>📖 原型说明与更新日志（点开看）</summary><div class="changelogBody">
-    原型说明（v0.17）：🏠 <b>小屋变大了，家具能玩了</b>——房间放大到 880×500；基础配置全部可互动：灵魂体会自己去爬架上玩（猫）、在玩具篮边扑咬（狗）、上秋千晃/站架子上看风景（鸟）、去水盆喝水、食盆有粮时自己去吃；你也可以直接点家具、食盆、水盆，指派它过去。物种扩容顺延到 v0.18。<br>原型说明（v0.16）：🛋️ <b>小屋改成「空房＋家具槽位」</b>——底图只剩墙、窗、地板和地毯，家具是一件件独立素材包摆进槽位；每只宠物开局发本物种的基础套件（猫：基础猫爬架＋布猫窝；狗：玩具篮＋狗窝垫；鸟：站架＋秋千架），记在它自己的档案里，以后靠里程碑添置、替换。灵魂体困了会自己走到窝边再躺下。建档新增<b>品种</b>（猫/狗可选，记在档案和小屋里）。<br>原型说明（v0.15）：🐾 <b>访客的宠物换成它自己的了</b>——带照片建档的猫/狗/鸟，现在直接在浏览器里用它自己的照片现场生成形象（照片做纹理、姿势图集裁形、描边和眼睛回到原位），不再套演示包；那套 AI 生成的布偶猫专属包只保留给最早建档的那只。正式版会升级为后台 AI 按每只照片单独生成的高清专属包。<br>原型说明（v0.14）：🔧 <b>按外部代码审查逐项修了一批</b>——静音键真的能静音了；点河对岸会自动绕桥过去；方向键不再滚屏、窗口失焦不会自己乱走；照片传错格式会出声告诉你；过桥前要输入它的名字才能确认；里程碑的称号（常来看看的人／守烛人）现在真的会发；手机上按钮更好点、提示不再盖住标题、更新日志折叠了；页脚补了素材署名；两张场景底图换成无损 WebP，页面轻了约三成。另说清一句：照片专属形象目前是<b>演示包</b>（以一只布偶猫的照片生成的那一套），正式版会按每只宠物自己的照片单独生成。<br>原型说明（v0.13）：📦 <b>全园素材包化</b>——按「所有素材必须做素材包、不许简单贴画」的纪律清了一轮：地上的捡拾物不再是 emoji，是手绘物品图集（肉腿/蜡烛/花束/小熊/围巾）；小屋的蜡烛、食盆、画像框都换成专属素材包（蜡烛两帧火焰、食盆空/满两态、画像框带爪印款）；连祈福星光、睡觉 Z 符、捡拾火花这三件特效，也离线烘焙成了精灵图集，不再用运行时贴片。场景里看得见的东西，件件有原画、有图集。<br>原型说明（v0.12）：🏮 <b>墙上的信物换成手绘的了</b>——上一版是代码画的扁平图形，跟房间的手绘墙面不搭；这版三件信物（木福牌、长寿结、金铃铛）是专门生成的手绘原画，跟房间、供品同一套工艺，挂在墙上是一体的了。<br>原型说明（v0.11）：🔊 <b>游戏有声音了</b>——捡东西叮咚、祈福有铃声、点烛有轻响、驱散团子有消散声、仪式结束有风铃，全是代码现场合成的，没有录音素材；右上角可以关。🏮 <b>祈福信物上墙了</b>——攒到的祈福牌、长寿结、金铃铛会挂进小屋画像右边的墙上。🕯️ <b>仪式有了收尾</b>——过桥或立碑之后，可以亲手为它点上第一支烛。🐾 没传照片的画像改成了爪印剪影，不再是像素小脸。<br>原型说明（v0.10）：🐾 <b>自家猫真走路了</b>——带照片建档的猫，走路不再是两帧静态图加浮动，而是一套 8 帧真步态循环（agent-sprite-forge 管线：站姿帧→图生视频→软抠图→自动挑循环），小屋里散步、去食盆、过桥仪式里走路都是这套；站立、睡觉、吃饭还是原来的姿势图。<br>原型说明（v0.9）：✨ <b>光点特效接入</b>——祈福时有星光落在它身上（pixelfx blessing）、睡着时头顶飘 Z 符、捡到东西时有小火花；👻 <b>新玩法：驱散阴影团子</b>——园子里会飘来灰黑小团子偷光吵闹，走近点它（或点它让守园人走过去），灯光一照就化作光尘，团子叼走的东西有几率掉回来（每天最多 3 件，每天最多来 5 只）。<br>原型说明（v0.8）：🏠 <b>房间变大了</b>——新内景更高更宽敞，画像挂到正墙中央；🎁 <b>献上玩具</b>——背包里的玩具献给它之后，就永久留在它房间的地板上（第一个是线团），它闲逛时自己会跑去扑着玩。<br>原型说明（v0.7）：✨ <b>照片专属形象上线</b>——带照片建档的猫，园子里的形象就是拿它的照片生成的那一套（白身、奶油色鞍纹、灰蓝耳朵、大蓬尾巴都是它本尊的），不再是通用猫换色，颜色也锁死以照片为准。旧存档里带照片的自家猫打开即自动换上。<br>原型说明（v0.6）：按哈克试玩报告逐项修复——①照片入库前压缩到 480px、存档失败会出声提醒，画像真贴进画框；②食盆改按时间戳结算（每 20 秒吃一格，刷新也不卡满）；③toast 提到顶层，小屋里能看见提示和背包余量；④「今日已捡」跨天清零、捡拾物绝不刷进河里且多刷在你附近；⑤登录礼包每天只能领一次；⑥陪玩/祈福每日计前 3 次，陪伴本身不限；⑦建档选「已经离开了」会补一场立碑仪式；⑧重置存档改成讲清后果的确认层；⑨小院和碑有了碰撞（爬不上房顶）、走近面板更容易触发、名字标签不被边缘切；⑩换毛色不再说开发术语。新玩法：在养宠物可以「祈福」了——每天在小屋里送它一句祝福（健健康康/平平安安/长命百岁/天天开心），祝福攒满 7/30/100 句得祈福牌、长寿结、金铃铛，过桥后这些宝贝会一直陪着它。</div>
+    原型说明（v0.18）：🧭 <b>摆放修正</b>——复查发现 A 槽（爬架/站架/玩具篮）钉在左侧墙的墙面上、高大家具像挂在墙上，食盆也落在墙角墙面。整排右移进后墙地板带：A 槽到墙角地板（避开窗户），食盆、水盆居中成喂食区，烛台靠右，供品回地毯一带。物种扩容顺延 v0.19。<br>原型说明（v0.17）：🏠 <b>小屋变大了，家具能玩了</b>——房间放大到 880×500；基础配置全部可互动：灵魂体会自己去爬架上玩（猫）、在玩具篮边扑咬（狗）、上秋千晃/站架子上看风景（鸟）、去水盆喝水、食盆有粮时自己去吃；你也可以直接点家具、食盆、水盆，指派它过去。物种扩容顺延到 v0.18。<br>原型说明（v0.16）：🛋️ <b>小屋改成「空房＋家具槽位」</b>——底图只剩墙、窗、地板和地毯，家具是一件件独立素材包摆进槽位；每只宠物开局发本物种的基础套件（猫：基础猫爬架＋布猫窝；狗：玩具篮＋狗窝垫；鸟：站架＋秋千架），记在它自己的档案里，以后靠里程碑添置、替换。灵魂体困了会自己走到窝边再躺下。建档新增<b>品种</b>（猫/狗可选，记在档案和小屋里）。<br>原型说明（v0.15）：🐾 <b>访客的宠物换成它自己的了</b>——带照片建档的猫/狗/鸟，现在直接在浏览器里用它自己的照片现场生成形象（照片做纹理、姿势图集裁形、描边和眼睛回到原位），不再套演示包；那套 AI 生成的布偶猫专属包只保留给最早建档的那只。正式版会升级为后台 AI 按每只照片单独生成的高清专属包。<br>原型说明（v0.14）：🔧 <b>按外部代码审查逐项修了一批</b>——静音键真的能静音了；点河对岸会自动绕桥过去；方向键不再滚屏、窗口失焦不会自己乱走；照片传错格式会出声告诉你；过桥前要输入它的名字才能确认；里程碑的称号（常来看看的人／守烛人）现在真的会发；手机上按钮更好点、提示不再盖住标题、更新日志折叠了；页脚补了素材署名；两张场景底图换成无损 WebP，页面轻了约三成。另说清一句：照片专属形象目前是<b>演示包</b>（以一只布偶猫的照片生成的那一套），正式版会按每只宠物自己的照片单独生成。<br>原型说明（v0.13）：📦 <b>全园素材包化</b>——按「所有素材必须做素材包、不许简单贴画」的纪律清了一轮：地上的捡拾物不再是 emoji，是手绘物品图集（肉腿/蜡烛/花束/小熊/围巾）；小屋的蜡烛、食盆、画像框都换成专属素材包（蜡烛两帧火焰、食盆空/满两态、画像框带爪印款）；连祈福星光、睡觉 Z 符、捡拾火花这三件特效，也离线烘焙成了精灵图集，不再用运行时贴片。场景里看得见的东西，件件有原画、有图集。<br>原型说明（v0.12）：🏮 <b>墙上的信物换成手绘的了</b>——上一版是代码画的扁平图形，跟房间的手绘墙面不搭；这版三件信物（木福牌、长寿结、金铃铛）是专门生成的手绘原画，跟房间、供品同一套工艺，挂在墙上是一体的了。<br>原型说明（v0.11）：🔊 <b>游戏有声音了</b>——捡东西叮咚、祈福有铃声、点烛有轻响、驱散团子有消散声、仪式结束有风铃，全是代码现场合成的，没有录音素材；右上角可以关。🏮 <b>祈福信物上墙了</b>——攒到的祈福牌、长寿结、金铃铛会挂进小屋画像右边的墙上。🕯️ <b>仪式有了收尾</b>——过桥或立碑之后，可以亲手为它点上第一支烛。🐾 没传照片的画像改成了爪印剪影，不再是像素小脸。<br>原型说明（v0.10）：🐾 <b>自家猫真走路了</b>——带照片建档的猫，走路不再是两帧静态图加浮动，而是一套 8 帧真步态循环（agent-sprite-forge 管线：站姿帧→图生视频→软抠图→自动挑循环），小屋里散步、去食盆、过桥仪式里走路都是这套；站立、睡觉、吃饭还是原来的姿势图。<br>原型说明（v0.9）：✨ <b>光点特效接入</b>——祈福时有星光落在它身上（pixelfx blessing）、睡着时头顶飘 Z 符、捡到东西时有小火花；👻 <b>新玩法：驱散阴影团子</b>——园子里会飘来灰黑小团子偷光吵闹，走近点它（或点它让守园人走过去），灯光一照就化作光尘，团子叼走的东西有几率掉回来（每天最多 3 件，每天最多来 5 只）。<br>原型说明（v0.8）：🏠 <b>房间变大了</b>——新内景更高更宽敞，画像挂到正墙中央；🎁 <b>献上玩具</b>——背包里的玩具献给它之后，就永久留在它房间的地板上（第一个是线团），它闲逛时自己会跑去扑着玩。<br>原型说明（v0.7）：✨ <b>照片专属形象上线</b>——带照片建档的猫，园子里的形象就是拿它的照片生成的那一套（白身、奶油色鞍纹、灰蓝耳朵、大蓬尾巴都是它本尊的），不再是通用猫换色，颜色也锁死以照片为准。旧存档里带照片的自家猫打开即自动换上。<br>原型说明（v0.6）：按哈克试玩报告逐项修复——①照片入库前压缩到 480px、存档失败会出声提醒，画像真贴进画框；②食盆改按时间戳结算（每 20 秒吃一格，刷新也不卡满）；③toast 提到顶层，小屋里能看见提示和背包余量；④「今日已捡」跨天清零、捡拾物绝不刷进河里且多刷在你附近；⑤登录礼包每天只能领一次；⑥陪玩/祈福每日计前 3 次，陪伴本身不限；⑦建档选「已经离开了」会补一场立碑仪式；⑧重置存档改成讲清后果的确认层；⑨小院和碑有了碰撞（爬不上房顶）、走近面板更容易触发、名字标签不被边缘切；⑩换毛色不再说开发术语。新玩法：在养宠物可以「祈福」了——每天在小屋里送它一句祝福（健健康康/平平安安/长命百岁/天天开心），祝福攒满 7/30/100 句得祈福牌、长寿结、金铃铛，过桥后这些宝贝会一直陪着它。</div>
   </details>
   <div id="credits">素材与鸣谢：园内场景、宠物与物品均为本项目自制素材包（AI 生成原画＋forge 图集）；灵魂体加载兜底图集含 [LPC] Cats and Dogs（bluecarrot16，CC-BY 3.0）与 Sprout Lands 小鸡（Cup Nooble，免费版·非商用，商用前替换）；特效帧由 patch-gg/pixelfx（MIT）离线烘焙；动画生产管线 agent-sprite-forge（MIT）。</div>
 </div>
@@ -1131,7 +1131,7 @@ function houseAction(act){
     S.inv.toy--;
     const kinds = ["yarn","mouse","bell","basket"];
     const kind = kinds[housePet.offerings.length % kinds.length];
-    const slots = [255, 350, 545, 640, 300, 590];
+    const slots = [330, 430, 560, 650, 380, 600];
     housePet.offerings.push({ kind:kind, x:slots[housePet.offerings.length] });
     bump("interact"); soulReact("play"); refreshHouseStats();
     toast("🧶 献上了"+({yarn:"一个线团",mouse:"一只玩具鼠",bell:"一个金铃铛",basket:"一个小篮子"})[kind]+"——它就留在 "+housePet.name+" 的房间里，它玩耍时自己会去扑");
@@ -1178,8 +1178,8 @@ soulCanvas.addEventListener("pointerdown", e=>{
   const H = soulCanvas.height, pet = housePet, f = furnishOf(pet);
   const hit = (cx, cy, w, h)=> Math.abs(lx-cx) < w/2 && Math.abs(ly-cy) < h/2;
   const go = (mode)=>{ soulState.mode = mode; soulState.reactUntil = 0; };
-  if(hit(225, H-60, 110, 70)){ if(pet.bowl>0) go("toBowl"); else toast("食盆是空的，先喂点粮吧"); return; }
-  if(hit(300, H-60, 76, 60)){ go("toDrink"); return; }
+  if(hit(400, H-60, 110, 70)){ if(pet.bowl>0) go("toBowl"); else toast("食盆是空的，先喂点粮吧"); return; }
+  if(hit(478, H-60, 76, 60)){ go("toDrink"); return; }
   for(const slot of ["A","B"]){ const id = f[slot]; if(!id) continue; const it = FURN_ITEMS[id], s = FURN_SLOTS[slot];
     if(hit(s.x, H - s.base - it.h/2, Math.max(96, it.h*0.62), it.h)){
       if(id==="cat_tree") go("toTree"); else if(id==="dog_basket") go("toBasket");
@@ -1468,7 +1468,7 @@ const FURN_ITEMS = {
   dog_basket:{ name:"玩具篮", slot:"A", h:82 }, dog_bed:{ name:"狗窝垫", slot:"B", h:82 },
   bird_stand:{ name:"站架", slot:"A", h:240 }, bird_swing:{ name:"秋千架", slot:"B", h:215 }
 };
-const FURN_SLOTS = { A:{ x:130, base:66 }, B:{ x:690, base:62 } };
+const FURN_SLOTS = { A:{ x:262, base:66 }, B:{ x:690, base:62 } };
 const FURN_KITS = { cat:["cat_tree","cat_nest"], dog:["dog_basket","dog_bed"], bird:["bird_stand","bird_swing"] };
 function defaultFurnish(species){ const f = {}; for(const id of (FURN_KITS[species]||[])) f[FURN_ITEMS[id].slot] = id; return f; }
 function furnishOf(pet){ if(!pet.furnish) pet.furnish = defaultFurnish(pet.species); return pet.furnish; }
@@ -1541,7 +1541,7 @@ function drawSoul(pet){
   }
   // 烛光（v0.13：蜡烛素材包，两帧火焰交替；光晕为渲染层）
   const candles = Math.min(5, pet.counts.candle);
-  for(let i = 0; i < candles; i++){ const cx = 348 + i * 34, cy = H - 64;
+  for(let i = 0; i < candles; i++){ const cx = 535 + i * 30, cy = H - 64;
     const gl = stx.createRadialGradient(cx, cy - 6, 2, cx, cy - 6, 30); gl.addColorStop(0, "rgba(255,190,80,.5)"); gl.addColorStop(1, "rgba(255,190,80,0)");
     stx.fillStyle = gl; stx.fillRect(cx - 36, cy - 44, 72, 72);
     const fr = FLAMER[(Math.floor(now / 340) + i) % 2 === 0 ? "flameL" : "flameR"];
@@ -1551,12 +1551,12 @@ function drawSoul(pet){
   // 食盆（v0.13：食盆素材包，空/满两态）
   const br = BOWLR[pet.bowl > 0 ? "full" : "empty"];
   if(br && ATLAS_BOWL.complete && ATLAS_BOWL.naturalWidth){ const dw = 88, dh = br[3] * dw / br[2];
-    stx.drawImage(ATLAS_BOWL, br[0], br[1], br[2], br[3], 225 - dw / 2, H - 44 - dh, dw, dh); }
-  else { pR(stx, 191, H - 58, 68, 8, "#7d9b74"); pR(stx, 199, H - 66, 52, 8, "#8aa87e"); if(pet.bowl > 0) pR(stx, 205, H - 68, 40, 5, "#b57e4c"); }
+    stx.drawImage(ATLAS_BOWL, br[0], br[1], br[2], br[3], 400 - dw / 2, H - 44 - dh, dw, dh); }
+  else { pR(stx, 366, H - 58, 68, 8, "#7d9b74"); pR(stx, 374, H - 66, 52, 8, "#8aa87e"); if(pet.bowl > 0) pR(stx, 380, H - 68, 40, 5, "#b57e4c"); }
   // 水盆（v0.17：常备清水，灵魂体自己会去喝；点水盆也能叫它去喝）
   const wr2 = FURNR.water;
   if(wr2 && ATLAS_FURN.complete && ATLAS_FURN.naturalWidth){ const dh = 30, dw = wr2[2]*dh/wr2[3];
-    stx.drawImage(ATLAS_FURN, wr2[0], wr2[1], wr2[2], wr2[3], 300 - dw / 2, H - 44 - dh, dw, dh); }
+    stx.drawImage(ATLAS_FURN, wr2[0], wr2[1], wr2[2], wr2[3], 478 - dw / 2, H - 44 - dh, dw, dh); }
   // 献供陈设（v0.8：献给它的玩具永久留在房间地板上）
   if(pet.offerings && ATLAS_OFF.complete && ATLAS_OFF.naturalWidth){
     for(const o of pet.offerings){ const r = OFFR[o.kind]; if(!r) continue;
@@ -1565,12 +1565,12 @@ function drawSoul(pet){
   }
   // 灵魂体状态机：走 / 睡 / 吃
   if(soulState.mode==="toBowl"){
-    const dx = 219 - soulState.x; soulState.dir = dx>=0 ? 1 : -1;
+    const dx = 394 - soulState.x; soulState.dir = dx>=0 ? 1 : -1;
     if(Math.abs(dx)<6){ soulState.mode="eat"; soulState.until = now+2400; soulState.react="eat"; soulState.reactUntil = now+1600; }
     else soulState.x += soulState.dir*2.4;
   } else if(soulState.mode==="eat"){
     if(now>soulState.until){ soulState.mode="idle"; soulState.until = now+2200; }
-  } else if(soulState.mode==="toDrink"){ soulWalkTo(300, "drink", 2100);
+  } else if(soulState.mode==="toDrink"){ soulWalkTo(478, "drink", 2100);
   } else if(soulState.mode==="drink"){ if(now>soulState.until){ soulState.mode="idle"; soulState.until = now+2200; }
   } else if(soulState.mode==="toTree"){ soulWalkTo(FURN_SLOTS.A.x+8, "playTree", 3000);
   } else if(soulState.mode==="playTree"){ if(now>soulState.until){ soulState.mode="idle"; soulState.until = now+2200; }
