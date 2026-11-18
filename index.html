@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>星星小园 · 原型 v0.39</title>
+<title>星星小园 · 原型 v0.40</title>
 <style>
   :root { --paper:#f5efe1; --card:#fffdf7; --ink:#2a3a2e; --ink2:#5d7057; --pine:#33523d; --gold:#a8842c; --goldsoft:#e7d6a4; --line:#ded2b4; --chip:#fbf7ea; --serif:"Songti SC","STSong","Noto Serif SC","SimSun",serif; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -139,7 +139,7 @@
 <body>
 <div id="app">
   <header>
-    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.39</span></h1>
+    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.40</span></h1>
   </header>
 
   <div id="hud">
@@ -173,6 +173,7 @@
     <details><summary>玩法说明</summary><div class="hintText">点地图、拖左下角的圆盘摇杆，或用 WASD/方向键走动；迷路了就打开背包里的「全园地图」 · 看到发光的小东西，点它一下就会走过去捡起来（先到先得，每天最多捡 10 件）；灰黑的阴影团子点一下就会追上去驱散净化，它叼走的东西会掉出来· 走近墓碑看介绍，点「进小屋」· 全园都是纪念区：北岸是草甸墓园，南岸是花园墓园，中间过彩虹桥 · 园里有一间祈福小屋，在家的宝贝预登记后可以去那儿祈福 · 任何人的小屋都能进、都能喂——只有换装是主人专属。（注：原型存档只存在你这台设备里，「全园共享」要等正式版联网后才开放。）</div></details>
     <div class="drawerLabel">关于</div>
     <details id="changelog"><summary>原型说明与更新日志（点开看）</summary><div class="changelogBody">
+    原型说明（v0.40）：🚶 <b>走路帧归一化（创作者裁决）</b>——此前归一化只管躺/吃/蜷，走路两帧没管，迈步姿势身子拉长、比站姿宽近 1/4，看着大一圈。本版把 walk1/walk2 也纳入 poseK、以站姿为锚对齐（不额外缩档）：站/走读得出是同一只，吃、睡的梯度保留（姿势＋缩档裁决）。各物种同规。
     原型说明（v0.39）：🍚 <b>吃姿再缩一档（创作者裁决）</b>——吃东西的姿势原画身子拉长、背拱高，归一化后仍比站姿宽约 1/4、显大；按睡姿同规再乘 0.8，吃姿宽度落到与站姿基本齐平，五姿势读得出是同一只。及于各物种吃姿。
     原型说明（v0.38）：🧦 <b>袜子改逐帧穿着版＋睡姿缩小（创作者裁决）</b>——学回来的纸娃娃管线（game-asset-gen 方法层）落地：猫的袜子不再是钉住的贴片，而是拿猫每个姿势的底帧逐帧生成「穿着版整帧」（站/走1/走2/躺/吃五帧，四只脚都有、走路逐帧跟随），脚底锚配准后成图集替换绘制；睡姿按创作者令再缩小（定版对照图比例）。已知边界：穿着版暂只供通用猫包（照片宝贝仍走旧贴片，逐只生成是正式版的事）；园里与仪式中的猫仍是旧贴片，下一步补。袜子试点全过程见 outfit-pilot 目录。
     原型说明（v0.37）：🎀 <b>配饰重做（创作者裁决）</b>——毛衣是裹身衣服，通用贴片贴上去就是一张贴纸，已下架；配饰改走头/颈/脚点位小件：新做蝴蝶结（头上）、铃铛项圈（脖子，取项圈底部弧段＋铃铛）、针织袜（脚上，双脚各一只），加上原有的围巾、小帽子、星星坠，共六件轮换。旧存档里穿着「毛衣」的宝贝自动改画项圈，不裸奔。裹身衣服将来要做，必须按物种单独成包绘制，不再走通用贴片。<br>
@@ -1504,6 +1505,7 @@ function poseK(rects, pose, baseK){ // v0.33：躺/吃/蜷姿势按站姿宽度�
   if(pose === "lie") ref = rects.stand || rects.side0;
   else if(pose === "eat") ref = rects.walk1 || rects.stand || rects.side0;
   else if(pose === "puff") ref = rects.side0 || rects.front;
+  else if(pose === "walk1" || pose === "walk2") ref = rects.stand || rects.side0; /* v0.40：走路帧也归一化，以站姿为锚（不额外缩） */
   else return baseK;
   const r = rects[pose]; if(!ref || !r) return baseK;
   const k = baseK * Math.min(1, Math.max(0.58, ref[2] * 1.04 / r[2]));
