@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>星星小园 · 原型 v0.28</title>
+<title>星星小园 · 原型 v0.29</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body { font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; background:#1c2b22; color:#2c3a2e; }
   #app { max-width:980px; margin:0 auto; background:#eef5e6; min-height:100vh; display:flex; flex-direction:column; }
-  header { padding:10px 14px; background:linear-gradient(90deg,#33523d,#4a7a52); color:#fff; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  header { padding:calc(10px + env(safe-area-inset-top)) 14px 10px; background:linear-gradient(90deg,#33523d,#4a7a52); color:#fff; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
   header h1 { font-size:17px; font-weight:600; margin-right:auto; }
   .badge { background:#ffd873; color:#6b4e00; border-radius:999px; padding:2px 10px; font-size:12px; font-weight:600; }
   #hud { display:flex; flex-wrap:wrap; gap:6px; padding:8px 12px; background:#fff; border-bottom:1px solid #d8e4cf; font-size:13px; align-items:center; }
@@ -18,12 +18,23 @@
   button.ghost { background:#e6efe0; color:#33523d; border:1px solid #b9d0a8; }
   button.warn { background:#b0563a; }
   button:disabled { opacity:.45; cursor:not-allowed; }
-  button { min-height:34px; }
-  #credits { font-size:11px; color:#7c8a72; text-align:center; padding:10px 8px 16px; line-height:1.7; }
+  button { transition:transform .15s ease, filter .15s ease; }
+  button:active { transform:scale(.97); filter:brightness(1.06); }
+  button.chip { color:#2c3a2e; }
+  button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline:2px solid #33523d; outline-offset:2px; }
+  #convertName { min-height:44px; }
+  .drawerLabel { width:100%; font-size:11px; font-weight:700; letter-spacing:.12em; color:#5d7057; margin-top:2px; }
+  #convertOverlay.show, #furnOverlay.show, #dirOverlay.show, #resetOverlay.show, #firstCandle.show { animation:ovFade .2s ease-out; }
+  #convertOverlay.show > div, #furnOverlay.show > div, #dirOverlay.show > div, #resetOverlay.show > div, #firstCandle.show > div, #regCard { animation:cardPop .22s ease-out; }
+  @keyframes ovFade { from { opacity:0; } }
+  @keyframes cardPop { from { opacity:0; transform:translateY(8px) scale(.98); } }
+  @media (prefers-reduced-motion: reduce) { * { animation:none !important; transition:none !important; } }
+  button { min-height:44px; }
+  #credits { font-size:11px; color:#5d7057; text-align:center; padding:10px 8px 16px; line-height:1.7; }
   details#changelog { margin-top:10px; }
   details#changelog summary { cursor:pointer; font-size:13px; color:#33523d; padding:6px 0; }
   .changelogBody { font-size:12.5px; line-height:1.8; color:#44543f; }
-  @media (max-width:640px){ h1{ font-size:19px; } button{ min-height:38px; } }
+  @media (max-width:640px){ h1{ font-size:19px; } }
   #mapWrap { position:relative; }
   canvas#map { display:block; width:100%; height:62vh; background:#9cc184; touch-action:pan-y; }
   #hud { flex-direction:column; align-items:stretch; }
@@ -33,7 +44,7 @@
   body.ceremonyMode { overflow:hidden; }
   body.ceremonyMode header, body.ceremonyMode #hud, body.ceremonyMode #hint, body.ceremonyMode #infoPanel, body.ceremonyMode #changelog, body.ceremonyMode #credits { display:none !important; }
   body.ceremonyMode canvas#map { height:100dvh; }
-  #toast { position:fixed; left:50%; top:auto; bottom:16px; transform:translateX(-50%); background:rgba(30,45,32,.94); color:#fff; padding:8px 16px; border-radius:999px; font-size:13px; opacity:0; transition:opacity .25s; pointer-events:none; max-width:92%; text-align:center; z-index:80; }
+  #toast { position:fixed; left:50%; top:auto; bottom:calc(16px + env(safe-area-inset-bottom)); transform:translateX(-50%); background:rgba(30,45,32,.94); color:#fff; padding:8px 16px; border-radius:999px; font-size:13px; opacity:0; transition:opacity .25s; pointer-events:none; max-width:92%; text-align:center; z-index:80; }
   #infoPanel { padding:10px 14px; background:#fffdf4; border-top:1px solid #e4dfc2; display:none; }
   #infoPanel.show { display:block; }
   #infoPanel h3 { font-size:15px; margin-bottom:4px; }
@@ -47,7 +58,7 @@
   #blessOverlay.show, #dirOverlay.show { display:flex; }
   .blessWish { margin:2px 2px 2px 0; }
   .dirRow { display:flex; align-items:center; gap:8px; padding:7px 2px; border-bottom:1px solid #eee3c8; }
-  .dirRow .nm { font-weight:700; } .dirRow .meta { color:#8a7a52; font-size:12.5px; flex:1; }
+  .dirRow .nm { font-weight:700; } .dirRow .meta { color:#77663c; font-size:12.5px; flex:1; }
   #furnCard { background:#fffdf6; border-radius:18px; padding:18px 20px; max-width:520px; width:92vw; max-height:84vh; overflow:auto; box-shadow:0 18px 50px rgba(0,0,0,.35); }
   .furnOpt { margin:2px 2px 2px 0; }
   #convertCard { background:#fffdf6; border-radius:16px; padding:22px; width:calc(100% - 48px); max-width:420px; }
@@ -72,15 +83,15 @@
   #ceremony.show { display:block; }
   #cerFade { position:absolute; inset:0; background:#fff6e2; opacity:0; transition:opacity .9s; }
   #cerText { position:absolute; left:0; right:0; top:36%; text-align:center; font-size:21px; font-weight:700; color:#fff; text-shadow:0 2px 16px rgba(60,30,10,.6); opacity:0; transition:opacity 1.1s; padding:0 34px; line-height:1.75; }
-  #btnSkipCer { position:absolute; right:14px; bottom:20px; pointer-events:auto; background:rgba(255,255,255,.88); }
-  #hint { padding:8px 14px; font-size:12px; color:#6a7a66; background:#f4f8ee; line-height:1.6; }
+  #btnSkipCer { position:absolute; right:14px; bottom:calc(20px + env(safe-area-inset-bottom)); pointer-events:auto; background:rgba(255,255,255,.88); }
+  #hint { padding:8px 14px; font-size:12px; color:#57685a; background:#f4f8ee; line-height:1.6; }
   /* 注册层 */
   #regOverlay { position:fixed; inset:0; background:rgba(20,32,22,.72); display:flex; align-items:center; justify-content:center; z-index:20; padding:16px; }
   #regCard { background:#fffdf6; border-radius:16px; padding:20px; width:100%; max-width:420px; max-height:92vh; overflow:auto; }
   #regCard h2 { font-size:18px; margin-bottom:6px; }
-  #regCard p.sub { font-size:12px; color:#7a8a72; margin-bottom:12px; line-height:1.6; }
+  #regCard p.sub { font-size:12px; color:#5d7057; margin-bottom:12px; line-height:1.6; }
   #regCard label { display:block; font-size:13px; margin:10px 0 4px; color:#44543f; }
-  #regCard input[type=text], #regCard select { width:100%; padding:9px 10px; border:1px solid #c9d8bc; border-radius:10px; font-size:14px; background:#fff; }
+  #regCard input[type=text], #regCard select { width:100%; padding:11px 10px; min-height:44px; border:1px solid #c9d8bc; border-radius:10px; font-size:14px; background:#fff; }
   #regCard input[type=color] { width:56px; height:34px; border:none; background:none; }
   #photoPreview { width:84px; height:84px; border-radius:12px; object-fit:cover; display:none; border:2px solid #d8e4cf; }
   #regCard .big { width:100%; padding:12px; font-size:15px; margin-top:16px; }
@@ -91,7 +102,7 @@
   #houseHead img { width:64px; height:64px; border-radius:12px; object-fit:cover; border:2px solid #e7d9a8; }
   #houseHead .emojiAvatar { width:64px; height:64px; border-radius:12px; background:#fdf3d0; display:flex; align-items:center; justify-content:center; font-size:36px; border:2px solid #e7d9a8; }
   #houseHead h3 { font-size:16px; }
-  #houseHead p { font-size:12px; color:#7a8a72; line-height:1.5; }
+  #houseHead p { font-size:12px; color:#5d7057; line-height:1.5; }
   canvas#soul { display:block; width:100%; height:auto; background:linear-gradient(#fdf6dd,#f3e3ba); }
   #blessRoom { display:none; flex-direction:column; }
   #blessRoom.show { display:flex; }
@@ -108,13 +119,14 @@
 <body>
 <div id="app">
   <header>
-    <h1>🌟 星星小园 · 原型 v0.28</h1>
+    <h1>🌟 星星小园 · 原型 v0.29</h1>
     <span class="badge" id="pioneerBadge">先行者 No.0001 · 创始园民（序号仅本地演示）</span>
   </header>
 
   <div id="hud">
-    <div id="hudBar"><button class="chip" id="btnDrawer" style="cursor:pointer">🎒 背包</button><span class="chip" id="invSum">🍖0 🕯️0 🌸0 🧸0 🧣0</span><span class="chip">💗 心意 <b id="playerTotal">0</b> 次</span><span class="chip" id="btnMute" style="cursor:pointer">🔊 声音开</span></div>
+    <div id="hudBar"><button class="chip" id="btnDrawer" style="cursor:pointer">🎒 背包</button><span class="chip" id="invSum">🍖0 🕯️0 🌸0 🧸0 🧣0</span><span class="chip">💗 心意 <b id="playerTotal">0</b> 次</span><button class="chip" id="btnMute" type="button" style="cursor:pointer">🔊 声音开</button></div>
     <div id="hudDrawer">
+    <div class="drawerLabel">物品与进度</div>
     <span class="chip">🍖 粮 <b id="invFood">0</b></span>
     <span class="chip">🕯️ 烛 <b id="invCandle">0</b></span>
     <span class="chip">🌸 花 <b id="invFlower">0</b></span>
@@ -123,7 +135,7 @@
     <span class="chip">🎁 今日已捡 <b id="pickToday">0</b>/10</span>
     <span class="chip">👻 已驱散团子 <b id="disperseTotal">0</b></span>
     <div class="msRow"><span id="msText">里程碑</span><div id="milestoneBar"><div id="milestoneFill"></div></div></div>
-    <span id="hudTitle" style="font-weight:700;color:#8a6d1f;margin-right:8px"></span><button class="ghost" id="btnLoginGift">登录礼包（累计 <span id="loginDays">0</span> 天）</button>
+    <div class="drawerLabel">去处与设置</div><span id="hudTitle" style="font-weight:700;color:#8a6d1f;margin-right:8px"></span><button class="ghost" id="btnLoginGift">登录礼包（累计 <span id="loginDays">0</span> 天）</button>
     <button class="ghost" id="btnPioneer">领创始礼包</button>
     <button class="ghost" id="btnDir">📖 碑名录</button>
     <button class="ghost" id="btnBlessGo">🛕 祈福小屋</button>
@@ -244,6 +256,7 @@
     </div>
   </div>
   <details id="changelog"><summary>📖 原型说明与更新日志（点开看）</summary><div class="changelogBody">
+    原型说明（v0.29）：🎛️ <b>UI 优化版</b>——按新装的 impeccable＋移动端审计标准走查后修：所有按钮热区统一 44px、表单输入 44px；五处小字对比度提到 4.5:1 以上；「声音开/关」由可点文字改成真按钮，背包按钮文字对比修复；弹层加 0.2 秒淡入浮起（系统设了减少动效则全关）；吐司与仪式跳过键避开手机底部安全区；背包抽屉加「物品与进度／去处与设置」分组标签；键盘焦点描边补齐。功能与存档不变。<br>
     原型说明（v0.28）：⭐ <b>正式更名为《星星小园》</b>——游戏名由《彩虹桥小园》改为《星星小园》；园里的彩虹桥还在，过桥与立碑仪式不变，其余功能与 v0.27 相同。<br>
     原型说明（v0.27）：🧱 <b>牌位墙改槽位制</b>——每面墙固定 27 个位置（9 列 × 3 排），紧凑挂满；登记了的点开看信息，没登记的挂一块淡牌，点开显示「未登记」；每位玩家最多登记 2 个宝贝（登记入口到上限就拦）。正式版上共享后端后，这面墙就是所有玩家共用的同一面墙。<br>原型说明（v0.26）：🪨 <b>墓碑落地、牌子真挂</b>——①墓碑包重做：旧抠图把碑座抠成半透明渐隐是"漂"的根源，这次用 AI 抠图模型（本地 BiRefNet 备选/u2net）＋alpha 硬化，碑体硬边贴地，接触阴影直接烤进素材包，不再代码现画；②祈福牌换新包：长长的红绳圈是真素材，牌子改小、不写名字，绳圈套过墙上的横杆挂着，每块带一点自然倾斜，垂影也烤在包里。<br>原型说明（v0.25）：📱 <b>移动体验批</b>——①顶栏收成一行（🎒背包按钮＋库存速览＋心意＋声音），其余家当（里程碑、礼包、碑名录、重置存档等）都收进背包抽屉，点开才展开；②过桥/立碑仪式<b>全屏</b>：仪式一开始页头、顶栏、说明全部让开，地图占满整屏，结束自动恢复；③<b>视野缩放</b>：窄屏自动拉远（手机上能看到更宽的园子，不再是 1:1 贴脸），桌面不变；④两处标注说实话了：先行者序号标明「仅本地演示」，玩法里注明全园共享要等正式版联网。<br>原型说明（v0.24）：🛕 <b>祈福小屋有了里面</b>——点小屋能进内景了：三面木架墙上挂着每一位登记过的宝贝的<b>祈福牌</b>（登记就自动上墙，牌面写名字，自家的牌子带红点），点任意一块牌子能看它的信息（主人、品种、年岁、祝福与香火）；屋里香炉可以<b>给所有牌位上香</b>（每天一炷，全屋牌子各添一炷香火）。自家预登记宝贝的祝福和送它过桥，也都搬进了它的牌子里。<br>原型说明（v0.23）：🛕 <b>祈福小屋专属素材包＋迁址</b>——原来的通用小木屋道具撤掉，换成按全图画风单独生成的祈福小屋原画（苔顶木屋、祈福牌架、灯笼、石板地基）做成的专属图集；位置从南岸西侧迁到<b>园子右下角的大樱花树旁</b>，碑位分配会避开小屋周边，小屋本身也有实体碰撞，不会再像贴纸浮在草地上。<br>原型说明（v0.22）：🗺️ <b>地图翻倍＋纪念为主</b>——园子扩到 4800×3200、换了全纪念园新底图（两岸都是碑地，碑容量约 140）；登记改为纪念为主：走了的立碑入园，还在家的只作预登记（不占位、不挂照片），园里南边新立一间<b>祈福小屋</b>，为在家的宝贝祈福；南岸生活区和过桥转化那套撤了（转纪念改从祈福小屋里送它过桥）。另加了<b>碑名录</b>，碑多了能搜名字让蝴蝶带路。老存档自动迁移（坐标翻倍、在养转预登记）。<br>原型说明（v0.21）：🕯️ <b>蜡烛只在墓碑前</b>——小屋里不再摆烛排了；它被点过的烛，现在亮在公园里它的墓碑脚下（最多排五支，火苗会轻轻晃）。在小屋里点烛照样计数，等它过桥之后，烛光就在碑前等它。<br>原型说明（v0.20）：🪑 <b>家具能换了</b>——它被照顾的次数攒够了，就能解锁更好看的替换家具（满 15 次解锁窝位替换款、满 40 次解锁架子位替换款），在小屋点「换家具（主人）」就能换上；被照顾满 200 次添一棵纪念小树、满 500 次添一盏长明小灯，自动出现在小屋右角。替换款一样能玩：双层爬架照样上、玩具箱照样扑、花藤秋千照样晃。<br>原型说明（v0.19）：🐰 <b>新物种来了：兔、仓鼠、龟、蜥蜴</b>——每个物种一张专属形象包（站/走/睡/吃/坐六个姿势）、一套基础家具（兔：草架＋草窝；仓鼠：跑轮＋小木屋；龟：浅水池＋晒台；蜥蜴：晒灯栖木＋躲避洞），还各有能玩的活动：兔子去草架前吃草、仓鼠上跑轮撒欢、乌龟泡池子和上晒台晒背、蜥蜴爬栖木在晒灯下取暖；点家具也能指派。带照片的照旧用它自己的照片生成形象。<br>原型说明（v0.18）：🧭 <b>摆放修正</b>——复查发现 A 槽（爬架/站架/玩具篮）钉在左侧墙的墙面上、高大家具像挂在墙上，食盆也落在墙角墙面。整排右移进后墙地板带：A 槽到墙角地板（避开窗户），食盆、水盆居中成喂食区，烛台靠右，供品回地毯一带。物种扩容顺延 v0.19。<br>原型说明（v0.17）：🏠 <b>小屋变大了，家具能玩了</b>——房间放大到 880×500；基础配置全部可互动：灵魂体会自己去爬架上玩（猫）、在玩具篮边扑咬（狗）、上秋千晃/站架子上看风景（鸟）、去水盆喝水、食盆有粮时自己去吃；你也可以直接点家具、食盆、水盆，指派它过去。物种扩容顺延到 v0.18。<br>原型说明（v0.16）：🛋️ <b>小屋改成「空房＋家具槽位」</b>——底图只剩墙、窗、地板和地毯，家具是一件件独立素材包摆进槽位；每只宠物开局发本物种的基础套件（猫：基础猫爬架＋布猫窝；狗：玩具篮＋狗窝垫；鸟：站架＋秋千架），记在它自己的档案里，以后靠里程碑添置、替换。灵魂体困了会自己走到窝边再躺下。建档新增<b>品种</b>（猫/狗可选，记在档案和小屋里）。<br>原型说明（v0.15）：🐾 <b>访客的宠物换成它自己的了</b>——带照片建档的猫/狗/鸟，现在直接在浏览器里用它自己的照片现场生成形象（照片做纹理、姿势图集裁形、描边和眼睛回到原位），不再套演示包；那套 AI 生成的布偶猫专属包只保留给最早建档的那只。正式版会升级为后台 AI 按每只照片单独生成的高清专属包。<br>原型说明（v0.14）：🔧 <b>按外部代码审查逐项修了一批</b>——静音键真的能静音了；点河对岸会自动绕桥过去；方向键不再滚屏、窗口失焦不会自己乱走；照片传错格式会出声告诉你；过桥前要输入它的名字才能确认；里程碑的称号（常来看看的人／守烛人）现在真的会发；手机上按钮更好点、提示不再盖住标题、更新日志折叠了；页脚补了素材署名；两张场景底图换成无损 WebP，页面轻了约三成。另说清一句：照片专属形象目前是<b>演示包</b>（以一只布偶猫的照片生成的那一套），正式版会按每只宠物自己的照片单独生成。<br>原型说明（v0.13）：📦 <b>全园素材包化</b>——按「所有素材必须做素材包、不许简单贴画」的纪律清了一轮：地上的捡拾物不再是 emoji，是手绘物品图集（肉腿/蜡烛/花束/小熊/围巾）；小屋的蜡烛、食盆、画像框都换成专属素材包（蜡烛两帧火焰、食盆空/满两态、画像框带爪印款）；连祈福星光、睡觉 Z 符、捡拾火花这三件特效，也离线烘焙成了精灵图集，不再用运行时贴片。场景里看得见的东西，件件有原画、有图集。<br>原型说明（v0.12）：🏮 <b>墙上的信物换成手绘的了</b>——上一版是代码画的扁平图形，跟房间的手绘墙面不搭；这版三件信物（木福牌、长寿结、金铃铛）是专门生成的手绘原画，跟房间、供品同一套工艺，挂在墙上是一体的了。<br>原型说明（v0.11）：🔊 <b>游戏有声音了</b>——捡东西叮咚、祈福有铃声、点烛有轻响、驱散团子有消散声、仪式结束有风铃，全是代码现场合成的，没有录音素材；右上角可以关。🏮 <b>祈福信物上墙了</b>——攒到的祈福牌、长寿结、金铃铛会挂进小屋画像右边的墙上。🕯️ <b>仪式有了收尾</b>——过桥或立碑之后，可以亲手为它点上第一支烛。🐾 没传照片的画像改成了爪印剪影，不再是像素小脸。<br>原型说明（v0.10）：🐾 <b>自家猫真走路了</b>——带照片建档的猫，走路不再是两帧静态图加浮动，而是一套 8 帧真步态循环（agent-sprite-forge 管线：站姿帧→图生视频→软抠图→自动挑循环），小屋里散步、去食盆、过桥仪式里走路都是这套；站立、睡觉、吃饭还是原来的姿势图。<br>原型说明（v0.9）：✨ <b>光点特效接入</b>——祈福时有星光落在它身上（pixelfx blessing）、睡着时头顶飘 Z 符、捡到东西时有小火花；👻 <b>新玩法：驱散阴影团子</b>——园子里会飘来灰黑小团子偷光吵闹，走近点它（或点它让守园人走过去），灯光一照就化作光尘，团子叼走的东西有几率掉回来（每天最多 3 件，每天最多来 5 只）。<br>原型说明（v0.8）：🏠 <b>房间变大了</b>——新内景更高更宽敞，画像挂到正墙中央；🎁 <b>献上玩具</b>——背包里的玩具献给它之后，就永久留在它房间的地板上（第一个是线团），它闲逛时自己会跑去扑着玩。<br>原型说明（v0.7）：✨ <b>照片专属形象上线</b>——带照片建档的猫，园子里的形象就是拿它的照片生成的那一套（白身、奶油色鞍纹、灰蓝耳朵、大蓬尾巴都是它本尊的），不再是通用猫换色，颜色也锁死以照片为准。旧存档里带照片的自家猫打开即自动换上。<br>原型说明（v0.6）：按哈克试玩报告逐项修复——①照片入库前压缩到 480px、存档失败会出声提醒，画像真贴进画框；②食盆改按时间戳结算（每 20 秒吃一格，刷新也不卡满）；③toast 提到顶层，小屋里能看见提示和背包余量；④「今日已捡」跨天清零、捡拾物绝不刷进河里且多刷在你附近；⑤登录礼包每天只能领一次；⑥陪玩/祈福每日计前 3 次，陪伴本身不限；⑦建档选「已经离开了」会补一场立碑仪式；⑧重置存档改成讲清后果的确认层；⑨小院和碑有了碰撞（爬不上房顶）、走近面板更容易触发、名字标签不被边缘切；⑩换毛色不再说开发术语。新玩法：在养宠物可以「祈福」了——每天在小屋里送它一句祝福（健健康康/平平安安/长命百岁/天天开心），祝福攒满 7/30/100 句得祈福牌、长寿结、金铃铛，过桥后这些宝贝会一直陪着它。</div>
   </details>
