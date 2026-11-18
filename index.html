@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>星星小园 · 原型 v0.40</title>
+<title>星星小园 · 原型 v0.41</title>
 <style>
   :root { --paper:#f5efe1; --card:#fffdf7; --ink:#2a3a2e; --ink2:#5d7057; --pine:#33523d; --gold:#a8842c; --goldsoft:#e7d6a4; --line:#ded2b4; --chip:#fbf7ea; --serif:"Songti SC","STSong","Noto Serif SC","SimSun",serif; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -139,7 +139,7 @@
 <body>
 <div id="app">
   <header>
-    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.40</span></h1>
+    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.41</span></h1>
   </header>
 
   <div id="hud">
@@ -173,6 +173,7 @@
     <details><summary>玩法说明</summary><div class="hintText">点地图、拖左下角的圆盘摇杆，或用 WASD/方向键走动；迷路了就打开背包里的「全园地图」 · 看到发光的小东西，点它一下就会走过去捡起来（先到先得，每天最多捡 10 件）；灰黑的阴影团子点一下就会追上去驱散净化，它叼走的东西会掉出来· 走近墓碑看介绍，点「进小屋」· 全园都是纪念区：北岸是草甸墓园，南岸是花园墓园，中间过彩虹桥 · 园里有一间祈福小屋，在家的宝贝预登记后可以去那儿祈福 · 任何人的小屋都能进、都能喂——只有换装是主人专属。（注：原型存档只存在你这台设备里，「全园共享」要等正式版联网后才开放。）</div></details>
     <div class="drawerLabel">关于</div>
     <details id="changelog"><summary>原型说明与更新日志（点开看）</summary><div class="changelogBody">
+    原型说明（v0.41）：🐱 <b>噗噗认领专属包（创作者实测抓出）</b>——登记时传了照片的猫，灵魂体此前走「照片当贴图压进通用轮廓」的临时办法，正面照片＋深色背景贴到侧面姿势上串色，睡姿看着像换了只猫。本版加认领规则：传了照片、名叫「噗噗」的猫自动改走按它的照片单独生成的内置专属包（站/走/睡/吃全套），刷新即生效。（原型期一对一认领；每只宠物单独生成是正式版的后台管线。）<br>🆓 <b>免费/付费档定规（创作者裁决）</b>：AI 按照片生成「同款」专属包＝付费；免费档用通用灵魂体，花色、品种大致对上即可——照片贴图法即日停用（串色），照片原图只作画像与头像。
     原型说明（v0.40）：🚶 <b>走路帧归一化（创作者裁决）</b>——此前归一化只管躺/吃/蜷，走路两帧没管，迈步姿势身子拉长、比站姿宽近 1/4，看着大一圈。本版把 walk1/walk2 也纳入 poseK、以站姿为锚对齐（不额外缩档）：站/走读得出是同一只，吃、睡的梯度保留（姿势＋缩档裁决）。各物种同规。
     原型说明（v0.39）：🍚 <b>吃姿再缩一档（创作者裁决）</b>——吃东西的姿势原画身子拉长、背拱高，归一化后仍比站姿宽约 1/4、显大；按睡姿同规再乘 0.8，吃姿宽度落到与站姿基本齐平，五姿势读得出是同一只。及于各物种吃姿。
     原型说明（v0.38）：🧦 <b>袜子改逐帧穿着版＋睡姿缩小（创作者裁决）</b>——学回来的纸娃娃管线（game-asset-gen 方法层）落地：猫的袜子不再是钉住的贴片，而是拿猫每个姿势的底帧逐帧生成「穿着版整帧」（站/走1/走2/躺/吃五帧，四只脚都有、走路逐帧跟随），脚底锚配准后成图集替换绘制；睡姿按创作者令再缩小（定版对照图比例）。已知边界：穿着版暂只供通用猫包（照片宝贝仍走旧贴片，逐只生成是正式版的事）；园里与仪式中的猫仍是旧贴片，下一步补。袜子试点全过程见 outfit-pilot 目录。
@@ -423,6 +424,8 @@ let selPlot = null, pendingPlot = null;
     S.mapV = 3;
   }
   if(S.incenseDate === undefined) S.incenseDate = "";
+  /* v0.41：噗噗认领——传了照片、名叫「噗噗」的猫改走内置专属包（按它的照片单独生成的那套），不再走照片贴图 */
+  for(const p of S.pets){ if(p.species === "cat" && p.photo && p.name === "噗噗" && p.pack !== "photo") p.pack = "photo"; }
   rollDay();
  }catch(e){ try{ localStorage.setItem(SAVE_KEY + "__bak", localStorage.getItem(SAVE_KEY) || ""); }catch(_){ } S = freshState(); } // 兜底：旧档先备份到 __bak 再重置，绝不白屏
 })();
@@ -720,6 +723,7 @@ function petPhotoImg(pet){
 }
 const _texCache = {};
 function photoTexCanvas(pet, atlas, rects, pose){
+  return null; // v0.41 免费档规则（创作者裁决）：照片不再当贴图压进轮廓（串色像换了只猫）——免费档用通用灵魂体＋照片吸取的毛色，花色品种大致对上即可；照片原图只作画像/头像；要「同款」走 AI 单独生成的专属包（付费档）。以下旧实现保留备查，不再执行。
   const r = rects[pose]; if(!r || !atlas.complete || !atlas.naturalWidth) return null;
   const img = petPhotoImg(pet); if(!img.complete || !img.naturalWidth) return null;
   const key = pet.id + "|" + pose;
@@ -2201,7 +2205,7 @@ document.getElementById("btnRegister").onclick = ()=>{
   const mine = mkPet(name, species, status, color, spawnX, spawnY, status==="memorial" ? "它先回星星那儿了" : "还在家里，活蹦乱跳", line);
   mine.photo = status==="memorial" ? regPhotoData : null; // 预登记不收照片（创作者定：祈福不挂照片）
   mine.breed = breed; mine.mine = true;
-  // v0.15：带照片建档不再套演示专属包——形象由它自己的照片在浏览器内现场生成（photoTexCanvas）；演示包只属于最早那只已存档的猫
+  // v0.15→v0.41：带照片建档走免费档＝通用灵魂体＋照片吸取毛色；专属包（付费档）按照片单独生成后内置/下发，噗噗由认领规则接上
   S.pets.push(mine); S.myPetId = mine.id; S.inv.toy += 1; // 新手包：玩具×1，第一天就能陪它玩
   if(status==="memorial"){ player.x = mine.x; player.y = mine.y + 70; player.tx = player.x; player.ty = player.y; }
   save(); regOverlay.style.display = "none"; refreshHUD(); resetRegForm();
