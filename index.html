@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>星星小园 · 原型 v0.35</title>
+<title>星星小园 · 原型 v0.36</title>
 <style>
   :root { --paper:#f5efe1; --card:#fffdf7; --ink:#2a3a2e; --ink2:#5d7057; --pine:#33523d; --gold:#a8842c; --goldsoft:#e7d6a4; --line:#ded2b4; --chip:#fbf7ea; --serif:"Songti SC","STSong","Noto Serif SC","SimSun",serif; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -67,7 +67,7 @@
   .blessWish { margin:2px 2px 2px 0; }
   .dirRow { display:flex; align-items:center; gap:8px; padding:8px 2px; border-bottom:1px solid #e7dcc0; }
   .dirRow .nm { font-weight:700; } .dirRow .meta { color:#77663c; font-size:12.5px; flex:1; }
-  #furnCard { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 20px; max-width:520px; width:92vw; max-height:84vh; overflow:auto; box-shadow:0 18px 50px rgba(20,30,18,.35); }
+  .furnCard { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 20px; max-width:520px; width:92vw; max-height:84vh; overflow:auto; box-shadow:0 18px 50px rgba(20,30,18,.35); }
   .furnOpt { margin:2px 2px 2px 0; }
   #convertCard { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; width:calc(100% - 48px); max-width:420px; box-shadow:0 18px 50px rgba(20,30,18,.35); }
   #convertCard h2 { font-family:var(--serif); letter-spacing:.03em; font-size:17px; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
@@ -106,11 +106,11 @@
   /* 小屋 */
   #house { display:none; flex-direction:column; }
   #house.show { display:flex; }
-  #houseHead { padding:10px 14px; background:var(--card); display:flex; gap:12px; align-items:center; border-bottom:1px solid var(--line); }
-  #houseHead img { width:64px; height:64px; border-radius:12px; object-fit:cover; border:2px solid var(--goldsoft); }
-  #houseHead .emojiAvatar { width:64px; height:64px; border-radius:12px; background:#f3e9cd; display:flex; align-items:center; justify-content:center; font-size:36px; border:2px solid var(--goldsoft); }
-  #houseHead h3 { font-family:var(--serif); letter-spacing:.03em; font-size:16px; }
-  #houseHead p { font-size:12px; color:var(--ink2); line-height:1.5; }
+  .houseHead { padding:10px 14px; background:var(--card); display:flex; gap:12px; align-items:center; border-bottom:1px solid var(--line); }
+  .houseHead img { width:64px; height:64px; border-radius:12px; object-fit:cover; border:2px solid var(--goldsoft); }
+  .houseHead .emojiAvatar { width:64px; height:64px; border-radius:12px; background:#f3e9cd; display:flex; align-items:center; justify-content:center; font-size:36px; border:2px solid var(--goldsoft); }
+  .houseHead h3 { font-family:var(--serif); letter-spacing:.03em; font-size:16px; }
+  .houseHead p { font-size:12px; color:var(--ink2); line-height:1.5; }
   canvas#soul { display:block; width:100%; height:auto; background:linear-gradient(#fdf6dd,#f3e3ba); }
   #blessRoom { display:none; flex-direction:column; }
   #blessRoom.show { display:flex; }
@@ -139,7 +139,7 @@
 <body>
 <div id="app">
   <header>
-    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.35</span></h1>
+    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.36</span></h1>
   </header>
 
   <div id="hud">
@@ -170,9 +170,10 @@
         <button class="ghost" id="btnExport">导出存档（备份）</button>
         <button class="ghost" id="btnImport">导入存档</button>
         <input type="file" id="importFile" accept=".json,application/json" style="display:none">
-    <details><summary>玩法说明</summary><div class="hintText">点地图、拖左下角的圆盘摇杆，或用 WASD/方向键走动；迷路了就打开背包里的「全园地图」 · 看到发光的小东西，点它一下就会走过去捡起来（全园共享、先到先得，每天最多捡 10 件）；灰黑的阴影团子点一下就会追上去驱散净化，它叼走的东西会掉出来· 走近墓碑看介绍，点「进小屋」· 全园都是纪念区：北岸是草甸墓园，南岸是花园墓园，中间过彩虹桥 · 园里有一间祈福小屋，在家的宝贝预登记后可以去那儿祈福 · 任何人的小屋都能进、都能喂——只有换装是主人专属。（注：原型存档只存在你这台设备里，「全园共享」要等正式版联网后才开放。）</div></details>
+    <details><summary>玩法说明</summary><div class="hintText">点地图、拖左下角的圆盘摇杆，或用 WASD/方向键走动；迷路了就打开背包里的「全园地图」 · 看到发光的小东西，点它一下就会走过去捡起来（先到先得，每天最多捡 10 件）；灰黑的阴影团子点一下就会追上去驱散净化，它叼走的东西会掉出来· 走近墓碑看介绍，点「进小屋」· 全园都是纪念区：北岸是草甸墓园，南岸是花园墓园，中间过彩虹桥 · 园里有一间祈福小屋，在家的宝贝预登记后可以去那儿祈福 · 任何人的小屋都能进、都能喂——只有换装是主人专属。（注：原型存档只存在你这台设备里，「全园共享」要等正式版联网后才开放。）</div></details>
     <div class="drawerLabel">关于</div>
     <details id="changelog"><summary>原型说明与更新日志（点开看）</summary><div class="changelogBody">
+    原型说明（v0.36）：🛠 <b>Hark 审查修复批（审的是 v0.34，逐项回原码核实）</b>——祈福小屋点屋身也能进门（旧版只圈屋脚）、走路与仪式都绕湖不再卡在北岸、登记表办完与重开自动清空（不再串上一只的名字/碑文/照片）并加「先不登记」、碑面板「（自家）」改认全部自家宝贝、存档带版本号且多标签页自动同步、提示改排队（里程碑不再被盖掉）、里程碑文案与实发奖励对齐、上香光点修回（字段名笔误）、摇杆隐藏清方向、输入框打字不再驱动人物、地图标记放大、碑名录加自家标记、食盆显示每秒自刷新、小屋整栋防穿、重复 id 清理、兜底图集署名补全（LPC 原页＋重上色说明）。与上一版 Claude 审查重合的四条已在 v0.35 修好。<br>
     原型说明（v0.35）：<b>衣服包落地（素材包纪律最后一笔欠账清零）</b>——按创作者「抄」批下来的纸娃娃结构做的：围巾/小帽子/毛衣/星星坠四件全部换成专属水彩图集贴片（原生生成原画→品红抠图 forge→outfit 图集），按<b>槽位＋分层＋姿势锚点</b>挂在身上：站/走一套锚点、躺姿一套、吃姿一套，帽子围巾会随姿势歪头垂落，不再是四四方方的程序色块。覆盖猫、狗（全四件）、鸟（围巾/帽/星星）、兔/仓鼠/乌龟/蜥蜴（围巾/帽/星星，毛衣不适合它们的身形没硬套）、仪式与兜底形象。换装还是点「换装」轮换四件。<br>
     <b>同版并入外部审查四修（审的是 v0.34，条条核实属实）</b>：①预登记宝贝在祈福屋点「送它过桥」、确认框输名字按钮永远灰——转换目标改存专用变量，不再靠每帧重算的就近宠物；②兔/仓鼠/龟/蜥蜴添粮提示「undefined」已修；③登记第二只后第一只拿不到里程碑和家具解锁——改成每只自家宝贝各算各的，旧档记录自动迁移；④存档缺字段会让游戏整个起不来——补齐默认值＋启动兜底（真出错先把旧档备份一份再重置，不白屏）。另清掉两个无入口的旧函数，抽屉里新增<b>导出/导入存档</b>（导入前自动备份当前档）。<br>
     原型说明（v0.34）：<b>复测试玩修掉一个真 bug</b>——登记第二只宝贝之后，第一只的小屋会被误判成「客访」：标题变客访、换装/换家具/换毛色按钮全消失，碑上的「自家」标记也只认最后登记的那只。根源是进屋判定还在认「最后登记的那只」（myPetId），没跟上「每人可登记 2 只」的所有权口径。已统一改走 isMine（登记时打的归属标记）：两只自家宝贝进屋都是自家、按钮都在、碑上都挂自家标记。0666 复测全流程（首入登记→完整仪式→过桥→名录→祈福屋上香→预登记+上限→小屋喂食→刷新存档）零报错顺带验过。<br>
@@ -184,7 +185,7 @@
     原型说明（v0.28）：⭐ <b>正式更名为《星星小园》</b>——游戏名由《彩虹桥小园》改为《星星小园》；园里的彩虹桥还在，过桥与立碑仪式不变，其余功能与 v0.27 相同。<br>
     原型说明（v0.27）：🧱 <b>牌位墙改槽位制</b>——每面墙固定 27 个位置（9 列 × 3 排），紧凑挂满；登记了的点开看信息，没登记的挂一块淡牌，点开显示「未登记」；每位玩家最多登记 2 个宝贝（登记入口到上限就拦）。正式版上共享后端后，这面墙就是所有玩家共用的同一面墙。<br>原型说明（v0.26）：🪨 <b>墓碑落地、牌子真挂</b>——①墓碑包重做：旧抠图把碑座抠成半透明渐隐是"漂"的根源，这次用 AI 抠图模型（本地 BiRefNet 备选/u2net）＋alpha 硬化，碑体硬边贴地，接触阴影直接烤进素材包，不再代码现画；②祈福牌换新包：长长的红绳圈是真素材，牌子改小、不写名字，绳圈套过墙上的横杆挂着，每块带一点自然倾斜，垂影也烤在包里。<br>原型说明（v0.25）：📱 <b>移动体验批</b>——①顶栏收成一行（🎒背包按钮＋库存速览＋心意＋声音），其余家当（里程碑、礼包、碑名录、重置存档等）都收进背包抽屉，点开才展开；②过桥/立碑仪式<b>全屏</b>：仪式一开始页头、顶栏、说明全部让开，地图占满整屏，结束自动恢复；③<b>视野缩放</b>：窄屏自动拉远（手机上能看到更宽的园子，不再是 1:1 贴脸），桌面不变；④两处标注说实话了：先行者序号标明「仅本地演示」，玩法里注明全园共享要等正式版联网。<br>原型说明（v0.24）：🛕 <b>祈福小屋有了里面</b>——点小屋能进内景了：三面木架墙上挂着每一位登记过的宝贝的<b>祈福牌</b>（登记就自动上墙，牌面写名字，自家的牌子带红点），点任意一块牌子能看它的信息（主人、品种、年岁、祝福与香火）；屋里香炉可以<b>给所有牌位上香</b>（每天一炷，全屋牌子各添一炷香火）。自家预登记宝贝的祝福和送它过桥，也都搬进了它的牌子里。<br>原型说明（v0.23）：🛕 <b>祈福小屋专属素材包＋迁址</b>——原来的通用小木屋道具撤掉，换成按全图画风单独生成的祈福小屋原画（苔顶木屋、祈福牌架、灯笼、石板地基）做成的专属图集；位置从南岸西侧迁到<b>园子右下角的大樱花树旁</b>，碑位分配会避开小屋周边，小屋本身也有实体碰撞，不会再像贴纸浮在草地上。<br>原型说明（v0.22）：🗺️ <b>地图翻倍＋纪念为主</b>——园子扩到 4800×3200、换了全纪念园新底图（两岸都是碑地，碑容量约 140）；登记改为纪念为主：走了的立碑入园，还在家的只作预登记（不占位、不挂照片），园里南边新立一间<b>祈福小屋</b>，为在家的宝贝祈福；南岸生活区和过桥转化那套撤了（转纪念改从祈福小屋里送它过桥）。另加了<b>碑名录</b>，碑多了能搜名字让蝴蝶带路。老存档自动迁移（坐标翻倍、在养转预登记）。<br>原型说明（v0.21）：🕯️ <b>蜡烛只在墓碑前</b>——小屋里不再摆烛排了；它被点过的烛，现在亮在公园里它的墓碑脚下（最多排五支，火苗会轻轻晃）。在小屋里点烛照样计数，等它过桥之后，烛光就在碑前等它。<br>原型说明（v0.20）：🪑 <b>家具能换了</b>——它被照顾的次数攒够了，就能解锁更好看的替换家具（满 15 次解锁窝位替换款、满 40 次解锁架子位替换款），在小屋点「换家具（主人）」就能换上；被照顾满 200 次添一棵纪念小树、满 500 次添一盏长明小灯，自动出现在小屋右角。替换款一样能玩：双层爬架照样上、玩具箱照样扑、花藤秋千照样晃。<br>原型说明（v0.19）：🐰 <b>新物种来了：兔、仓鼠、龟、蜥蜴</b>——每个物种一张专属形象包（站/走/睡/吃/坐六个姿势）、一套基础家具（兔：草架＋草窝；仓鼠：跑轮＋小木屋；龟：浅水池＋晒台；蜥蜴：晒灯栖木＋躲避洞），还各有能玩的活动：兔子去草架前吃草、仓鼠上跑轮撒欢、乌龟泡池子和上晒台晒背、蜥蜴爬栖木在晒灯下取暖；点家具也能指派。带照片的照旧用它自己的照片生成形象。<br>原型说明（v0.18）：🧭 <b>摆放修正</b>——复查发现 A 槽（爬架/站架/玩具篮）钉在左侧墙的墙面上、高大家具像挂在墙上，食盆也落在墙角墙面。整排右移进后墙地板带：A 槽到墙角地板（避开窗户），食盆、水盆居中成喂食区，烛台靠右，供品回地毯一带。物种扩容顺延 v0.19。<br>原型说明（v0.17）：🏠 <b>小屋变大了，家具能玩了</b>——房间放大到 880×500；基础配置全部可互动：灵魂体会自己去爬架上玩（猫）、在玩具篮边扑咬（狗）、上秋千晃/站架子上看风景（鸟）、去水盆喝水、食盆有粮时自己去吃；你也可以直接点家具、食盆、水盆，指派它过去。物种扩容顺延到 v0.18。<br>原型说明（v0.16）：🛋️ <b>小屋改成「空房＋家具槽位」</b>——底图只剩墙、窗、地板和地毯，家具是一件件独立素材包摆进槽位；每只宠物开局发本物种的基础套件（猫：基础猫爬架＋布猫窝；狗：玩具篮＋狗窝垫；鸟：站架＋秋千架），记在它自己的档案里，以后靠里程碑添置、替换。灵魂体困了会自己走到窝边再躺下。建档新增<b>品种</b>（猫/狗可选，记在档案和小屋里）。<br>原型说明（v0.15）：🐾 <b>访客的宠物换成它自己的了</b>——带照片建档的猫/狗/鸟，现在直接在浏览器里用它自己的照片现场生成形象（照片做纹理、姿势图集裁形、描边和眼睛回到原位），不再套演示包；那套 AI 生成的布偶猫专属包只保留给最早建档的那只。正式版会升级为后台 AI 按每只照片单独生成的高清专属包。<br>原型说明（v0.14）：🔧 <b>按外部代码审查逐项修了一批</b>——静音键真的能静音了；点河对岸会自动绕桥过去；方向键不再滚屏、窗口失焦不会自己乱走；照片传错格式会出声告诉你；过桥前要输入它的名字才能确认；里程碑的称号（常来看看的人／守烛人）现在真的会发；手机上按钮更好点、提示不再盖住标题、更新日志折叠了；页脚补了素材署名；两张场景底图换成无损 WebP，页面轻了约三成。另说清一句：照片专属形象目前是<b>演示包</b>（以一只布偶猫的照片生成的那一套），正式版会按每只宠物自己的照片单独生成。<br>原型说明（v0.13）：📦 <b>全园素材包化</b>——按「所有素材必须做素材包、不许简单贴画」的纪律清了一轮：地上的捡拾物不再是 emoji，是手绘物品图集（肉腿/蜡烛/花束/小熊/围巾）；小屋的蜡烛、食盆、画像框都换成专属素材包（蜡烛两帧火焰、食盆空/满两态、画像框带爪印款）；连祈福星光、睡觉 Z 符、捡拾火花这三件特效，也离线烘焙成了精灵图集，不再用运行时贴片。场景里看得见的东西，件件有原画、有图集。<br>原型说明（v0.12）：🏮 <b>墙上的信物换成手绘的了</b>——上一版是代码画的扁平图形，跟房间的手绘墙面不搭；这版三件信物（木福牌、长寿结、金铃铛）是专门生成的手绘原画，跟房间、供品同一套工艺，挂在墙上是一体的了。<br>原型说明（v0.11）：🔊 <b>游戏有声音了</b>——捡东西叮咚、祈福有铃声、点烛有轻响、驱散团子有消散声、仪式结束有风铃，全是代码现场合成的，没有录音素材；右上角可以关。🏮 <b>祈福信物上墙了</b>——攒到的祈福牌、长寿结、金铃铛会挂进小屋画像右边的墙上。🕯️ <b>仪式有了收尾</b>——过桥或立碑之后，可以亲手为它点上第一支烛。🐾 没传照片的画像改成了爪印剪影，不再是像素小脸。<br>原型说明（v0.10）：🐾 <b>自家猫真走路了</b>——带照片建档的猫，走路不再是两帧静态图加浮动，而是一套 8 帧真步态循环（agent-sprite-forge 管线：站姿帧→图生视频→软抠图→自动挑循环），小屋里散步、去食盆、过桥仪式里走路都是这套；站立、睡觉、吃饭还是原来的姿势图。<br>原型说明（v0.9）：✨ <b>光点特效接入</b>——祈福时有星光落在它身上（pixelfx blessing）、睡着时头顶飘 Z 符、捡到东西时有小火花；👻 <b>新玩法：驱散阴影团子</b>——园子里会飘来灰黑小团子偷光吵闹，走近点它（或点它让守园人走过去），灯光一照就化作光尘，团子叼走的东西有几率掉回来（每天最多 3 件，每天最多来 5 只）。<br>原型说明（v0.8）：🏠 <b>房间变大了</b>——新内景更高更宽敞，画像挂到正墙中央；🎁 <b>献上玩具</b>——背包里的玩具献给它之后，就永久留在它房间的地板上（第一个是线团），它闲逛时自己会跑去扑着玩。<br>原型说明（v0.7）：✨ <b>照片专属形象上线</b>——带照片建档的猫，园子里的形象就是拿它的照片生成的那一套（白身、奶油色鞍纹、灰蓝耳朵、大蓬尾巴都是它本尊的），不再是通用猫换色，颜色也锁死以照片为准。旧存档里带照片的自家猫打开即自动换上。<br>原型说明（v0.6）：按哈克试玩报告逐项修复——①照片入库前压缩到 480px、存档失败会出声提醒，画像真贴进画框；②食盆改按时间戳结算（每 20 秒吃一格，刷新也不卡满）；③toast 提到顶层，小屋里能看见提示和背包余量；④「今日已捡」跨天清零、捡拾物绝不刷进河里且多刷在你附近；⑤登录礼包每天只能领一次；⑥陪玩/祈福每日计前 3 次，陪伴本身不限；⑦建档选「已经离开了」会补一场立碑仪式；⑧重置存档改成讲清后果的确认层；⑨小院和碑有了碰撞（爬不上房顶）、走近面板更容易触发、名字标签不被边缘切；⑩换毛色不再说开发术语。新玩法：在养宠物可以「祈福」了——每天在小屋里送它一句祝福（健健康康/平平安安/长命百岁/天天开心），祝福攒满 7/30/100 句得祈福牌、长寿结、金铃铛，过桥后这些宝贝会一直陪着它。</div>
   </details>
-    <div id="credits">素材与鸣谢：园内场景、宠物与物品均为本项目自制素材包（AI 生成原画＋forge 图集）；灵魂体加载兜底图集含 [LPC] Cats and Dogs（bluecarrot16，CC-BY 3.0）与 Sprout Lands 小鸡（Cup Nooble，免费版·非商用，商用前替换）；特效帧由 patch-gg/pixelfx（MIT）离线烘焙；动画生产管线 agent-sprite-forge（MIT）。</div>
+    <div id="credits">素材与鸣谢：园内场景、宠物与物品均为本项目自制素材包（AI 生成原画＋forge 图集）；灵魂体加载兜底图集含 [LPC] Cats and Dogs（bluecarrot16，CC-BY 3.0）（原页 opengameart.org/content/lpc-cats-and-dogs，已按登记毛色重新上色；园内无第三方非商用素材）；特效帧由 patch-gg/pixelfx（MIT）离线烘焙；动画生产管线 agent-sprite-forge（MIT）。</div>
     </div>
   </div>
 
@@ -245,7 +246,7 @@
   </div>
 
   <div id="house">
-    <div id="houseHead">
+    <div class="houseHead">
       <span id="houseAvatar"></span>
       <div>
         <h3 id="houseName"></h3>
@@ -277,7 +278,7 @@
   </div>
 
   <div id="blessRoom">
-    <div id="houseHead">
+    <div class="houseHead">
       <span class="emojiAvatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:32px;height:32px;color:#33523d"><path d="M4 11l8-6.5L20 11"/><path d="M6.2 9.5V20h11.6V9.5"/><path d="M10 20v-5h4v5"/></svg></span>
       <div>
         <h3>祈福小屋</h3>
@@ -294,7 +295,7 @@
     </div>
   </div>
   <div id="furnOverlay">
-    <div id="furnCard">
+    <div class="furnCard">
       <h2 style="margin:2px 0 6px;font-family:var(--serif);letter-spacing:.03em;display:flex;align-items:center;gap:8px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 4v7.5h11V4"/><path d="M6.5 11.5V20"/><path d="M17.5 11.5V20"/><path d="M6.5 15.5h11"/></svg> 换家具</h2>
       <div id="furnList"></div>
       <div class="row" style="margin-top:12px"><button id="btnFurnClose">完成</button></div>
@@ -312,7 +313,7 @@
 </div>
 
   <div id="dirOverlay">
-    <div id="furnCard">
+    <div class="furnCard">
       <h2 style="margin:2px 0 6px;font-family:var(--serif);letter-spacing:.03em;display:flex;align-items:center;gap:8px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h12.5v17H6z"/><path d="M9.5 7.5h6"/><path d="M9.5 11h6"/></svg> 碑名录</h2>
       <input type="text" id="dirSearch" placeholder="搜名字…" maxlength="12" style="width:100%;box-sizing:border-box;margin-bottom:6px">
       <div id="dirList"></div>
@@ -354,6 +355,7 @@
     <input type="text" id="regLine" placeholder="比如：慢慢来，我们不赶时间" maxlength="30">
     </div>
     <button class="big" id="btnRegister">建档，送它入园</button>
+    <button class="ghost" id="btnRegCancel" style="margin-top:8px;width:100%">先不登记，去园里逛逛</button>
   </div>
 </div>
 
@@ -382,6 +384,8 @@ let selPlot = null, pendingPlot = null;
 (function normalizeSave(){ try{
   S.lastGiftDate = S.lastGiftDate || ""; S.pickDate = S.pickDate || "";
   if(!S.claimed) S.claimed = { loginSession:false, pioneer:false }; // v0.35 审查修复④：缺字段不再让游戏起不来
+  if(S.saveV === undefined) S.saveV = 36; // v0.36：存档版本号
+  S.saveV = 36;
   if(!S.inv) S.inv = { food:3, candle:3, flower:2, toy:0, clothes:0 };
   if(!Array.isArray(S.milestonesHit)) S.milestonesHit = [];
   if(!Array.isArray(S.petMilestonesHit)) S.petMilestonesHit = [];
@@ -420,7 +424,7 @@ let selPlot = null, pendingPlot = null;
 })();
 function freshState(){
   return {
-    mapV:2, playerTotal:0, loginDays:0, pickToday:0, lastGiftDate:"", pickDate:"", disperseTotal:0, guardDays:0, lastGuardDate:"", blobDate:"", blobSpawned:0, blobDrops:0, muted:false,
+    mapV:2, saveV:36, playerTotal:0, loginDays:0, pickToday:0, lastGiftDate:"", pickDate:"", disperseTotal:0, guardDays:0, lastGuardDate:"", blobDate:"", blobSpawned:0, blobDrops:0, muted:false,
     inv:{ food:3, candle:3, flower:2, toy:0, clothes:0 },
     claimed:{ loginSession:false, pioneer:false },
     milestonesHit:[], petMilestonesHit:[], titles:[],
@@ -448,10 +452,10 @@ const PLAYER_MS = [
   { n:5,   reward:{flower:3,candle:3}, label:"鲜花×3＋蜡烛×3" },
   { n:15,  reward:{toy:1},             label:"玩具一件" },
   { n:30, reward:{clothes:1},         label:"里程碑纪念围巾（第一件衣服）" },
-  { n:50,  reward:{candle:5}, title:"常来看看的人",          label:"星星烛×5＋称号「常来看看的人」" },
-  { n:100, reward:{clothes:2},         label:"衣服套装一套" },
-  { n:200, reward:{toy:2},             label:"稀有玩具" },
-  { n:365, reward:{clothes:1}, title:"守烛人",         label:"徽章「守烛人」＋重塑卡" }
+  { n:50,  reward:{candle:5}, title:"常来看看的人",          label:"蜡烛×5＋称号「常来看看的人」" },
+  { n:100, reward:{clothes:2},         label:"衣服×2" },
+  { n:200, reward:{toy:2},             label:"玩具×2" },
+  { n:365, reward:{clothes:1}, title:"守烛人",         label:"称号「守烛人」＋衣服一件" }
 ];
 function grantReward(r){ for(const k in r){ S.inv[k] = (S.inv[k]||0) + r[k]; } }
 function checkMilestones(){
@@ -499,7 +503,8 @@ window.addEventListener("resize", fitCanvas);
 
 const player = { x:3050, y:1990, tx:3050, ty:1990, speed:340, face:"down", moving:false, destQ:[] };
 const keys = {};
-window.addEventListener("keydown", e=>{ const k = e.key.toLowerCase();
+window.addEventListener("keydown", e=>{ if(/INPUT|TEXTAREA|SELECT/.test((e.target || {}).tagName || "")) return; // v0.36：在输入框里打字不驱动人物
+  const k = e.key.toLowerCase();
   if(["arrowup","arrowdown","arrowleft","arrowright"," "].includes(k) && !/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||"")) e.preventDefault();
   keys[k] = true; });
 window.addEventListener("keyup",   e=>{ keys[e.key.toLowerCase()] = false; });
@@ -518,22 +523,50 @@ canvas.addEventListener("pointerdown", e=>{
     if(!pk.fromBlob && S.pickToday>=10){ toast("今天捡满 10 件啦，留些给别人吧 🌿"); return; }
     pendingPickup = pk; pendingBlob = null; setDest(pk.x, pk.y); return;
   }
-  if(Math.hypot(wx-BLESS_HOUSE.x, wy-BLESS_HOUSE.y) < 130){
+  if(wx > BLESS_HOUSE.x - 195 && wx < BLESS_HOUSE.x + 195 && wy > BLESS_HOUSE.y - 385 && wy < BLESS_HOUSE.y + 30){ // v0.36：判定改对整栋屋身（旧版只圈屋脚，点屋身没反应）
     if(Math.hypot(player.x-BLESS_HOUSE.x, player.y-BLESS_HOUSE.y) < 340){ enterBlessRoom(); return; }
     pendingBlob = null; pendingPickup = null; setDest(BLESS_HOUSE.x, BLESS_HOUSE.y + 76); toast("🛕 那是祈福小屋，走近了再点它进去"); return;
   }
   pendingBlob = null; pendingPickup = null;
   setDest(wx, wy);
 });
-function setDest(x, y){ // 点对岸时自动绕桥：南岸口→北岸口→目标
+const POND = { x0: 2200, y0: 2140, x1: 3650, y1: 2900 }; // 东南湖面碰撞区（与主循环推挤一致）
+function segRectHit(x1, y1, x2, y2, rx0, ry0, rx1, ry1){ // 线段与矩形相交（含端点落在内部）
+  if(x1 > rx0 && x1 < rx1 && y1 > ry0 && y1 < ry1) return true;
+  if(x2 > rx0 && x2 < rx1 && y2 > ry0 && y2 < ry1) return true;
+  const hit = (ax, ay, bx, by, cx, cy, dx, dy) => { const d = (bx - ax) * (dy - cy) - (by - ay) * (dx - cx); if(!d) return false; const t = ((cx - ax) * (dy - cy) - (cy - ay) * (dx - cx)) / d, u = ((cx - ax) * (by - ay) - (cy - ay) * (bx - ax)) / d; return t >= 0 && t <= 1 && u >= 0 && u <= 1; };
+  return hit(x1, y1, x2, y2, rx0, ry0, rx1, ry0) || hit(x1, y1, x2, y2, rx1, ry0, rx1, ry1) || hit(x1, y1, x2, y2, rx1, ry1, rx0, ry1) || hit(x1, y1, x2, y2, rx0, ry1, rx0, ry0);
+}
+function pondWaypoints(x1, y1, x2, y2){ // v0.36：直线穿湖时给出绕湖角点（四边各试，只取全程不穿湖且最短的一组）
+  if(!segRectHit(x1, y1, x2, y2, POND.x0, POND.y0, POND.x1, POND.y1)) return [];
+  const M = 150;
+  const sides = [
+    [{x: POND.x0 - M, y: POND.y0 - M}, {x: POND.x1 + M, y: POND.y0 - M}],
+    [{x: POND.x1 + M, y: POND.y0 - M}, {x: POND.x1 + M, y: POND.y1 + M}],
+    [{x: POND.x0 - M, y: POND.y1 + M}, {x: POND.x1 + M, y: POND.y1 + M}],
+    [{x: POND.x0 - M, y: POND.y0 - M}, {x: POND.x0 - M, y: POND.y1 + M}]
+  ];
+  let best = null, bestLen = 1e18;
+  for(const pr of sides){
+    for(const pts of [pr, [pr[1], pr[0]]]){
+      if(segRectHit(x1, y1, pts[0].x, pts[0].y, POND.x0, POND.y0, POND.x1, POND.y1)) continue;
+      if(segRectHit(pts[1].x, pts[1].y, x2, y2, POND.x0, POND.y0, POND.x1, POND.y1)) continue;
+      const L = Math.hypot(pts[0].x - x1, pts[0].y - y1) + Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y) + Math.hypot(x2 - pts[1].x, y2 - pts[1].y);
+      if(L < bestLen){ bestLen = L; best = pts; }
+    }
+  }
+  return best || [sides[0][0], sides[0][1]];
+}
+function setDest(x, y){ // 点对岸时自动绕桥：南岸口→北岸口→目标；任一段穿湖再绕湖
   const rT = WORLD.riverY, rB = WORLD.riverY + WORLD.riverH;
   const ps = player.y < rT ? -1 : (player.y > rB ? 1 : 0);
   const ts = y < rT ? -1 : (y > rB ? 1 : 0);
-  player.destQ = [];
-  if(ps && ts && ps !== ts){
-    player.destQ = [ {x:2880, y:(ps<0 ? rT-26 : rB+26)}, {x:2880, y:(ts<0 ? rT-26 : rB+26)}, {x:x, y:y} ];
-    const f = player.destQ.shift(); player.tx = f.x; player.ty = f.y;
-  } else { player.tx = x; player.ty = y; }
+  let pts = [{x:x, y:y}];
+  if(ps && ts && ps !== ts) pts = [ {x:2880, y:(ps<0 ? rT-26 : rB+26)}, {x:2880, y:(ts<0 ? rT-26 : rB+26)}, {x:x, y:y} ];
+  const out = []; let cx = player.x, cy = player.y;
+  for(const p of pts){ for(const w of pondWaypoints(cx, cy, p.x, p.y)) out.push(w); out.push(p); cx = p.x; cy = p.y; }
+  player.destQ = out;
+  const f = player.destQ.shift(); player.tx = f.x; player.ty = f.y;
 }
 function camera(){
   return { x: clamp(player.x - vw()/2, 0, Math.max(0,WORLD.w-vw())),
@@ -567,15 +600,15 @@ function spawnPickup(){
 for(let i=0;i<32;i++) spawnPickup();
 setInterval(()=>{ if(pickups.length<32 && document.visibilityState==="visible") spawnPickup(); }, 3000);
 
-/* ============ 绘制（真素材：Sprout Lands 像素包（Cup Nooble，免费版·非商用·署名）+ Kenney 角色（CC0）；v0.3.2 灵魂体 = 猫专属定制素材包（自生成原画 + forge 后处理）+ 狗 LPC 母版占位（bluecarrot16，CC-BY 3.0）+ Sprout 小鸡） ============ */
+/* ============ 绘制（真素材：自制素材包为主；v0.3.2 灵魂体 = 猫专属定制素材包（自生成原画 + forge 后处理）+ 狗 LPC 母版占位（bluecarrot16，CC-BY 3.0）+ Sprout 小鸡行已于 v0.36 裁除（从未被代码引用）） ============ */
 const PX = 1; // v0.4：手绘原画全分辨率平滑渲染（原 PX=3 最近邻放大即“平面像素”来源，已废）贴入
 const buf = document.createElement("canvas"), btx = buf.getContext("2d");
 function pR(c,x,y,w,h,col){ c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), Math.max(1,Math.round(w)), Math.max(1,Math.round(h))); }
 
-/* ===== 灵魂体素材：v0.3.2 起每种动物单独一套专属素材包；下方 ATLAS2 为狗/鸟占位（LPC 母版 bluecarrot16，CC-BY 3.0；Sprout 小鸡），猫包见 ATLAS3 ===== */
+/* ===== 灵魂体素材：v0.3.2 起每种动物单独一套专属素材包；下方 ATLAS2 为狗/鸟占位（LPC 母版 bluecarrot16，CC-BY 3.0；Sprout 小鸡行已于 v0.36 裁除（从未被代码引用）），猫包见 ATLAS3 ===== */
 const ATLAS2 = new Image();
-ATLAS2.src = "data:image/png;base64,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";
-const R2 = {"cat0_stand": [0, 0, 32, 32], "cat0_walk1": [32, 0, 32, 32], "cat0_walk2": [64, 0, 32, 32], "cat0_lie": [96, 0, 32, 32], "cat1_stand": [0, 32, 32, 32], "cat1_walk1": [32, 32, 32, 32], "cat1_walk2": [64, 32, 32, 32], "cat1_lie": [96, 32, 32, 32], "cat2_stand": [0, 64, 32, 32], "cat2_walk1": [32, 64, 32, 32], "cat2_walk2": [64, 64, 32, 32], "cat2_lie": [96, 64, 32, 32], "cat3_stand": [0, 96, 32, 32], "cat3_walk1": [32, 96, 32, 32], "cat3_walk2": [64, 96, 32, 32], "cat3_lie": [96, 96, 32, 32], "dog0_stand": [0, 128, 32, 32], "dog0_walk1": [32, 128, 32, 32], "dog0_walk2": [64, 128, 32, 32], "dog0_lie": [96, 128, 32, 32], "dog1_stand": [0, 160, 32, 32], "dog1_walk1": [32, 160, 32, 32], "dog1_walk2": [64, 160, 32, 32], "dog1_lie": [96, 160, 32, 32], "dog2_stand": [0, 192, 32, 32], "dog2_walk1": [32, 192, 32, 32], "dog2_walk2": [64, 192, 32, 32], "dog2_lie": [96, 192, 32, 32], "dog3_stand": [0, 224, 32, 32], "dog3_walk1": [32, 224, 32, 32], "dog3_walk2": [64, 224, 32, 32], "dog3_lie": [96, 224, 32, 32], "chick_front": [0, 256, 16, 16], "chick_side0": [16, 256, 16, 16], "chick_side1": [32, 256, 16, 16], "chick_side2": [48, 256, 16, 16], "chick_peck": [64, 256, 16, 16]};
+ATLAS2.src = "data:image/png;base64,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";
+const R2 = {"cat0_stand": [0, 0, 32, 32], "cat0_walk1": [32, 0, 32, 32], "cat0_walk2": [64, 0, 32, 32], "cat0_lie": [96, 0, 32, 32], "cat1_stand": [0, 32, 32, 32], "cat1_walk1": [32, 32, 32, 32], "cat1_walk2": [64, 32, 32, 32], "cat1_lie": [96, 32, 32, 32], "cat2_stand": [0, 64, 32, 32], "cat2_walk1": [32, 64, 32, 32], "cat2_walk2": [64, 64, 32, 32], "cat2_lie": [96, 64, 32, 32], "cat3_stand": [0, 96, 32, 32], "cat3_walk1": [32, 96, 32, 32], "cat3_walk2": [64, 96, 32, 32], "cat3_lie": [96, 96, 32, 32], "dog0_stand": [0, 128, 32, 32], "dog0_walk1": [32, 128, 32, 32], "dog0_walk2": [64, 128, 32, 32], "dog0_lie": [96, 128, 32, 32], "dog1_stand": [0, 160, 32, 32], "dog1_walk1": [32, 160, 32, 32], "dog1_walk2": [64, 160, 32, 32], "dog1_lie": [96, 160, 32, 32], "dog2_stand": [0, 192, 32, 32], "dog2_walk1": [32, 192, 32, 32], "dog2_walk2": [64, 192, 32, 32], "dog2_lie": [96, 192, 32, 32], "dog3_stand": [0, 224, 32, 32], "dog3_walk1": [32, 224, 32, 32], "dog3_walk2": [64, 224, 32, 32], "dog3_lie": [96, 224, 32, 32]};
 const _recolorCache = {};
 function recolored(species, pose, hex){
   const pk = NEW_PACKS[species]; if(pk) return recoloredPack(pk.atlas, pk.rects, pk.cache, pose, hex);
@@ -947,16 +980,17 @@ const joyVec = { x: 0, y: 0 };
   joy.addEventListener("pointermove", e => { if(e.pointerId === pid) move(e); });
   function end(e){ if(e.pointerId !== pid) return; pid = null; joyVec.x = 0; joyVec.y = 0; setKnob(0, 0); }
   joy.addEventListener("pointerup", end); joy.addEventListener("pointercancel", end);
-  setInterval(() => { const touch = ("ontouchstart" in window) || navigator.maxTouchPoints > 0; joy.style.display = (touch && !housePet && !blessTimer && !ceremony) ? "block" : "none"; }, 600);
+  setInterval(() => { const touch = ("ontouchstart" in window) || navigator.maxTouchPoints > 0; const show = touch && !housePet && !blessTimer && !ceremony; if(!show && (joyVec.x || joyVec.y)){ joyVec.x = 0; joyVec.y = 0; setKnob(0, 0); } joy.style.display = show ? "block" : "none"; }, 600); // v0.36：隐藏时清方向，防残留自走
 })();
 function openMap(){
+  document.getElementById("hudDrawer").classList.remove("open"); // v0.36：地图不再压在没关的抽屉上
   document.getElementById("mapImg").src = PLATE.src;
   const marks = document.getElementById("mapMarks"); marks.innerHTML = "";
   const add = (x, y, color, size, label, fn, border) => { const d = document.createElement(fn ? "button" : "span"); d.className = "mapDot"; d.style.left = (x / WORLD.w * 100) + "%"; d.style.top = (y / WORLD.h * 100) + "%"; d.style.width = size + "px"; d.style.height = size + "px"; d.style.background = color; if(border) d.style.borderColor = border; d.title = label; if(fn) d.onclick = fn; marks.appendChild(d); };
-  for(const pl of PLOTS){ const occ = S.pets.some(p => p.status === "memorial" && plotOf(p) === pl); add(pl.x, pl.y, occ ? "#a8842c" : "rgba(255,253,247,.5)", occ ? 12 : 8, "一园 " + pl.no + " 号" + (occ ? "" : "（空位）")); }
-  for(const p of S.pets){ if(p.status !== "memorial") continue; const pl = plotOf(p); if(!pl) continue; add(pl.x, pl.y - 30, isMine(p) ? "#c2504e" : "#33523d", 15, p.name + " · 一园 " + pl.no + " 号", () => { closeMap(); setDest(p.x, p.y + 56); toast("去 " + p.name + " 那儿（一园 " + pl.no + " 号）"); }); }
-  add(BLESS_HOUSE.x, BLESS_HOUSE.y - 10, "#b3543f", 15, "祈福小屋", () => { closeMap(); setDest(BLESS_HOUSE.x, BLESS_HOUSE.y + 76); toast("去祈福小屋"); });
-  add(player.x, player.y, "#fffdf7", 12, "我在这里", null, "#33523d");
+  for(const pl of PLOTS){ const occ = S.pets.some(p => p.status === "memorial" && plotOf(p) === pl); add(pl.x, pl.y, occ ? "#a8842c" : "rgba(255,253,247,.5)", occ ? 14 : 11, "一园 " + pl.no + " 号" + (occ ? "" : "（空位）")); }
+  for(const p of S.pets){ if(p.status !== "memorial") continue; const pl = plotOf(p); if(!pl) continue; add(pl.x, pl.y - 30, isMine(p) ? "#c2504e" : "#33523d", 18, p.name + " · 一园 " + pl.no + " 号", () => { closeMap(); setDest(p.x, p.y + 56); toast("去 " + p.name + " 那儿（一园 " + pl.no + " 号）"); }); }
+  add(BLESS_HOUSE.x, BLESS_HOUSE.y - 10, "#b3543f", 18, "祈福小屋", () => { closeMap(); setDest(BLESS_HOUSE.x, BLESS_HOUSE.y + 76); toast("去祈福小屋"); });
+  add(player.x, player.y, "#fffdf7", 14, "我在这里", null, "#33523d");
   const reg = S.pets.filter(p => p.status === "memorial").length;
   document.getElementById("mapSub").textContent = "一园（春樱园）共 50 个碑位，已登记 " + reg + " 个。红点是自家的碑、绿点是园友的碑，点一下就走过去；砖红点是祈福小屋，白点是你现在的位置。";
   document.getElementById("mapOverlay").classList.add("show");
@@ -990,7 +1024,7 @@ function loop(t){
     const onBridge = player.x>BRIDGE.x0 && player.x<BRIDGE.x1;
     if(inRiver && !onBridge){ player.y = player.y < WORLD.riverY+WORLD.riverH/2 ? WORLD.riverY+2 : WORLD.riverY+WORLD.riverH-2; player.ty = player.y; }
     if(player.x > 2200 && player.x < 3650 && player.y > 2140 && player.y < 2900){ player.y = player.y < 2520 ? 2140 : 2900; player.ty = player.y; } // v0.22：东南湖面
-    if(Math.abs(player.x - BLESS_HOUSE.x) < 128 && player.y > BLESS_HOUSE.y - 52 && player.y < BLESS_HOUSE.y + 26){ player.y = player.y < BLESS_HOUSE.y - 13 ? BLESS_HOUSE.y - 52 : BLESS_HOUSE.y + 26; player.ty = player.y; } // v0.23：祈福小屋屋基
+    if(Math.abs(player.x - BLESS_HOUSE.x) < 180 && player.y > BLESS_HOUSE.y - 300 && player.y < BLESS_HOUSE.y + 26){ player.y = player.y < BLESS_HOUSE.y - 137 ? BLESS_HOUSE.y - 300 : BLESS_HOUSE.y + 26; player.ty = player.y; } // v0.23：祈福小屋屋基
     player.x = clamp(player.x, 24, WORLD.w-24); player.y = clamp(player.y, 24, WORLD.h-24);
     // 小院/碑体碰撞（报告14）：不能爬上房顶、不能穿过碑身
     for(const pet of S.pets){
@@ -1037,13 +1071,13 @@ function updateInfoPanel(){
   if(ceremony){ infoPanel.classList.remove("show"); return; }
   if(nearestPet){
     infoPanel.classList.add("show");
-    document.getElementById("infoName").textContent = nearestPet.name + (nearestPet.status==="memorial" ? " 的纪念碑" : " 的小院") + (nearestPet.status==="memorial" && plotOf(nearestPet) ? " · 一园 " + plotOf(nearestPet).no + " 号" : "") + (nearestPet.id===S.myPetId ? "（自家）":"");
+    document.getElementById("infoName").textContent = nearestPet.name + (nearestPet.status==="memorial" ? " 的纪念碑" : " 的小院") + (nearestPet.status==="memorial" && plotOf(nearestPet) ? " · 一园 " + plotOf(nearestPet).no + " 号" : "") + (isMine(nearestPet) ? "（自家）":"");
     const c = nearestPet.counts;
     const stats = "被投喂 "+c.fed+" 次 · 被点烛 "+c.candle+" 次 · 被献花 "+(c.flower||0)+" 次 · 被祈福 "+c.pray+" 次 · 被陪玩 "+(c.interact||0)+" 次"+((c.bless||0)>0 ? " · 被祝福 "+c.bless+" 次" : "")+" · 来访 "+c.visits+" 次";
     document.getElementById("infoText").textContent = nearestPet.status==="memorial"
       ? nearestPet.dates+" · 它住在北岸了｜你写给它的话：「"+nearestPet.line+"」｜"+stats
       : nearestPet.dates+" · "+nearestPet.line+"｜"+stats;
-    document.getElementById("btnConvert").style.display = (nearestPet.id===S.myPetId && nearestPet.status==="prereg") ? "" : "none";
+    document.getElementById("btnConvert").style.display = (isMine(nearestPet) && nearestPet.status==="prereg") ? "" : "none";
     document.getElementById("btnEnter").style.display = ""; document.getElementById("btnGuide").style.display = "";
     document.getElementById("btnRegHere").style.display = "none";
   } else if(selPlot){
@@ -1056,7 +1090,7 @@ function updateInfoPanel(){
   } else infoPanel.classList.remove("show");
 }
 document.getElementById("btnEnter").onclick = ()=>{ if(nearestPet) enterHouse(nearestPet); };
-document.getElementById("btnRegHere").onclick = ()=>{ if(!selPlot) return; pendingPlot = selPlot; const rs = document.getElementById("regStatus"); rs.value = "memorial"; syncRegMode(); document.getElementById("regOverlay").style.display = "flex"; };
+document.getElementById("btnRegHere").onclick = ()=>{ if(!selPlot) return; pendingPlot = selPlot; resetRegForm(); const rs = document.getElementById("regStatus"); rs.value = "memorial"; syncRegMode(); document.getElementById("regOverlay").style.display = "flex"; };
 /* ============ 过桥转纪念仪式（v0.5）：送行 → 过桥（虹光/光尘）→ 北岸立碑 ============ */
 let ceremony = null;
 const CER_PLOT = { x:2880, y:2320, no:0 };
@@ -1105,10 +1139,14 @@ function cerPath(pts, u){ // 距离加权折线插值（仪式绕桥走位用）
   for(let i = 0; i < ds.length; i++){ if(want <= ds[i] || i === ds.length - 1) return cerLerp(pts[i], pts[i+1], ds[i] ? want / ds[i] : 0); want -= ds[i]; }
   return pts[pts.length - 1];
 }
-function cerRoute(fx, fy, tx, ty){ // 跨河走位：经桥面北口/南口绕行，不直线趟水
+function cerRoute(fx, fy, tx, ty){ // 跨河走位：经桥面北口/南口绕行，不直线趟水；任一段穿湖再绕湖（v0.36）
   const mid = WORLD.riverY + WORLD.riverH / 2;
-  if((fy < mid) === (ty < mid)) return [{x:fx,y:fy},{x:tx,y:ty}];
-  return fy < mid ? [{x:fx,y:fy},{x:3010,y:1900},{x:tx,y:ty}] : [{x:fx,y:fy},{x:2700,y:1120},{x:tx,y:ty}];
+  let pts;
+  if((fy < mid) === (ty < mid)) pts = [{x:fx,y:fy},{x:tx,y:ty}];
+  else pts = fy < mid ? [{x:fx,y:fy},{x:3010,y:1900},{x:tx,y:ty}] : [{x:fx,y:fy},{x:2700,y:1120},{x:tx,y:ty}];
+  const out = [pts[0]];
+  for(let i = 1; i < pts.length; i++){ for(const w of pondWaypoints(pts[i-1].x, pts[i-1].y, pts[i].x, pts[i].y)) out.push(w); out.push(pts[i]); }
+  return out;
 }
 function ceremonyTick(now){
   const cer = ceremony; if(!cer) return;
@@ -1270,9 +1308,15 @@ document.getElementById("btnResetGo").onclick = ()=>{ localStorage.removeItem(SA
 
 document.body.appendChild(document.getElementById("toast")); // 报告3：toast 提到 body 顶层，小屋里也看得见
 let toastTimer = null;
-function toast(msg){
-  const el = document.getElementById("toast"); el.textContent = msg; el.style.opacity = 1;
-  clearTimeout(toastTimer); toastTimer = setTimeout(()=> el.style.opacity = 0, 2400);
+let toastQ = [], toastBusy = false;
+function toast(msg){ // v0.36：改排队——里程碑提示不再被紧跟的业务提示盖掉
+  toastQ.push(msg); if(toastQ.length > 4) toastQ.splice(0, toastQ.length - 4);
+  pumpToast();
+}
+function pumpToast(){
+  if(toastBusy || !toastQ.length) return; toastBusy = true;
+  const el = document.getElementById("toast"); el.textContent = toastQ.shift(); el.style.opacity = 1;
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>{ el.style.opacity = 0; toastBusy = false; setTimeout(pumpToast, 150); }, 2400);
 }
 
 /* ============ 小屋 ============ */
@@ -1879,6 +1923,9 @@ function drawOutfit(c, pet, table, group, only){
   if(o.indexOf("帽") >= 0) draw("hat");
   if(o.indexOf("星星") >= 0) draw("star");
 }
+/* ============ v0.36：多标签页存档同步（另一个标签页写了档，本页自动重载跟上） ============ */
+window.addEventListener("storage", e => { if(e.key === SAVE_KEY && e.newValue) location.reload(); });
+
 const photoImgs = {}; // 照片 Image 缓存只放内存，绝不挂在 pet 上（会被存档序列化坏掉）
 function petImg(pet){
   if(!pet.photo) return null;
@@ -1888,6 +1935,7 @@ function petImg(pet){
 }
 function drawSoul(pet){
   settleBowl(pet);
+  if(housePet === pet){ drawSoul._fs = (drawSoul._fs || 0) + 1; if(drawSoul._fs % 20 === 0) refreshHouseStats(); } // v0.36：食盆余量每秒自刷新（旧版只在操作时刷新，看着像不动）
   const W = soulCanvas.width, H = soulCanvas.height, now = performance.now();
   const SPX = 1;
   if(sbuf.width !== W/SPX || sbuf.height !== H/SPX){ sbuf.width = W/SPX; sbuf.height = H/SPX; }
@@ -2105,6 +2153,16 @@ document.getElementById("regPhoto").addEventListener("change", e=>{
   };
   reader.readAsDataURL(f);
 });
+function resetRegForm(){ // v0.36：登记表办完/打开都清空——绝不串上一只的名字、碑文和照片
+  document.getElementById("regName").value = "";
+  document.getElementById("regLine").value = "";
+  document.getElementById("regPhoto").value = "";
+  regPhotoData = null; regPhotoColor = null;
+  const pv = document.getElementById("photoPreview"); pv.style.display = "none"; pv.removeAttribute("src");
+  const ph = document.getElementById("photoColorHint"); if(ph) ph.style.display = "none";
+  const br = document.getElementById("regBreed"); if(br) br.value = "";
+}
+document.getElementById("btnRegCancel").onclick = ()=>{ regOverlay.style.display = "none"; resetRegForm(); };
 document.getElementById("btnRegister").onclick = ()=>{
   if(myPets().length >= 2){ toast("每位玩家最多登记 2 个宝贝——先陪好现在这两位吧 💛"); return; }
   const name = document.getElementById("regName").value.trim() || "小满";
@@ -2121,9 +2179,9 @@ document.getElementById("btnRegister").onclick = ()=>{
   // v0.15：带照片建档不再套演示专属包——形象由它自己的照片在浏览器内现场生成（photoTexCanvas）；演示包只属于最早那只已存档的猫
   S.pets.push(mine); S.myPetId = mine.id; S.inv.toy += 1; // 新手包：玩具×1，第一天就能陪它玩
   if(status==="memorial"){ player.x = mine.x; player.y = mine.y + 70; player.tx = player.x; player.ty = player.y; }
-  save(); regOverlay.style.display = "none"; refreshHUD();
+  save(); regOverlay.style.display = "none"; refreshHUD(); resetRegForm();
   if(status==="memorial"){ startMemorialCeremony(mine); } // 报告9：建档时已离开的，也给一场立碑仪式
-  else toast("📝 "+name+" 预登记好了，祈福小屋的墙上也给它挂上了牌子。它还在家里陪着你。去园子右下角樱花树旁的祈福小屋，可以为它祈福攒福气；将来真到了那一天，在小屋里送它过桥，这份档案就转成纪念档。");
+  else toast("📝 "+name+" 预登记好了，祈福小屋的墙上也给它挂上了牌子。它还在家里陪着你。去园子右下角樱花树旁的祈福小屋，可以为它祈福攒福气；将来真到了那一天，在祈福小屋的牌位前送它过桥，这份档案就转成纪念档。");
 };
 if(S.myPetId){ regOverlay.style.display = "none"; const mine = S.pets.find(p=>p.id===S.myPetId); if(mine) mine.mine = true; if(mine && mine.status==="memorial"){ player.x=mine.x; player.y=mine.y+70; player.tx=player.x; player.ty=player.y; } }
 
@@ -2168,8 +2226,8 @@ function renderDir(q){
   if(!pets.length){ const p = document.createElement("p"); p.className = "sub"; p.textContent = "没找到这个名字。"; list.appendChild(p); return; }
   for(const pet of pets){
     const row = document.createElement("div"); row.className = "dirRow";
-    const nm = document.createElement("span"); nm.className = "nm"; nm.textContent = pet.name;
-    const meta = document.createElement("span"); meta.className = "meta"; meta.textContent = (pet.dates || "") + (pet.status === "memorial" && plotOf(pet) ? " · 一园 " + plotOf(pet).no + " 号" : "");
+    const nm = document.createElement("span"); nm.className = "nm"; nm.textContent = pet.name + (isMine(pet) ? "（自家）" : "");
+    const meta = document.createElement("span"); meta.className = "meta"; meta.textContent = (pet.dates ? pet.dates + " · " : "") + (pet.status === "memorial" && plotOf(pet) ? " · 一园 " + plotOf(pet).no + " 号" : "");
     const go = document.createElement("button"); go.textContent = "带我去";
     go.onclick = () => { document.getElementById("dirOverlay").classList.remove("show"); setDest(pet.x, pet.y + 56); toast("🦋 蝴蝶带你去看 " + pet.name); };
     row.appendChild(nm); row.appendChild(meta); row.appendChild(go); list.appendChild(row);
@@ -2234,7 +2292,7 @@ function drawBlessRoom(){
   }
   if(incenseFxT0 && Date.now() - incenseFxT0 < 2600 && ATLAS_FXB.complete && ATLAS_FXB.naturalWidth){
     const sh = FXSHEETS.blessing, u = (Date.now() - incenseFxT0) / 2600;
-    const fr = Math.floor((Date.now() - incenseFxT0) / 100) % sh.frames;
+    const fr = Math.floor((Date.now() - incenseFxT0) / 100) % sh.n; // v0.36：字段名与特效表统一（旧作 sh.frames 恒 undefined，上香光点从没显示过）
     bctx.globalAlpha = 0.85;
     bctx.drawImage(ATLAS_FXB, fr * sh.fw, 0, sh.fw, sh.fh, 440 - sh.fw * 0.55, 336 - sh.fh * 0.8 - u * 60, sh.fw * 1.1, sh.fh * 1.1);
     bctx.globalAlpha = 1;
@@ -2259,7 +2317,7 @@ function renderEmptySlot(slot){
   box.appendChild(sub);
   if(mc < 2){ const row = document.createElement("div"); row.className = "row";
     const g = document.createElement("button"); g.textContent = "去登记一个宝贝";
-    g.onclick = () => { leaveBlessRoom(); regOverlay.style.display = "flex"; };
+    g.onclick = () => { leaveBlessRoom(); resetRegForm(); regOverlay.style.display = "flex"; };
     row.appendChild(g); box.appendChild(row); }
 }
 function renderPlaqueInfo(pet){
