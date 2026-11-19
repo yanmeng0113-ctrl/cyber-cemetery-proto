@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>星星小园 · 原型 v0.42</title>
+<title>星星小园 · 原型 v0.43</title>
 <style>
   :root { --paper:#f5efe1; --card:#fffdf7; --ink:#2a3a2e; --ink2:#5d7057; --pine:#33523d; --gold:#a8842c; --goldsoft:#e7d6a4; --line:#ded2b4; --chip:#fbf7ea; --serif:"Songti SC","STSong","Noto Serif SC","SimSun",serif; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -173,6 +173,7 @@
     <details><summary>玩法说明</summary><div class="hintText">点地图、拖左下角的圆盘摇杆，或用 WASD/方向键走动；迷路了就打开背包里的「全园地图」 · 看到发光的小东西，点它一下就会走过去捡起来（先到先得，每天最多捡 10 件）；灰黑的阴影团子点一下就会追上去驱散净化，它叼走的东西会掉出来· 走近墓碑看介绍，点「进小屋」· 全园都是纪念区：北岸是草甸墓园，南岸是花园墓园，中间过彩虹桥 · 园里有一间祈福小屋，在家的宝贝预登记后可以去那儿祈福 · 任何人的小屋都能进、都能喂——只有换装是主人专属。（注：原型存档只存在你这台设备里，「全园共享」要等正式版联网后才开放。）</div></details>
     <div class="drawerLabel">关于</div>
     <details id="changelog"><summary>原型说明与更新日志（点开看）</summary><div class="changelogBody">
+    原型说明（v0.43）：⚖️ <b>心意入账每日上限 36（创作者裁决）</b>——点烛、喂食、陪玩、祈福、上香都照常进行，宠物自己的计数也照常累积，只是玩家「心意」每天最多入账 36 点（防反复刷同一只宠物几天刷满 365 里程碑）；到顶当天会轻轻提示一次。<br>
     原型说明（v0.42）：🎨 <b>花色包第一轮接入（创作者裁决）</b>——登记时品种、花色都改成下拉选：品种决定造型（猫：短毛/长毛/无毛/折耳/矮脚；狗：标准/短腿/短鼻/蓬松/卷毛/巨型），花色决定用哪套预制素材包，猫 21 套＋狗 18 套已全部做好接进游戏；睡姿、吃姿的大小按定版比例直接做进包里，不再靠运行时现缩。<b>形象层不收费</b>：花色包提前成套做好、免费选用；照片只作小屋里的画像，不再当贴图。<br>
     原型说明（v0.41）：🐱 <b>噗噗认领专属包（创作者实测抓出）</b>——登记时传了照片的猫，灵魂体此前走「照片当贴图压进通用轮廓」的临时办法，正面照片＋深色背景贴到侧面姿势上串色，睡姿看着像换了只猫。本版加认领规则：传了照片、名叫「噗噗」的猫自动改走按它的照片单独生成的内置专属包（站/走/睡/吃全套），刷新即生效。（原型期一对一认领；每只宠物单独生成是正式版的后台管线。）<br>🆓 <b>形象层定规（创作者裁决，v0.42 更正）</b>：形象层不收费——花色包提前成套做好、免费选用（v0.42 起猫狗首批 39 套已接入）；照片贴图法即日停用（串色），照片原图只作画像与头像。
     原型说明（v0.40）：🚶 <b>走路帧归一化（创作者裁决）</b>——此前归一化只管躺/吃/蜷，走路两帧没管，迈步姿势身子拉长、比站姿宽近 1/4，看着大一圈。本版把 walk1/walk2 也纳入 poseK、以站姿为锚对齐（不额外缩档）：站/走读得出是同一只，吃、睡的梯度保留（姿势＋缩档裁决）。各物种同规。
@@ -428,6 +429,7 @@ let selPlot = null, pendingPlot = null;
     S.mapV = 3;
   }
   if(S.incenseDate === undefined) S.incenseDate = "";
+   if(S.creditDate === undefined){ S.creditDate = ""; S.creditToday = 0; S.creditNoteDate = ""; } /* v0.43：心意入账日额 */
   /* v0.41：噗噗认领——传了照片、名叫「噗噗」的猫改走内置专属包（按它的照片单独生成的那套），不再走照片贴图 */
   for(const p of S.pets){ if(p.species === "cat" && p.photo && p.name === "噗噗" && p.pack !== "photo") p.pack = "photo"; }
    for(const p of S.pets){ if(p.coat === undefined) p.coat = ""; } /* v0.42：花色包字段补默认 */
@@ -436,7 +438,7 @@ let selPlot = null, pendingPlot = null;
 })();
 function freshState(){
   return {
-    mapV:2, saveV:36, playerTotal:0, loginDays:0, pickToday:0, lastGiftDate:"", pickDate:"", disperseTotal:0, guardDays:0, lastGuardDate:"", blobDate:"", blobSpawned:0, blobDrops:0, muted:false,
+    mapV:2, saveV:36, playerTotal:0, creditDate:"", creditToday:0, creditNoteDate:"", loginDays:0, pickToday:0, lastGiftDate:"", pickDate:"", disperseTotal:0, guardDays:0, lastGuardDate:"", blobDate:"", blobSpawned:0, blobDrops:0, muted:false,
     inv:{ food:3, candle:3, flower:2, toy:0, clothes:0 },
     claimed:{ loginSession:false, pioneer:false },
     milestonesHit:[], petMilestonesHit:[], titles:[],
@@ -470,6 +472,12 @@ const PLAYER_MS = [
   { n:365, reward:{clothes:1}, title:"守烛人",         label:"称号「守烛人」＋衣服一件" }
 ];
 function grantReward(r){ for(const k in r){ S.inv[k] = (S.inv[k]||0) + r[k]; } }
+function grantCredit(){ /* v0.43：心意入账每日上限 36（创作者裁决）——动作与宠物计数照常，只封顶玩家心意入账 */
+  const today = todayStr();
+  if(S.creditDate !== today){ S.creditDate = today; S.creditToday = 0; }
+  if(S.creditToday >= 36){ if(S.creditNoteDate !== today){ S.creditNoteDate = today; toast("💛 今天的心意入账到上限啦（36）——陪伴照常，明天继续攒"); } return false; }
+  S.creditToday++; S.playerTotal++; return true;
+}
 function checkMilestones(){
   for(const m of PLAYER_MS){
     if(S.playerTotal >= m.n && !S.milestonesHit.includes(m.n)){
@@ -1256,7 +1264,7 @@ document.getElementById("btnFirstCandle").onclick = ()=>{
   const pet = S.pets.find(q=> q.id === firstCandlePetId);
   document.getElementById("firstCandle").classList.remove("show");
   if(!pet) return;
-  pet.counts.candle++; S.playerTotal++; checkMilestones();
+  pet.counts.candle++; grantCredit(); checkMilestones();
   FXM.spawn("blessing", pet.x, pet.y - 10, 2.3, "park", 3.2);
   SFX.candle(); save(); refreshHUD();
   toast("🕯️ 第一支烛点上了——" + pet.name + " 在北岸的家，灯亮着。");
@@ -1403,7 +1411,7 @@ document.querySelectorAll("#houseActions button[data-act]").forEach(btn=>{
   btn.onclick = ()=> houseAction(btn.dataset.act);
 });
 function bump(kind){
-  housePet.counts[kind]++; S.playerTotal++; checkMilestones(); refreshHUD(); refreshHouseStats(); save();
+  housePet.counts[kind]++; grantCredit(); checkMilestones(); refreshHUD(); refreshHouseStats(); save();
 }
 /* 每日计次（报告6）：陪玩/祈福每天每只计前 3 次，陪伴本身不限 */
 function countedToday(pet, kind){
@@ -1425,7 +1433,7 @@ function doBless(wish){
   if(!housePet || housePet.status !== "alive") return;
   if(housePet.lastBlessDate === todayStr()){ toast("今天的祝福已经送到啦，它收到了 💛 明天再来给它攒一句"); return; }
   housePet.lastBlessDate = todayStr(); housePet.blessWish = wish; housePet.counts.bless = (housePet.counts.bless||0)+1;
-  S.playerTotal++; checkMilestones(); soulReact("glow"); FXM.spawn("blessing", soulState.x, soulCanvas.height-80, 2.3, "house", 3.2); SFX.bless();
+  grantCredit(); checkMilestones(); soulReact("glow"); FXM.spawn("blessing", soulState.x, soulCanvas.height-80, 2.3, "house", 3.2); SFX.bless();
   toast("🙏 愿 "+housePet.name+" "+wish+"——第 "+housePet.counts.bless+" 句祝福，它收到了");
   refreshHUD(); refreshHouseStats(); refreshBlessBar(); save();
 }
@@ -2334,7 +2342,7 @@ function blessWish(wish, pet){
   if(!mine || mine.status !== "prereg") return;
   if(mine.lastBlessDate === todayStr()){ toast("今天的祝福已经送到啦，它收到了 💛 明天再来给它攒一句"); return; }
   mine.lastBlessDate = todayStr(); mine.blessWish = wish; mine.counts.bless = (mine.counts.bless || 0) + 1;
-  S.playerTotal++; checkMilestones(); SFX.bless();
+  grantCredit(); checkMilestones(); SFX.bless();
   toast("🙏 愿 " + mine.name + " " + wish + "——第 " + mine.counts.bless + " 句祝福，它收到了");
   refreshHUD(); if(selPlaque) renderPlaqueInfo(selPlaque); save();
 }
@@ -2474,7 +2482,7 @@ document.getElementById("btnIncense").onclick = () => {
   if(S.incenseDate === todayStr()){ toast("今天的香已经上过了，满屋香火正旺，明天再来 🙏"); return; }
   S.incenseDate = todayStr();
   for(const p of S.pets) p.counts.incense = (p.counts.incense || 0) + 1;
-  S.playerTotal++; checkMilestones(); incenseFxT0 = Date.now(); SFX.bless();
+  grantCredit(); checkMilestones(); incenseFxT0 = Date.now(); SFX.bless();
   toast("🕯️ 一炷香上好了——满屋 " + S.pets.length + " 块牌子，都沾上了香火");
   refreshHUD(); save();
 };
