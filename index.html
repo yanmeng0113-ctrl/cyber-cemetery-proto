@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="icon" href="data:,">
-<title>星星小园 · 原型 v0.47</title>
+<title>星星小园 · 原型 v0.48</title>
 <style>
   :root { --paper:#f5efe1; --card:#fffdf7; --ink:#2a3a2e; --ink2:#5d7057; --pine:#33523d; --gold:#a8842c; --goldsoft:#e7d6a4; --line:#ded2b4; --chip:#fbf7ea; --serif:"Songti SC","STSong","Noto Serif SC","SimSun",serif; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -75,6 +75,11 @@
   #convertCard p { font-size:13.5px; color:#5a6a58; line-height:1.7; }
   #convertCard .row { margin-top:16px; display:flex; gap:8px; }
   #resetOverlay { position:fixed; inset:0; background:rgba(22,34,24,.74); display:none; align-items:center; justify-content:center; z-index:70; }
+  #photoOverlay { position:fixed; inset:0; background:rgba(22,34,24,.84); display:none; align-items:center; justify-content:center; z-index:72; }
+  #photoOverlay.show { display:flex; animation:ovFade .2s ease-out; }
+  #photoCard { background:#fffdf4; border-radius:18px; padding:18px; width:min(92vw, 430px); text-align:center; box-shadow:0 18px 50px rgba(0,0,0,.35); }
+  #photoBig { max-width:100%; max-height:54vh; border-radius:12px; border:3px solid #e7d9a8; object-fit:contain; background:#f7efdb; }
+  #photoBigEmpty { font-size:84px; padding:22px 0 8px; }
   #firstCandle { position:fixed; inset:0; background:rgba(22,34,24,.55); display:none; align-items:center; justify-content:center; z-index:75; padding:16px; }
   #firstCandle.show { display:flex; }
   #firstCandle .fcCard { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px 20px; max-width:340px; text-align:center; box-shadow:0 12px 40px rgba(20,30,18,.35); }
@@ -140,7 +145,7 @@
 <body>
 <div id="app">
   <header>
-    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.47</span></h1>
+    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.48</span></h1>
   </header>
 
   <div id="hud">
@@ -174,7 +179,7 @@
     <details><summary>玩法说明</summary><div class="hintText">点地图、拖左下角的圆盘摇杆，或用 WASD/方向键走动；迷路了就打开背包里的「全园地图」 · 看到发光的小东西，点它一下就会走过去捡起来（先到先得，每天最多捡 10 件）；灰黑的阴影团子点一下就会追上去驱散净化，它叼走的东西会掉出来· 走近墓碑看介绍，点「进小屋」· 全园都是纪念区：北岸是草甸墓园，南岸是花园墓园，中间过彩虹桥 · 园里有一间祈福小屋，在家的宝贝预登记后可以去那儿祈福 · 任何人的小屋都能进、都能喂——只有换装是主人专属。（注：原型存档只存在你这台设备里，「全园共享」要等正式版联网后才开放。）</div></details>
     <div class="drawerLabel">关于</div>
     <details id="changelog"><summary>原型说明与更新日志（点开看）</summary><div class="changelogBody">
-    原型说明（v0.47）：🛡 <b>健壮性与安全修复</b>——主循环加容错（一帧出错不再卡死游戏）；导入存档先清洗字段、小屋信息渲染转义（防恶意存档注入脚本）；未知家具自动过滤（防小屋卡死）；页头版本号对齐本版。<br>（v0.46）🛠 <b>存档可靠性修复</b>——导出存档改为永远导出当前进度（此前本地保存失败时导出的会是旧档）；登记照片加防串档保护：换照片或取消后重开，不会再把旧照片存进新档案。🎨 <b>花色包第三轮接入：49 套长尾补全</b>——猫添金渐层、陨石边牧同款的陨石色、卷耳猫和短尾猫两条新造型线，鸟添黄化玄凤和灰鹦鹉，仓鼠、龟、蜥蜴的花色也补齐了；至此三轮 121 套预制花色包全部上线，登记时按品种＋花色选用，形象层照旧不收费。<br>
+    原型说明（v0.48）：🖼 <b>点相框看大图、换照片</b>——在小屋里点墙上的相框，画像放大查看；主人可以给纪念宝贝放上/更换照片（与登记同一压缩规格），相框与头像即时更新，客访只能看；在养预登记宝贝仍不挂照片。<br>（v0.47）🛡 <b>健壮性与安全修复</b>——主循环加容错（一帧出错不再卡死游戏）；导入存档先清洗字段、小屋信息渲染转义（防恶意存档注入脚本）；未知家具自动过滤（防小屋卡死）；页头版本号对齐本版。<br>（v0.46）🛠 <b>存档可靠性修复</b>——导出存档改为永远导出当前进度（此前本地保存失败时导出的会是旧档）；登记照片加防串档保护：换照片或取消后重开，不会再把旧照片存进新档案。🎨 <b>花色包第三轮接入：49 套长尾补全</b>——猫添金渐层、陨石边牧同款的陨石色、卷耳猫和短尾猫两条新造型线，鸟添黄化玄凤和灰鹦鹉，仓鼠、龟、蜥蜴的花色也补齐了；至此三轮 121 套预制花色包全部上线，登记时按品种＋花色选用，形象层照旧不收费。<br>
     原型说明（v0.44）：🐦 <b>花色包第二轮接入：鸟、兔、仓鼠、龟、蜥蜴五物种 33 套新包</b>（加现有通用包对位共 38 套）——五物种的品种全表与花色双下拉一并补齐：选玄凤鹦鹉出冠羽造型、选垂耳兔耳朵垂下、选陆龟是高壳，选完花色进屋就是那一套。形象层照旧不收费。<br>
     原型说明（v0.43）：⚖️ <b>心意入账每日上限 36（创作者裁决）</b>——点烛、喂食、陪玩、祈福、上香都照常进行，宠物自己的计数也照常累积，只是玩家「心意」每天最多入账 36 点（防反复刷同一只宠物几天刷满 365 里程碑）；到顶当天会轻轻提示一次。<br>
     原型说明（v0.42）：🎨 <b>花色包第一轮接入（创作者裁决）</b>——登记时品种、花色都改成下拉选：品种决定造型（猫：短毛/长毛/无毛/折耳/矮脚；狗：标准/短腿/短鼻/蓬松/卷毛/巨型），花色决定用哪套预制素材包，猫 21 套＋狗 18 套已全部做好接进游戏；睡姿、吃姿的大小按定版比例直接做进包里，不再靠运行时现缩。<b>形象层不收费</b>：花色包提前成套做好、免费选用；照片只作小屋里的画像，不再当贴图。<br>
@@ -229,6 +234,18 @@
     </div>
   </div>
 
+  <div id="photoOverlay">
+    <div id="photoCard">
+      <h2 id="photoBigName">画像</h2>
+      <div><img id="photoBig" alt=""><div id="photoBigEmpty" style="display:none">🐾</div></div>
+      <p id="photoBigHint"></p>
+      <div class="row">
+        <button class="ghost" id="btnPhotoClose">关闭</button>
+        <button id="btnPhotoChange" style="display:none">更换照片</button>
+      </div>
+    </div>
+  </div>
+  <input type="file" id="housePhoto" accept="image/*" style="display:none">
   <div id="firstCandle">
     <div class="fcCard">
       <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.2c1.1 1.5 1.7 2.5 1.7 3.6a1.7 1.7 0 1 1-3.4 0c0-1.1.6-2.1 1.7-3.6z"/><path d="M9.5 20.5v-5.2a2.5 2.5 0 0 1 5 0v5.2"/><path d="M5 20.5h14"/></svg> 为 <span id="fcName">它</span> 点第一支烛</h3>
@@ -1390,6 +1407,52 @@ function enterHouse(pet){
   startSoul(pet);
   window.scrollTo({ top:0, behavior:"smooth" });
 }
+/* v0.48：相框大图查看器——点小屋墙上的相框打开；主人可给纪念宝贝放/换照片（预登记不挂照片，沿用登记的压缩规格） */
+let housePhotoToken = 0;
+function openPhotoViewer(){
+  if(!housePet) return;
+  const pet = housePet;
+  document.getElementById("photoBigName").textContent = pet.name + " 的画像";
+  const img = document.getElementById("photoBig"), emp = document.getElementById("photoBigEmpty");
+  if(pet.photo && pet.photo.indexOf("data:image/")===0){ img.src = pet.photo; img.style.display = ""; emp.style.display = "none"; }
+  else { img.removeAttribute("src"); img.style.display = "none"; emp.style.display = ""; }
+  const mine = isMine(pet) && pet.status==="memorial";
+  const ch = document.getElementById("btnPhotoChange");
+  ch.style.display = mine ? "" : "none";
+  ch.textContent = pet.photo ? "更换照片" : "放上它的照片";
+  document.getElementById("photoBigHint").textContent = pet.photo ? "这张照片挂在小屋的墙上，也作它的头像。" : (mine ? "墙上还没有它的照片，放一张上去吧。" : "它还没有留下照片。");
+  document.getElementById("photoOverlay").classList.add("show");
+}
+document.getElementById("btnPhotoClose").onclick = ()=> document.getElementById("photoOverlay").classList.remove("show");
+document.getElementById("photoOverlay").addEventListener("click", e=>{ if(e.target.id==="photoOverlay") e.target.classList.remove("show"); });
+const housePhotoEl = document.getElementById("housePhoto");
+document.getElementById("btnPhotoChange").onclick = ()=> housePhotoEl.click();
+housePhotoEl.addEventListener("change", e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const myTok = ++housePhotoToken;
+  if(f.type && f.type.indexOf("image/")!==0){ toast("⚠️ 这个文件不是图片，换一张照片试试"); e.target.value = ""; return; }
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    const im = new Image();
+    im.onerror = ()=> toast("⚠️ 这张照片读不出来（格式可能不支持，比如 HEIC），换一张试试");
+    im.onload = ()=>{
+      if(myTok !== housePhotoToken || !housePet) return;
+      const MAX = 480, sc = Math.min(1, MAX/Math.max(im.width, im.height));
+      const cv = document.createElement("canvas"); cv.width = Math.max(1, Math.round(im.width*sc)); cv.height = Math.max(1, Math.round(im.height*sc));
+      cv.getContext("2d").drawImage(im, 0, 0, cv.width, cv.height);
+      housePet.photo = cv.toDataURL("image/jpeg", .85);
+      save();
+      const av = document.getElementById("houseAvatar"); av.innerHTML = "";
+      const him = document.createElement("img"); him.src = housePet.photo; him.style.cssText = "width:64px;height:64px;border-radius:12px;object-fit:cover;border:2px solid #e7d9a8"; av.appendChild(him);
+      document.getElementById("btnCoat").style.display = (isMine(housePet) && !housePet.photo && (housePet.species==="cat"||housePet.species==="dog")) ? "" : "none";
+      openPhotoViewer();
+      toast("🖼 照片放好了——墙上的相框和头像都是它了");
+    };
+    im.src = reader.result;
+  };
+  reader.readAsDataURL(f);
+  e.target.value = "";
+});
 function leaveHouse(){
   if(housePet){ housePet.soulX = Math.round(soulState.x); housePet.soulMode = soulState.mode==="sleep" ? "sleep" : "walk"; save(); }
   housePet = null; stopSoul(); FXM.clear("house"); sleepPatch = null;
@@ -1525,6 +1588,7 @@ soulCanvas.addEventListener("pointerdown", e=>{
   const ly = (e.clientY-rect.top) * soulCanvas.height / rect.height;
   const H = soulCanvas.height, pet = housePet, f = furnishOf(pet);
   const hit = (cx, cy, w, h)=> Math.abs(lx-cx) < w/2 && Math.abs(ly-cy) < h/2;
+  if(hit(440, 110, 184, 184)){ openPhotoViewer(); return; } /* v0.48：点墙上相框（画布 364,34 起 152 见方）看大图/换照片 */
   const go = (mode)=>{ soulState.mode = mode; soulState.reactUntil = 0; };
   if(hit(400, H-60, 110, 70)){ if(pet.bowl>0) go("toBowl"); else toast("食盆是空的，先喂点粮吧"); return; }
   if(hit(478, H-60, 76, 60)){ go("toDrink"); return; }
