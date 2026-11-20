@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>星星小园 · 原型 v0.45</title>
+<title>星星小园 · 原型 v0.46</title>
 <style>
   :root { --paper:#f5efe1; --card:#fffdf7; --ink:#2a3a2e; --ink2:#5d7057; --pine:#33523d; --gold:#a8842c; --goldsoft:#e7d6a4; --line:#ded2b4; --chip:#fbf7ea; --serif:"Songti SC","STSong","Noto Serif SC","SimSun",serif; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -173,7 +173,7 @@
     <details><summary>玩法说明</summary><div class="hintText">点地图、拖左下角的圆盘摇杆，或用 WASD/方向键走动；迷路了就打开背包里的「全园地图」 · 看到发光的小东西，点它一下就会走过去捡起来（先到先得，每天最多捡 10 件）；灰黑的阴影团子点一下就会追上去驱散净化，它叼走的东西会掉出来· 走近墓碑看介绍，点「进小屋」· 全园都是纪念区：北岸是草甸墓园，南岸是花园墓园，中间过彩虹桥 · 园里有一间祈福小屋，在家的宝贝预登记后可以去那儿祈福 · 任何人的小屋都能进、都能喂——只有换装是主人专属。（注：原型存档只存在你这台设备里，「全园共享」要等正式版联网后才开放。）</div></details>
     <div class="drawerLabel">关于</div>
     <details id="changelog"><summary>原型说明与更新日志（点开看）</summary><div class="changelogBody">
-    原型说明（v0.45）：🎨 <b>花色包第三轮接入：49 套长尾补全</b>——猫添金渐层、陨石边牧同款的陨石色、卷耳猫和短尾猫两条新造型线，鸟添黄化玄凤和灰鹦鹉，仓鼠、龟、蜥蜴的花色也补齐了；至此三轮 121 套预制花色包全部上线，登记时按品种＋花色选用，形象层照旧不收费。<br>
+    原型说明（v0.46）：🛠 <b>存档可靠性修复</b>——导出存档改为永远导出当前进度（此前本地保存失败时导出的会是旧档）；登记照片加防串档保护：换照片或取消后重开，不会再把旧照片存进新档案。🎨 <b>花色包第三轮接入：49 套长尾补全</b>——猫添金渐层、陨石边牧同款的陨石色、卷耳猫和短尾猫两条新造型线，鸟添黄化玄凤和灰鹦鹉，仓鼠、龟、蜥蜴的花色也补齐了；至此三轮 121 套预制花色包全部上线，登记时按品种＋花色选用，形象层照旧不收费。<br>
     原型说明（v0.44）：🐦 <b>花色包第二轮接入：鸟、兔、仓鼠、龟、蜥蜴五物种 33 套新包</b>（加现有通用包对位共 38 套）——五物种的品种全表与花色双下拉一并补齐：选玄凤鹦鹉出冠羽造型、选垂耳兔耳朵垂下、选陆龟是高壳，选完花色进屋就是那一套。形象层照旧不收费。<br>
     原型说明（v0.43）：⚖️ <b>心意入账每日上限 36（创作者裁决）</b>——点烛、喂食、陪玩、祈福、上香都照常进行，宠物自己的计数也照常累积，只是玩家「心意」每天最多入账 36 点（防反复刷同一只宠物几天刷满 365 里程碑）；到顶当天会轻轻提示一次。<br>
     原型说明（v0.42）：🎨 <b>花色包第一轮接入（创作者裁决）</b>——登记时品种、花色都改成下拉选：品种决定造型（猫：短毛/长毛/无毛/折耳/矮脚；狗：标准/短腿/短鼻/蓬松/卷毛/巨型），花色决定用哪套预制素材包，猫 21 套＋狗 18 套已全部做好接进游戏；睡姿、吃姿的大小按定版比例直接做进包里，不再靠运行时现缩。<b>形象层不收费</b>：花色包提前成套做好、免费选用；照片只作小屋里的画像，不再当贴图。<br>
@@ -1343,7 +1343,7 @@ document.getElementById("btnPioneer").onclick = ()=>{
 };
 document.getElementById("btnReset").onclick = ()=> document.getElementById("resetOverlay").classList.add("show");
 document.getElementById("btnResetCancel").onclick = ()=> document.getElementById("resetOverlay").classList.remove("show");
-document.getElementById("btnExport").onclick = ()=>{ try{ const raw = localStorage.getItem(SAVE_KEY) || JSON.stringify(S); const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([raw], { type:"application/json" })); a.download = "星星小园存档.json"; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href), 4000); toast("📦 存档已导出——收好这个文件，换手机或清缓存后用「导入存档」就能把园子搬回来"); }catch(e){ toast("导出没成功，截图发我看看"); } };
+document.getElementById("btnExport").onclick = ()=>{ try{ const raw = JSON.stringify(S); /* v0.46：导出以内存现行档为准，本地存储在保存失败时是旧档 */ const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([raw], { type:"application/json" })); a.download = "星星小园存档.json"; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href), 4000); toast("📦 存档已导出——收好这个文件，换手机或清缓存后用「导入存档」就能把园子搬回来"); }catch(e){ toast("导出没成功，截图发我看看"); } };
 const importFileEl = document.getElementById("importFile");
 document.getElementById("btnImport").onclick = ()=> importFileEl.click();
 importFileEl.onchange = ()=>{ const f = importFileEl.files && importFileEl.files[0]; if(!f) return; const rd = new FileReader(); rd.onload = ()=>{ try{ const obj = JSON.parse(rd.result); if(!obj || !Array.isArray(obj.pets)) throw new Error("bad save"); try{ localStorage.setItem(SAVE_KEY + "__bak", localStorage.getItem(SAVE_KEY) || ""); }catch(_){ } localStorage.setItem(SAVE_KEY, JSON.stringify(obj)); toast("📥 存档导入成功，正在重新打开园子…"); setTimeout(()=>location.reload(), 700); }catch(e){ toast("这个文件不像园子的存档，没有导入，原来的园子没动"); } }; rd.readAsText(f); importFileEl.value = ""; };
@@ -2165,7 +2165,7 @@ function drawSoul(pet){
 
 /* ============ 注册 ============ */
 const regOverlay = document.getElementById("regOverlay");
-let regPhotoData = null, regPhotoColor = null;
+let regPhotoData = null, regPhotoColor = null, regPhotoToken = 0; // v0.46：照片加载代次——换照片/取消后，迟到的旧加载结果作废
 const COAT_SNAP = [ ["#f2ede4","奶白"], ["#e8e0d0","米白"], ["#d9a45b","橘"], ["#b8b0a8","灰"], ["#8a6642","棕"], ["#33333a","黑"], ["#7fb6d9","蓝"] ];
 function snapCoatFromCanvas(cv){
   const cx = cv.getContext("2d"), W = cv.width, H = cv.height;
@@ -2307,12 +2307,14 @@ syncCoatRow();
 
 document.getElementById("regPhoto").addEventListener("change", e=>{
   const f = e.target.files[0]; if(!f) return;
+  const myTok = ++regPhotoToken;
   if(f.type && f.type.indexOf("image/")!==0){ toast("⚠️ 这个文件不是图片，换一张照片试试"); e.target.value = ""; return; }
   const reader = new FileReader();
   reader.onload = ()=>{
     const im = new Image();
     im.onerror = ()=>{ toast("⚠️ 这张照片读不出来（格式可能不支持，比如 HEIC），换一张试试"); };
     im.onload = ()=>{
+      if(myTok !== regPhotoToken) return; // v0.46：这张照片已被换掉或取消，迟到的结果作废
       const MAX = 480, sc = Math.min(1, MAX/Math.max(im.width, im.height));
       const cv = document.createElement("canvas"); cv.width = Math.max(1, Math.round(im.width*sc)); cv.height = Math.max(1, Math.round(im.height*sc));
       cv.getContext("2d").drawImage(im, 0, 0, cv.width, cv.height);
@@ -2333,7 +2335,7 @@ function resetRegForm(){ // v0.36：登记表办完/打开都清空——绝不�
   document.getElementById("regName").value = "";
   document.getElementById("regLine").value = "";
   document.getElementById("regPhoto").value = "";
-  regPhotoData = null; regPhotoColor = null;
+  regPhotoData = null; regPhotoColor = null; regPhotoToken++; // v0.46：作废在途的照片加载
   const pv = document.getElementById("photoPreview"); pv.style.display = "none"; pv.removeAttribute("src");
   const ph = document.getElementById("photoColorHint"); if(ph) ph.style.display = "none";
   const br = document.getElementById("regBreed"); if(br) br.value = "";
