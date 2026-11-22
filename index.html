@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="icon" href="data:,">
-<title>星星小园 · 原型 v0.52</title>
+<title>星星小园 · 原型 v0.53</title>
 <style>
   :root { --paper:#f5efe1; --card:#fffdf7; --ink:#2a3a2e; --ink2:#5d7057; --pine:#33523d; --gold:#a8842c; --goldsoft:#e7d6a4; --line:#ded2b4; --chip:#fbf7ea; --serif:"Songti SC","STSong","Noto Serif SC","SimSun",serif; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -145,11 +145,11 @@
 <body>
 <div id="app">
   <header>
-    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.52</span></h1>
+    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.53</span></h1>
   </header>
 
   <div id="hud">
-    <div id="hudBar"><button class="chip" id="btnDrawer" style="cursor:pointer"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 8h13l-1.1 11a2 2 0 0 1-2 1.8H8.6a2 2 0 0 1-2-1.8L5.5 8z"/><path d="M9 10.5V6.5a3 3 0 0 1 6 0v4"/></svg> 背包</button></div>
+    <div id="hudBar"><button class="chip" id="btnDrawer" style="cursor:pointer"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 8h13l-1.1 11a2 2 0 0 1-2 1.8H8.6a2 2 0 0 1-2-1.8L5.5 8z"/><path d="M9 10.5V6.5a3 3 0 0 1 6 0v4"/></svg> 背包</button><button class="chip" id="btnMapTop" style="cursor:pointer"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg> 地图</button></div>
     <div id="hudDrawer">
     <div class="drawerLabel">我的身份</div>
     <span class="badge" id="pioneerBadge">先行者 No.0001 · 创始园民（序号仅本地演示）</span><span id="hudTitle" style="font-weight:700;color:#8a6d1f"></span>
@@ -177,9 +177,10 @@
         <button class="ghost" id="btnImport">导入存档</button>
         <p class="sub" style="margin-top:6px">两个入口（github.io / pages.dev）的存档互不相通，换入口时用导出/导入搬档。</p>
         <input type="file" id="importFile" accept=".json,application/json" style="display:none">
-    <details><summary>玩法说明</summary><div class="hintText">点地图、拖左下角的圆盘摇杆，或用 WASD/方向键走动；迷路了就打开背包里的「全园地图」 · 看到发光的小东西，点它一下就会走过去捡起来（先到先得，每天最多捡 10 件）；灰黑的阴影团子点一下就会追上去驱散净化，它叼走的东西会掉出来· 走近墓碑看介绍，点「进小屋」· 全园都是纪念区：北岸是草甸墓园，南岸是花园墓园，中间过彩虹桥 · 园里有一间祈福小屋，在家的宝贝预登记后可以去那儿祈福 · 任何人的小屋都能进、都能喂——只有换装是主人专属。（注：原型存档只存在你这台设备里，「全园共享」要等正式版联网后才开放。）</div></details>
+    <details><summary>玩法说明</summary><div class="hintText">点地图、拖左下角的圆盘摇杆，或用 WASD/方向键走动；迷路了就点顶栏的「地图」看全园 · 看到发光的小东西，点它一下就会走过去捡起来（先到先得，每天最多捡 10 件）；灰黑的阴影团子点一下就会追上去驱散净化，它叼走的东西会掉出来· 走近墓碑看介绍，点「进小屋」· 全园都是纪念区：北岸是草甸墓园，南岸是花园墓园，中间过彩虹桥 · 园里有一间祈福小屋，在家的宝贝预登记后可以去那儿祈福 · 任何人的小屋都能进、都能喂——只有换装是主人专属。（注：原型存档只存在你这台设备里，「全园共享」要等正式版联网后才开放。）</div></details>
     <div class="drawerLabel">关于</div>
     <details id="changelog"><summary>原型说明与更新日志（点开看）</summary><div class="changelogBody">
+    原型说明（v0.53）：🗺️ <b>实玩反馈修复</b>——①<b>地图提到主界面</b>：顶栏新增「地图」按钮、和「背包」并排，不用再钻背包两层找；地图上点碑点、点祈福小屋照旧能直接走过去。②<b>团子不再碰上就散</b>：之前点地面走路时，点位离团子稍近就被当成要驱散、人在近处更是点一下就直接散掉，路过像撞散了一样；现在必须点中团子本体（或按「驱散」按钮）才会追上去驱散，走过、撞上都不触发。<br>
     原型说明（v0.52）：🧰 <b>修复＋优化批</b>——①<b>小屋自主活动恢复</b>：修好一处状态机断路（宝贝进屋后只在散步⇄睡觉间循环、永远回不到「发呆挑活动」），现在它会自己喝水、吃食盆、玩供品、玩家具了；②<b>存档层修复</b>：导入/重置后锁住本页保存，旧内存档不再覆盖刚导入的档；导入备份只在有现档时写，不再把好备份写空；存档损坏时原文另存留底、并尝试从备份恢复；③<b>背景音乐</b>：新添很轻的八音盒风环境音乐（五声音阶随机慢板），第一次点屏幕后开始，跟声音开关一起开关；④<b>多标签页</b>：另一标签更新存档时，本页改为锁定保存＋顶部提示刷新，不再整页强刷打断登记/仪式；⑤<b>小修小优</b>：收回家具时宝贝不再对空表演、透明底照片存下不再变黑底、图集未就绪不缓存空白图、画布分辨率封顶 2 更省电、花色包脚本改延迟加载、小屋底图压缩（首屏再减约 0.29MB，细节比对无差别）、两个入口存档不互通的提示已写进抽屉。<br>
     原型说明（v0.51）：🪑 <b>打磨批</b>——①家具可以<b>收回</b>了：家具面板里点「🧹 收回这件」，位置留空，睡点、点击和互动都会跟着让开；②新物种的家具会动了：刺猬自己去跑轮、豚鼠去干草架吃草、雪貂躺吊床、蛇盘栖枝、龙猫上跳台/进浴屋，点家具也能互动；③五个新物种各添两件<b>升级款家具</b>（被照顾满 15 次解锁右区、满 40 次解锁左区）：多层瞭望台、陶土浴房、双层干草篮、花环隧道、木纹跑轮、蘑菇小屋、彩虹布隧道、星星吊床、开花栖枝、苔藓石洞；④多开页面防复活：重置或导入存档后，开着的旧页面不会再把旧档悄悄写回来；⑤包变小了：素材全部无损转码（画面一模一样），首屏约 8.2MB → 约 7.4MB，打开更快。<br>原型说明（v0.50）：🛡 <b>外审修复版</b>——导入存档先全面验伤（坏条目剔除、数字一律转数），坏档再也冲不掉好档，加载出问题先从备份恢复，还申请了浏览器持久存储；小屋换照片在选图时就锁定是哪只宝贝，不会串到别家，存档写失败会如实提醒；过桥后各处文案同步，不再写「还在家里」；仪式里狗和鸟也跟花色包了；登记表每次打开全清、不残留上一只的选择，名字必填，碑文留空就是留空；蛇的进食帧去掉了嘴边小鼠、walk1 补全尾巴；换装挂件按每个物种体型逐个标定，不再浮空错位；碑的碰撞对齐碑面。口径澄清：祈福、陪玩每日「计入次数」为前 3 次（陪伴不限次），心意入账上限 36 是另一层账。<br>原型说明（v0.49）：🐾 <b>新物种第二批：龙猫、豚鼠、刺猬、雪貂、蛇</b>——五个物种各有专属形象包（站/走/睡/吃/坐六姿势）与全套花色（龙猫 6、豚鼠 5、刺猬 4、雪貂 4、蛇 4，共 23 套），登记时按物种＋品种＋花色选用；每种配一套基础家具（龙猫：原木跳台＋砂浴屋；豚鼠：干草架＋草编隧道；刺猬：静音跑轮＋躲避小屋；雪貂：布隧道＋吊床；蛇：栖木枝＋躲避洞）。顺手修了过桥/立碑仪式里花色不跟随的旧毛病（原先新物种在仪式里会退回通用形象）。形象层照旧不收费。<br>原型说明（v0.48）：🖼 <b>点相框看大图、换照片</b>——在小屋里点墙上的相框，画像放大查看；主人可以给纪念宝贝放上/更换照片（与登记同一压缩规格），相框与头像即时更新，客访只能看；在养预登记宝贝仍不挂照片。<br>（v0.47）🛡 <b>健壮性与安全修复</b>——主循环加容错（一帧出错不再卡死游戏）；导入存档先清洗字段、小屋信息渲染转义（防恶意存档注入脚本）；未知家具自动过滤（防小屋卡死）；页头版本号对齐本版。<br>（v0.46）🛠 <b>存档可靠性修复</b>——导出存档改为永远导出当前进度（此前本地保存失败时导出的会是旧档）；登记照片加防串档保护：换照片或取消后重开，不会再把旧照片存进新档案。🎨 <b>花色包第三轮接入：49 套长尾补全</b>——猫添金渐层、陨石边牧同款的陨石色、卷耳猫和短尾猫两条新造型线，鸟添黄化玄凤和灰鹦鹉，仓鼠、龟、蜥蜴的花色也补齐了；至此三轮 121 套预制花色包全部上线，登记时按品种＋花色选用，形象层照旧不收费。<br>
     原型说明（v0.44）：🐦 <b>花色包第二轮接入：鸟、兔、仓鼠、龟、蜥蜴五物种 33 套新包</b>（加现有通用包对位共 38 套）——五物种的品种全表与花色双下拉一并补齐：选玄凤鹦鹉出冠羽造型、选垂耳兔耳朵垂下、选陆龟是高壳，选完花色进屋就是那一套。形象层照旧不收费。<br>
@@ -584,11 +585,8 @@ canvas.addEventListener("pointerdown", e=>{
   const r = canvas.getBoundingClientRect();
   const cam = camera();
   const wx = cam.x + (e.clientX - r.left) / ZOOM, wy = cam.y + (e.clientY - r.top) / ZOOM;
-  const b = blobs.find(q => (q.state==="drift") && Math.hypot(q.x-wx, q.y-14-wy) < 54);
-  if(b){
-    if(Math.hypot(player.x-b.x, player.y-b.y) < 95){ disperseBlob(b); pendingBlob = null; pendingPickup = null; return; }
-    pendingBlob = b.id; setDest(b.x, b.y); return;
-  }
+  const b = blobs.find(q => (q.state==="drift") && Math.hypot(q.x-wx, q.y-14-wy) < 32); // v0.53：须点中团子本体（原半径 54 且玩家在 95 内点任意地面就直接散，路过误触严重）
+  if(b){ pendingBlob = b.id; pendingPickup = null; setDest(b.x, b.y); return; } // 点中→追上去，抵近才驱散（blobTick 统一处理）
   const pk = pickups.find(q => Math.hypot(q.x-wx, q.y-10-wy) < 50);
   if(pk){
     if(!pk.fromBlob && S.pickToday>=10){ toast("今天捡满 10 件啦，留些给别人吧 🌿"); return; }
@@ -1089,6 +1087,7 @@ function openMap(){
 }
 function closeMap(){ document.getElementById("mapOverlay").classList.remove("show"); }
 document.getElementById("btnMap").onclick = openMap;
+document.getElementById("btnMapTop").onclick = openMap; // v0.53：主界面顶栏直达
 document.getElementById("btnMapClose").onclick = closeMap;
 document.getElementById("btnAct").onclick = (e) => { const b = e.currentTarget; if(!b._tgt) return;
   if(b._mode === "pickup"){ if(!b._tgt.fromBlob && S.pickToday >= 10){ toast("今天捡满 10 件啦，留些给别人吧 🌿"); return; } pendingPickup = b._tgt; pendingBlob = null; setDest(b._tgt.x, b._tgt.y); }
