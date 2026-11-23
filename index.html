@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="icon" href="data:,">
-<title>星星小园 · 原型 v0.61</title>
+<title>星星小园 · 原型 v0.62</title>
 <style>
   :root { --paper:#f5efe1; --card:#fffdf7; --ink:#2a3a2e; --ink2:#5d7057; --pine:#33523d; --gold:#a8842c; --goldsoft:#e7d6a4; --line:#ded2b4; --chip:#fbf7ea; --serif:"Songti SC","STSong","Noto Serif SC","SimSun",serif; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -173,7 +173,7 @@
 <body>
 <div id="app">
   <header>
-    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.61</span></h1>
+    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.62</span></h1>
   </header>
 
   <div id="hud">
@@ -210,6 +210,7 @@
     <details><summary>玩法说明</summary><div class="hintText">点地图、拖左下角的圆盘摇杆，或用 WASD/方向键走动；迷路了就点顶栏的「地图」看全园 · 看到发光的小东西，点它一下就会走过去捡起来（先到先得，每天最多捡 10 件）；灰黑的阴影团子点一下就会追上去驱散净化，它叼走的东西会掉出来· 走近墓碑看介绍，点「进小屋」· 全园都是纪念区：北岸是草甸墓园，南岸是花园墓园，中间过彩虹桥 · 园里有一间祈福小屋，在家的宝贝预登记后可以去那儿祈福 · 任何人的小屋都能进、都能喂——只有换装是主人专属。（注：原型存档只存在你这台设备里，「全园共享」要等正式版联网后才开放。）</div></details>
     <div class="drawerLabel">关于</div>
     <details id="changelog"><summary>原型说明与更新日志（点开看）</summary><div class="changelogBody">
+    原型说明（v0.62）：🧭 <b>外部审查清单全量梳理</b>——①宝贝立起（standUp）时补上专属挂件锚点：此前立起借用侧身锚点，项圈、围巾会飘到半空；现按每个物种的立起帧实测标定（猫狗共用组＋兔/仓鼠/龟/蜥蜴/龙猫/豚鼠/刺猬/雪貂/蛇逐个量），立起时小件也戴得稳稳的。②龙猫登记去掉重复选项：龙猫按花色区分，品种与花色本是同一个轴，登记时只留一处选。其余审查项已逐条复核（详见原型说明）。<br>
     原型说明（v0.61）：🐍 <b>修好原色玉米蛇走路没头的问题</b>——第二轮素材重锻时，这一帧的生成原图本身就没画头（只有一截波浪身子）；换回第一轮原图、按原管线重新锻出的完整帧，有头有尾。其余三种花色（白化、炭黑、暴风雪）的蛇已逐帧查过，头都在。<br>
     原型说明（v0.60）：🛠 <b>外部审查修复批＋审美打磨批（合并上线）</b>——按一份逐项实测的外部审查修掉：①导入存档不再弄丢房间里的玩具（连同脏字段消毒、照片只收本地图）；②花色自动回填改规矩——只认名字＋物种双合的样板，其余按自家品种和毛色就近选，跨物种的错包自动纠正，白猫不再变虎斑、玄凤不再变虎皮；③寻路换成全图网格寻路——过桥、绕湖、绕屋、绕碑一条路走通，出生在桥上、满园 50 块碑都不再卡死；④在小屋里改窗口大小，回园子画面不再变空白；⑤鸟在仪式里不再是一团光（补上缺失的站姿帧）、跳步和画面同相位；⑥碑文留空不再挂空引号，立碑后直接把你送到自家碑前；⑦背景音乐：存了静音的人第一次点屏幕不再漏出半秒声音，切后台立刻停，顶栏音乐开关与总声音开关同步；⑧登记满 2 个宝贝时按钮改成写明原因的禁用态；⑨小修一串：团子贴图上部也点得中、蛇的家具改名「盘栖原木」、收回家具后不再出现「家具 家具」、仪式字幕下移不压名牌、多标签页过期时明确提示操作没存上。<br>
     原型说明（v0.59，并入 v0.60）：🎨 <b>审美打磨批</b>（按 Taste-Skill 的方法过了一遍各页面，只修最出戏的三处）——①登记表告别浏览器原生控件：选照片变成园子自己的按钮、选完显示文件名，毛色块改成圆角小色卡；②小屋动作按钮改成等宽两列网格，不再长短不一；页头头像没照片时不再用 emoji，改成名字首字的宋体徽章；「回园子里」不再折行；③背包抽屉的设置区按钮对齐成网格（礼包整行、危险的重置存档单独整行）。功能与存档都没动。<br>
@@ -986,7 +987,7 @@ function drawCatSprite(c, pet, x, y, now){
   c.save(); c.translate(x, y); if(soulState.dir<0) c.scale(-1,1);
   if(m==="eat") c.translate(0, Math.sin(now/220)>0 ? 3 : 0);
   c.drawImage(cv, -r[2]*K/2, -r[4]*K, r[2]*K, r[3]*K);
-  if(!worn) drawOutfit(c, pet, OUTFIT_ANCH.quad, pose === "lie" ? "lie" : pose === "eat" ? "eat" : "side");
+  if(!worn) drawOutfit(c, pet, OUTFIT_ANCH.quad, pose === "lie" ? "lie" : pose === "eat" ? "eat" : pose === "standUp" ? "standUp" : "side");
   c.restore();
 }
 function recoloredPack(atlas, rects, cache, pose, hex){
@@ -1034,7 +1035,7 @@ function drawDogSprite(c, pet, x, y, now){
   c.save(); c.translate(x, y); if(soulState.dir<0) c.scale(-1,1);
   if(m==="eat") c.translate(0, Math.sin(now/220)>0 ? 3 : 0);
   c.drawImage(cv, -r[2]*K/2, -r[4]*K, r[2]*K, r[3]*K);
-  drawOutfit(c, pet, OUTFIT_ANCH.quad, pose === "lie" ? "lie" : pose === "eat" ? "eat" : "side");
+  drawOutfit(c, pet, OUTFIT_ANCH.quad, pose === "lie" ? "lie" : pose === "eat" ? "eat" : pose === "standUp" ? "standUp" : "side");
   c.restore();
 }
 function drawBirdSprite(c, pet, x, y, now){
@@ -2174,7 +2175,7 @@ function drawNewSoul(c, pet, x, y, now){
   c.save(); c.translate(x, y); if(soulState.dir<0) c.scale(-1,1);
   if(m==="eat" || m==="drink") c.translate(0, Math.sin(now/220)>0 ? 2 : 0);
   c.drawImage(cv, -r[2]*K/2, -r[4]*K, r[2]*K, r[3]*K);
-  drawOutfit(c, pet, OUTFIT_ANCH[pet.species] || OUTFIT_ANCH.newp, pose === "lie" ? "lie" : pose === "eat" ? "eat" : "side"); /* v0.50：逐物种锚点 */
+  drawOutfit(c, pet, OUTFIT_ANCH[pet.species] || OUTFIT_ANCH.newp, pose === "lie" ? "lie" : pose === "eat" ? "eat" : pose === "standUp" ? "standUp" : "side"); /* v0.50：逐物种锚点 */
   c.restore();
 }
 /* ===== v0.20 家具解锁与替换：被照顾里程碑解锁替换款/装饰，换家具面板 ===== */
@@ -2236,7 +2237,8 @@ const OUTFIT_ANCH = { // v0.37：只挂头/颈/脚点位小件；袜子是双脚
   quad: {
     side: { socks:[[26,-16,17,0],[-26,-16,17,0]], collar:[24,-52,42,-0.15], scarf:[27,-56,34,-0.10], bow:[26,-96,26,0.15], hat:[36,-102,34,0.12], star:[2,-64,15,0] },
     lie:  { collar:[30,-26,36,-0.20], scarf:[30,-28,32,-0.35], bow:[36,-42,24,0.30], hat:[40,-46,32,0.30], star:[10,-40,14,0] },
-    eat:  { socks:[[24,-15,15,0],[-22,-15,15,0]], collar:[34,-36,38,-0.30], scarf:[36,-38,32,-0.15], bow:[42,-52,24,0.35], hat:[46,-56,32,0.35], star:[8,-50,14,0] }
+    eat:  { socks:[[24,-15,15,0],[-22,-15,15,0]], collar:[34,-36,38,-0.30], scarf:[36,-38,32,-0.15], bow:[42,-52,24,0.35], hat:[46,-56,32,0.35], star:[8,-50,14,0] },
+    standUp: { socks:[[-14,-6,16,0],[14,-6,16,0]], collar:[12,-51,42,-0.05], scarf:[12,-48,34,0], bow:[20,-80,26,0.05], hat:[16,-83,34,0.08], star:[44,-66,15,0] } /* v0.62：立起姿势锚点（实测标定） */
   },
   bird: {
     front: { collar:[0,-48,26,0], scarf:[2,-56,22,0], bow:[2,-84,22,0], hat:[2,-90,24,0.10], star:[16,-60,12,0] },
@@ -2246,21 +2248,22 @@ const OUTFIT_ANCH = { // v0.37：只挂头/颈/脚点位小件；袜子是双脚
   newp: {
     side: { collar:[14,-38,30,-0.10], scarf:[20,-44,26,0], bow:[12,-79,24,0.05], hat:[27,-78,26,0.10], star:[1,-50,12,0] },
     lie:  { collar:[24,-20,28,-0.20], scarf:[22,-22,24,-0.30], bow:[28,-34,22,0.30], hat:[30,-36,24,0.30], star:[8,-30,11,0] },
-    eat:  { collar:[28,-28,28,-0.20], scarf:[26,-30,24,0], bow:[30,-48,22,0.30], hat:[34,-52,24,0.30], star:[6,-38,11,0] }
+    eat:  { collar:[28,-28,28,-0.20], scarf:[26,-30,24,0], bow:[30,-48,22,0.30], hat:[34,-52,24,0.30], star:[6,-38,11,0] },
+    standUp: { collar:[2,-59,30,-0.05], scarf:[2,-56,26,0], bow:[10,-84,24,0.05], hat:[6,-87,26,0.08], star:[36,-69,12,0] } /* v0.62 */
   },
   park:   { side: { socks:[[18,-11,12,0],[-18,-11,12,0]], collar:[16,-38,32,-0.15], scarf:[14,-40,24,0], bow:[20,-64,22,0.10], hat:[25,-68,28,0.10], star:[-12,-44,12,0] } },
   legacy: { side: { socks:[[16,-2,12,0],[-16,-2,12,0]], collar:[16,-10,28,-0.10], scarf:[21,-4,20,0], bow:[24,-30,20,0.05], hat:[31,-33,26,0.05], star:[-3,-13,11,0] } }
 };
 /* v0.50：新物种挂件锚点逐物种标定（按各物种三姿势真实像素几何量出，告别共用 newp 锚点） */
-OUTFIT_ANCH.rabbit = { side: { collar:[12,-49,25,-0.1], scarf:[14,-52,21,0], bow:[17,-84,18,0.05], hat:[19,-87,22,0.1], star:[-7,-41,10,0] }, lie: { collar:[13,-21,29,-0.2], scarf:[15,-24,24,-0.3], bow:[19,-44,21,0.3], hat:[21,-46,26,0.3], star:[-8,-21,11,0] }, eat: { collar:[11,-36,24,-0.2], scarf:[13,-39,20,0], bow:[18,-57,17,0.3], hat:[20,-59,21,0.3], star:[-6,-28,9,0] } };
-OUTFIT_ANCH.hamster = { side: { collar:[7,-27,18,-0.1], scarf:[9,-30,15,0], bow:[12,-47,12,0.05], hat:[14,-50,16,0.1], star:[-5,-22,7,0] }, lie: { collar:[7,-22,14,-0.2], scarf:[9,-25,12,-0.3], bow:[9,-46,10,0.3], hat:[11,-48,12,0.3], star:[-4,-22,5,0] }, eat: { collar:[8,-24,17,-0.2], scarf:[10,-27,14,0], bow:[12,-37,12,0.3], hat:[14,-39,15,0.3], star:[-4,-18,6,0] } };
-OUTFIT_ANCH.turtle = { side: { collar:[9,-23,20,-0.1], scarf:[11,-26,16,0], bow:[16,-39,14,0.05], hat:[18,-42,18,0.1], star:[-5,-19,8,0] }, lie: { collar:[8,-17,17,-0.2], scarf:[10,-20,14,-0.3], bow:[10,-34,12,0.3], hat:[12,-36,15,0.3], star:[-4,-17,6,0] }, eat: { collar:[9,-23,20,-0.2], scarf:[11,-26,16,0], bow:[8,-32,14,0.3], hat:[10,-34,18,0.3], star:[-5,-17,8,0] } };
-OUTFIT_ANCH.lizard = { side: { collar:[14,-29,30,-0.1], scarf:[16,-32,25,0], bow:[24,-50,21,0.05], hat:[26,-53,27,0.1], star:[-7,-24,11,0] }, lie: { collar:[14,-19,30,-0.2], scarf:[16,-22,25,-0.3], bow:[22,-40,21,0.3], hat:[24,-42,26,0.3], star:[-7,-19,11,0] }, eat: { collar:[13,-31,27,-0.2], scarf:[15,-34,22,0], bow:[17,-49,19,0.3], hat:[19,-51,24,0.3], star:[-7,-24,10,0] } };
-OUTFIT_ANCH.chinchilla = { side: { collar:[11,-35,23,-0.1], scarf:[13,-38,19,0], bow:[15,-61,16,0.05], hat:[17,-64,20,0.1], star:[-6,-30,9,0] }, lie: { collar:[7,-24,15,-0.2], scarf:[9,-27,13,-0.3], bow:[11,-50,11,0.3], hat:[13,-52,13,0.3], star:[-4,-24,6,0] }, eat: { collar:[7,-38,15,-0.2], scarf:[9,-41,13,0], bow:[11,-58,11,0.3], hat:[13,-60,13,0.3], star:[-4,-29,6,0] } };
-OUTFIT_ANCH.guineapig = { side: { collar:[14,-30,31,-0.1], scarf:[16,-33,25,0], bow:[23,-53,22,0.05], hat:[25,-56,27,0.1], star:[-8,-25,12,0] }, lie: { collar:[10,-24,22,-0.2], scarf:[12,-27,18,-0.3], bow:[16,-49,16,0.3], hat:[18,-51,20,0.3], star:[-6,-24,8,0] }, eat: { collar:[9,-35,19,-0.2], scarf:[11,-38,16,0], bow:[14,-55,13,0.3], hat:[16,-57,17,0.3], star:[-5,-27,7,0] } };
-OUTFIT_ANCH.hedgehog = { side: { collar:[11,-26,22,-0.1], scarf:[13,-29,18,0], bow:[16,-45,16,0.05], hat:[18,-48,20,0.1], star:[-6,-22,9,0] }, lie: { collar:[8,-23,16,-0.2], scarf:[10,-26,14,-0.3], bow:[11,-47,12,0.3], hat:[13,-49,15,0.3], star:[-4,-23,6,0] }, eat: { collar:[8,-30,16,-0.2], scarf:[10,-33,13,0], bow:[12,-46,11,0.3], hat:[14,-48,14,0.3], star:[-4,-23,6,0] } };
-OUTFIT_ANCH.ferret = { side: { collar:[16,-31,34,-0.1], scarf:[18,-34,28,0], bow:[31,-53,24,0.05], hat:[33,-56,30,0.1], star:[-8,-26,13,0] }, lie: { collar:[8,-22,18,-0.2], scarf:[10,-25,15,-0.3], bow:[12,-46,13,0.3], hat:[14,-48,16,0.3], star:[-5,-22,7,0] }, eat: { collar:[8,-33,16,-0.2], scarf:[10,-36,13,0], bow:[11,-53,11,0.3], hat:[13,-55,14,0.3], star:[-4,-26,6,0] } };
-OUTFIT_ANCH.snake = { side: { collar:[9,-21,18,-0.1], scarf:[11,-24,15,0], bow:[13,-36,13,0.05], hat:[15,-39,16,0.1], star:[-5,-17,7,0] }, lie: { collar:[7,-13,14,-0.2], scarf:[9,-16,12,-0.3], bow:[10,-29,10,0.3], hat:[12,-31,13,0.3], star:[-4,-13,6,0] }, eat: { collar:[7,-19,14,-0.2], scarf:[9,-22,12,0], bow:[10,-30,10,0.3], hat:[12,-32,12,0.3], star:[-4,-14,5,0] } };
+OUTFIT_ANCH.rabbit = { side: { collar:[12,-49,25,-0.1], scarf:[14,-52,21,0], bow:[17,-84,18,0.05], hat:[19,-87,22,0.1], star:[-7,-41,10,0] }, lie: { collar:[13,-21,29,-0.2], scarf:[15,-24,24,-0.3], bow:[19,-44,21,0.3], hat:[21,-46,26,0.3], star:[-8,-21,11,0] }, eat: { collar:[11,-36,24,-0.2], scarf:[13,-39,20,0], bow:[18,-57,17,0.3], hat:[20,-59,21,0.3], star:[-6,-28,9,0] }, standUp: { collar:[3,-62,25,-0.05], scarf:[3,-59,21,0], bow:[6,-86,18,0.05], hat:[4,-89,22,0.08], star:[16,-70,10,0] } };
+OUTFIT_ANCH.hamster = { side: { collar:[7,-27,18,-0.1], scarf:[9,-30,15,0], bow:[12,-47,12,0.05], hat:[14,-50,16,0.1], star:[-5,-22,7,0] }, lie: { collar:[7,-22,14,-0.2], scarf:[9,-25,12,-0.3], bow:[9,-46,10,0.3], hat:[11,-48,12,0.3], star:[-4,-22,5,0] }, eat: { collar:[8,-24,17,-0.2], scarf:[10,-27,14,0], bow:[12,-37,12,0.3], hat:[14,-39,15,0.3], star:[-4,-18,6,0] }, standUp: { collar:[3,-60,18,-0.05], scarf:[3,-57,15,0], bow:[9,-86,12,0.05], hat:[6,-89,16,0.08], star:[29,-70,7,0] } };
+OUTFIT_ANCH.turtle = { side: { collar:[9,-23,20,-0.1], scarf:[11,-26,16,0], bow:[16,-39,14,0.05], hat:[18,-42,18,0.1], star:[-5,-19,8,0] }, lie: { collar:[8,-17,17,-0.2], scarf:[10,-20,14,-0.3], bow:[10,-34,12,0.3], hat:[12,-36,15,0.3], star:[-4,-17,6,0] }, eat: { collar:[9,-23,20,-0.2], scarf:[11,-26,16,0], bow:[8,-32,14,0.3], hat:[10,-34,18,0.3], star:[-5,-17,8,0] }, standUp: { collar:[16,-58,20,-0.05], scarf:[16,-55,16,0], bow:[19,-86,14,0.05], hat:[18,-89,18,0.08], star:[29,-70,8,0] } };
+OUTFIT_ANCH.lizard = { side: { collar:[14,-29,30,-0.1], scarf:[16,-32,25,0], bow:[24,-50,21,0.05], hat:[26,-53,27,0.1], star:[-7,-24,11,0] }, lie: { collar:[14,-19,30,-0.2], scarf:[16,-22,25,-0.3], bow:[22,-40,21,0.3], hat:[24,-42,26,0.3], star:[-7,-19,11,0] }, eat: { collar:[13,-31,27,-0.2], scarf:[15,-34,22,0], bow:[17,-49,19,0.3], hat:[19,-51,24,0.3], star:[-7,-24,10,0] }, standUp: { collar:[18,-61,30,-0.05], scarf:[18,-58,25,0], bow:[24,-86,21,0.05], hat:[21,-89,27,0.08], star:[44,-71,11,0] } };
+OUTFIT_ANCH.chinchilla = { side: { collar:[11,-35,23,-0.1], scarf:[13,-38,19,0], bow:[15,-61,16,0.05], hat:[17,-64,20,0.1], star:[-6,-30,9,0] }, lie: { collar:[7,-24,15,-0.2], scarf:[9,-27,13,-0.3], bow:[11,-50,11,0.3], hat:[13,-52,13,0.3], star:[-4,-24,6,0] }, eat: { collar:[7,-38,15,-0.2], scarf:[9,-41,13,0], bow:[11,-58,11,0.3], hat:[13,-60,13,0.3], star:[-4,-29,6,0] }, standUp: { collar:[0,-44,23,-0.05], scarf:[0,-41,19,0], bow:[8,-80,16,0.05], hat:[2,-82,20,0.08], star:[30,-64,9,0] } };
+OUTFIT_ANCH.guineapig = { side: { collar:[14,-30,31,-0.1], scarf:[16,-33,25,0], bow:[23,-53,22,0.05], hat:[25,-56,27,0.1], star:[-8,-25,12,0] }, lie: { collar:[10,-24,22,-0.2], scarf:[12,-27,18,-0.3], bow:[16,-49,16,0.3], hat:[18,-51,20,0.3], star:[-6,-24,8,0] }, eat: { collar:[9,-35,19,-0.2], scarf:[11,-38,16,0], bow:[14,-55,13,0.3], hat:[16,-57,17,0.3], star:[-5,-27,7,0] }, standUp: { collar:[0,-42,31,-0.05], scarf:[0,-39,25,0], bow:[7,-82,22,0.05], hat:[3,-85,27,0.08], star:[28,-60,12,0] } };
+OUTFIT_ANCH.hedgehog = { side: { collar:[11,-26,22,-0.1], scarf:[13,-29,18,0], bow:[16,-45,16,0.05], hat:[18,-48,20,0.1], star:[-6,-22,9,0] }, lie: { collar:[8,-23,16,-0.2], scarf:[10,-26,14,-0.3], bow:[11,-47,12,0.3], hat:[13,-49,15,0.3], star:[-4,-23,6,0] }, eat: { collar:[8,-30,16,-0.2], scarf:[10,-33,13,0], bow:[12,-46,11,0.3], hat:[14,-48,14,0.3], star:[-4,-23,6,0] }, standUp: { collar:[0,-40,22,-0.05], scarf:[0,-37,18,0], bow:[7,-80,16,0.05], hat:[3,-83,20,0.08], star:[28,-60,9,0] } };
+OUTFIT_ANCH.ferret = { side: { collar:[16,-31,34,-0.1], scarf:[18,-34,28,0], bow:[31,-53,24,0.05], hat:[33,-56,30,0.1], star:[-8,-26,13,0] }, lie: { collar:[8,-22,18,-0.2], scarf:[10,-25,15,-0.3], bow:[12,-46,13,0.3], hat:[14,-48,16,0.3], star:[-5,-22,7,0] }, eat: { collar:[8,-33,16,-0.2], scarf:[10,-36,13,0], bow:[11,-53,11,0.3], hat:[13,-55,14,0.3], star:[-4,-26,6,0] }, standUp: { collar:[2,-59,34,-0.05], scarf:[2,-56,28,0], bow:[8,-84,24,0.05], hat:[5,-87,30,0.08], star:[29,-69,13,0] } };
+OUTFIT_ANCH.snake = { side: { collar:[9,-21,18,-0.1], scarf:[11,-24,15,0], bow:[13,-36,13,0.05], hat:[15,-39,16,0.1], star:[-5,-17,7,0] }, lie: { collar:[7,-13,14,-0.2], scarf:[9,-16,12,-0.3], bow:[10,-29,10,0.3], hat:[12,-31,13,0.3], star:[-4,-13,6,0] }, eat: { collar:[7,-19,14,-0.2], scarf:[9,-22,12,0], bow:[10,-30,10,0.3], hat:[12,-32,12,0.3], star:[-4,-14,5,0] }, standUp: { collar:[16,-59,18,-0.05], scarf:[16,-56,15,0], bow:[20,-84,13,0.05], hat:[18,-87,16,0.08], star:[33,-69,7,0] } };
 function drawOutfit(c, pet, table, group, only){
   if(!pet.outfit || !table) return;
   if(!ATLAS_OUTFIT.complete || !ATLAS_OUTFIT.naturalWidth) return;
@@ -2514,6 +2517,7 @@ const BREEDS = {
 function syncBreedRow(){
   const sp = document.getElementById("regSpecies").value;
   const row = document.getElementById("regBreedRow"), sel = document.getElementById("regBreed");
+  row.textContent = sp === "chinchilla" ? "花色（龙猫按花色区分 · 选填）" : "品种（选填）"; /* v0.62：龙猫品种即花色（总表口径） */
   if(BREEDS[sp]){ row.style.display = ""; sel.style.display = "";
     sel.innerHTML = '<option value="">不选也可以</option>' + BREEDS[sp].map(b=>'<option value="'+b+'">'+b+'</option>').join("");
   } else { row.style.display = "none"; sel.style.display = "none"; sel.innerHTML = ""; }
@@ -2624,6 +2628,12 @@ function syncCoatRow(){
   const row = document.getElementById("regCoatRow"), sel = document.getElementById("regCoat");
   const lines = COAT_LINES[sp];
   if(!lines){ row.style.display = "none"; sel.style.display = "none"; sel.innerHTML = ""; return; }
+  if(sp === "chinchilla"){ /* v0.62：龙猫品种即花色——花色行与品种行同义，隐藏花色行，值由品种带出 */
+    row.style.display = "none"; sel.style.display = "none";
+    sel.innerHTML = lines.std.map(c=>'<option value="'+c[0]+'">'+c[1]+'</option>').join("");
+    sel.value = coatDefaultFor(sp, document.getElementById("regBreed").value || "");
+    return;
+  }
   row.style.display = ""; sel.style.display = "";
   const breed = document.getElementById("regBreed").value || "";
   const ln = coatLineFor(sp, breed);
