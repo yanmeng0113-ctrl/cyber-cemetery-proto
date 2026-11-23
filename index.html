@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="icon" href="data:,">
-<title>星星小园 · 原型 v0.58</title>
+<title>星星小园 · 原型 v0.60</title>
 <style>
   :root { --paper:#f5efe1; --card:#fffdf7; --ink:#2a3a2e; --ink2:#5d7057; --pine:#33523d; --gold:#a8842c; --goldsoft:#e7d6a4; --line:#ded2b4; --chip:#fbf7ea; --serif:"Songti SC","STSong","Noto Serif SC","SimSun",serif; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -96,7 +96,7 @@
   #ceremony { position:fixed; inset:0; z-index:60; display:none; pointer-events:none; }
   #ceremony.show { display:block; }
   #cerFade { position:absolute; inset:0; background:#fff6e2; opacity:0; transition:opacity .9s; }
-  #cerText { position:absolute; left:0; right:0; top:36%; text-align:center; font-family:var(--serif); font-size:21px; font-weight:700; letter-spacing:.05em; color:#fff; text-shadow:0 2px 16px rgba(60,30,10,.6); opacity:0; transition:opacity 1.1s; padding:0 34px; line-height:1.75; }
+  #cerText { position:absolute; left:0; right:0; bottom:11%; /* v0.60 外审P3：字幕下移，不再压人物名牌 */ text-align:center; font-family:var(--serif); font-size:21px; font-weight:700; letter-spacing:.05em; color:#fff; text-shadow:0 2px 16px rgba(60,30,10,.6); opacity:0; transition:opacity 1.1s; padding:0 34px; line-height:1.75; }
   #btnSkipCer { position:absolute; right:14px; bottom:calc(20px + env(safe-area-inset-bottom)); pointer-events:auto; background:rgba(255,253,247,.92); color:var(--pine); border:1px solid var(--line); }
   #hint { padding:8px 14px; font-size:12px; color:#57685a; background:#f1ead6; line-height:1.6; }
   /* 注册层 */
@@ -127,7 +127,22 @@
   #house.show { display:flex; }
   .houseHead { padding:10px 14px; background:var(--card); display:flex; gap:12px; align-items:center; border-bottom:1px solid var(--line); }
   .houseHead img { width:64px; height:64px; border-radius:12px; object-fit:cover; border:2px solid var(--goldsoft); }
-  .houseHead .emojiAvatar { width:64px; height:64px; border-radius:12px; background:#f3e9cd; display:flex; align-items:center; justify-content:center; font-size:36px; border:2px solid var(--goldsoft); }
+  .houseHead .emojiAvatar { width:64px; height:64px; border-radius:12px; background:linear-gradient(145deg,#f8eed3,#ecd9a9); border:2px solid var(--goldsoft); display:flex; align-items:center; justify-content:center; font-family:var(--serif); font-size:29px; color:var(--pine); }
+  /* v0.59 审美打磨（taste 方法：统一系统、去原生控件出戏） */
+  input[type="color"] { -webkit-appearance:none; appearance:none; width:58px; height:38px; padding:0; border:1px solid #c9bb96; border-radius:10px; background:none; cursor:pointer; }
+  input[type="color"]::-webkit-color-swatch-wrapper { padding:3px; }
+  input[type="color"]::-webkit-color-swatch { border:none; border-radius:7px; }
+  .fileBtn { display:inline-flex; align-items:center; min-height:44px; padding:8px 18px; border:1px solid #c9bb96; border-radius:12px; background:var(--card); color:var(--pine); font-size:13.5px; letter-spacing:.03em; cursor:pointer; box-shadow:none; }
+  .fileBtn:active { transform:scale(.97); }
+  .fileName { margin-left:10px; font-size:12.5px; color:var(--ink2); }
+  #houseActions { display:grid; grid-template-columns:1fr 1fr; }
+  #houseActions button { width:100%; }
+  #houseActions button:last-child { grid-column:span 2; }
+  #btnLeave { white-space:nowrap; }
+  .setGrid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:2px 0 6px; }
+  .setGrid > button { width:100%; margin:0; }
+  .setGrid .span2 { grid-column:span 2; }
+  .setGrid > p { grid-column:span 2; margin:2px 0 0; }
   .houseHead h3 { font-family:var(--serif); letter-spacing:.03em; font-size:16px; }
   .houseHead p { font-size:12px; color:var(--ink2); line-height:1.5; }
   canvas#soul { display:block; width:100%; height:auto; background:linear-gradient(#fdf6dd,#f3e3ba); }
@@ -136,7 +151,7 @@
   canvas#blessCanvas { display:block; width:100%; height:auto; background:#f3e3ba; }
   #plaqueInfo { padding:10px 4px 2px; min-height:64px; }
   #houseStats { padding:8px 14px; font-size:13px; background:var(--card); display:flex; flex-wrap:wrap; gap:6px; }
-  #houseActions { padding:12px 14px; display:flex; flex-wrap:wrap; gap:8px; background:var(--card); }
+  #houseActions { padding:12px 14px; display:grid; grid-template-columns:1fr 1fr; gap:8px; background:var(--card); }
   #milestoneBar { height:8px; background:#e7dfc8; border-radius:99px; overflow:hidden; flex:1; min-width:120px; }
   #milestoneFill { height:100%; background:linear-gradient(90deg,#6d9a5f,#c2a14a); width:0%; transition:width .4s; }
   .msRow { display:flex; align-items:center; gap:8px; flex:1; min-width:220px; }
@@ -158,7 +173,7 @@
 <body>
 <div id="app">
   <header>
-    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.58</span></h1>
+    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.60</span></h1>
   </header>
 
   <div id="hud">
@@ -182,20 +197,24 @@
     <button class="ghost" id="btnMap"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg> 全园地图</button>
     <button class="ghost" id="btnBlessGo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-6.5L20 11"/><path d="M6.2 9.5V20h11.6V9.5"/><path d="M10 20v-5h4v5"/></svg> 祈福小屋</button>
     <div class="drawerLabel">礼包与设置</div>
-    <button class="ghost" id="btnLoginGift"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 10.5h15V20h-15z"/><path d="M3.5 6.5h17v4h-17z"/><path d="M12 6.5V20"/><path d="M12 6.5c-3.8 0-4.8-1.1-4.8-2.4C7.2 2.6 9 2.2 10.2 3c1 .7 1.8 3.5 1.8 3.5z"/><path d="M12 6.5c3.8 0 4.8-1.1 4.8-2.4C16.8 2.6 15 2.2 13.8 3c-1 .7-1.8 3.5-1.8 3.5z"/></svg> 登录礼包（累计 <span id="loginDays">0</span> 天）</button>
+    <div class="setGrid">
+    <button class="ghost span2" id="btnLoginGift"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 10.5h15V20h-15z"/><path d="M3.5 6.5h17v4h-17z"/><path d="M12 6.5V20"/><path d="M12 6.5c-3.8 0-4.8-1.1-4.8-2.4C7.2 2.6 9 2.2 10.2 3c1 .7 1.8 3.5 1.8 3.5z"/><path d="M12 6.5c3.8 0 4.8-1.1 4.8-2.4C16.8 2.6 15 2.2 13.8 3c-1 .7-1.8 3.5-1.8 3.5z"/></svg> 登录礼包（累计 <span id="loginDays">0</span> 天）</button>
     <button class="ghost" id="btnPioneer"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 21.5v-17"/><path d="M5.5 5h11l-2.6 3.5 2.6 3.5h-11"/></svg> 领创始礼包</button>
     <button class="ghost" id="btnMute" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.8v4.4h3.2L12 18.5v-13L7.2 9.8H4z"/><path d="M15.5 9.2a4 4 0 0 1 0 5.6"/><path d="M18.2 6.8a7.4 7.4 0 0 1 0 10.4"/></svg> <span id="muteLabel">声音开</span></button>
-    <button class="warn" id="btnReset"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.8 3.4v4h-4"/></svg> 重置存档</button>
+    <button class="warn span2" id="btnReset"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.8 3.4v4h-4"/></svg> 重置存档</button>
         <button class="ghost" id="btnExport">导出存档（备份）</button>
         <button class="ghost" id="btnImport">导入存档</button>
         <p class="sub" style="margin-top:6px">两个入口（github.io / pages.dev）的存档互不相通，换入口时用导出/导入搬档。</p>
         <input type="file" id="importFile" accept=".json,application/json" style="display:none">
+    </div><!-- /setGrid -->
     <details><summary>玩法说明</summary><div class="hintText">点地图、拖左下角的圆盘摇杆，或用 WASD/方向键走动；迷路了就点顶栏的「地图」看全园 · 看到发光的小东西，点它一下就会走过去捡起来（先到先得，每天最多捡 10 件）；灰黑的阴影团子点一下就会追上去驱散净化，它叼走的东西会掉出来· 走近墓碑看介绍，点「进小屋」· 全园都是纪念区：北岸是草甸墓园，南岸是花园墓园，中间过彩虹桥 · 园里有一间祈福小屋，在家的宝贝预登记后可以去那儿祈福 · 任何人的小屋都能进、都能喂——只有换装是主人专属。（注：原型存档只存在你这台设备里，「全园共享」要等正式版联网后才开放。）</div></details>
     <div class="drawerLabel">关于</div>
     <details id="changelog"><summary>原型说明与更新日志（点开看）</summary><div class="changelogBody">
+    原型说明（v0.60）：🛠 <b>外部审查修复批＋审美打磨批（合并上线）</b>——按一份逐项实测的外部审查修掉：①导入存档不再弄丢房间里的玩具（连同脏字段消毒、照片只收本地图）；②花色自动回填改规矩——只认名字＋物种双合的样板，其余按自家品种和毛色就近选，跨物种的错包自动纠正，白猫不再变虎斑、玄凤不再变虎皮；③寻路换成全图网格寻路——过桥、绕湖、绕屋、绕碑一条路走通，出生在桥上、满园 50 块碑都不再卡死；④在小屋里改窗口大小，回园子画面不再变空白；⑤鸟在仪式里不再是一团光（补上缺失的站姿帧）、跳步和画面同相位；⑥碑文留空不再挂空引号，立碑后直接把你送到自家碑前；⑦背景音乐：存了静音的人第一次点屏幕不再漏出半秒声音，切后台立刻停，顶栏音乐开关与总声音开关同步；⑧登记满 2 个宝贝时按钮改成写明原因的禁用态；⑨小修一串：团子贴图上部也点得中、蛇的家具改名「盘栖原木」、收回家具后不再出现「家具 家具」、仪式字幕下移不压名牌、多标签页过期时明确提示操作没存上。<br>
+    原型说明（v0.59，并入 v0.60）：🎨 <b>审美打磨批</b>（按 Taste-Skill 的方法过了一遍各页面，只修最出戏的三处）——①登记表告别浏览器原生控件：选照片变成园子自己的按钮、选完显示文件名，毛色块改成圆角小色卡；②小屋动作按钮改成等宽两列网格，不再长短不一；页头头像没照片时不再用 emoji，改成名字首字的宋体徽章；「回园子里」不再折行；③背包抽屉的设置区按钮对齐成网格（礼包整行、危险的重置存档单独整行）。功能与存档都没动。<br>
     原型说明（v0.58）：🎵 <b>背景音乐换豆包生成版＋新增音乐开关</b>——BGM 改为豆包「音频生成」（seed-audio-1.0）作的爵士钢琴华尔兹，37 秒无缝循环、音量压到背景位；顶栏新增「音乐开/关」按钮，只管音乐、不管音效，关了会记进存档，下次进来还是关着。<br>
     原型说明（v0.57）：🌙 <b>新增标题页</b>——进园先见圆月星空的标题图，两个选择：「开始游戏」去给宝贝建档、「读取存档」导入备份文件；已经有宝贝的玩家，主按钮自动变成「继续游戏」。<br>
-    原型说明（v0.56）：🎵 <b>背景音乐换成指定曲目</b>——应创作者要求，BGM 改为其提供视频中提取的《Someone in the Crowd》（La La Land，创作者本人演奏），已压低音量并做成无缝循环；首次触摸开始播放，静音或切后台自动暂停，原生成式八音盒 BGM 退役。<br>
+    原型说明（v0.56）：🎵 <b>背景音乐换成指定曲目</b>——应创作者要求，BGM 改为创作者本人演奏的录音（自其提供视频中提取），已压低音量并做成无缝循环；首次触摸开始播放，静音或切后台自动暂停，原生成式八音盒 BGM 退役。<br>
     原型说明（v0.55）：🎨 <b>全员素材包＋鸟改跳步</b>——①<b>每只宠物都走预制花色包</b>：核查发现只有登记时选过花色的宠物才是素材包，六只样板宠物（团团/啾啾/阿黄/小白/奶糖/煤球）没配花色，一直在用老办法拿底图强行换色——颜色像涂上去的、还没涂匀。现在全员补上对应花色包，存量档打开自动迁移；登记表能选的 149 个花色已全部做成素材包（本版新补白色小鸟、熊猫兔、金黄仓鼠、墨绿水龟、黄色守宫 5 套），万一花色对不上号，兜底也改走物种的默认素材包，不再换色平涂。②<b>鸟走路改成一跳一停</b>：原来贴着地面匀速滑行像溜冰，现在按跳跃节奏前进、腾空时是跳跃帧，落点停顿一下再跳。<br>
     原型说明（v0.54）：🧭 <b>外审修复批</b>——①<b>地图导航不再被祈福小屋挡住</b>：从园子西南去东南角的碑（比如煤球那块），路线斜穿祈福小屋屋基时会被碰撞推到屋边、改掉目标停在半路，碑的介绍面板都弹不出来；现在导航会像绕湖、过桥一样自动绕开小屋再抵达。②<b>登记卡按钮不再沉底</b>：手机上「先不登记，去园里逛逛」原先藏在登记卡可滚动区的最底下、首屏看不见；现在两个按钮固定在卡片底部并留了安全区空白，滑不滑都点得到。③清掉一段停用已久的照片贴图死代码（不影响运行）。<br>
     原型说明（v0.53）：🗺️ <b>实玩反馈修复</b>——①<b>地图提到主界面</b>：顶栏新增「地图」按钮、和「背包」并排，不用再钻背包两层找；地图上点碑点、点祈福小屋照旧能直接走过去。②<b>团子不再碰上就散</b>：之前点地面走路时，点位离团子稍近就被当成要驱散、人在近处更是点一下就直接散掉，路过像撞散了一样；现在必须点中团子本体（或按「驱散」按钮）才会追上去驱散，走过、撞上都不触发。<br>
@@ -414,7 +433,7 @@
     <label>它的毛色（灵魂体占位配色）</label>
     <input type="color" id="regColor" value="#e8a04c">
     <label>一张它的照片（可选，只存本机，挂在小屋墙上）</label>
-    <input type="file" id="regPhoto" accept="image/*">
+    <label class="fileBtn" for="regPhoto">选择照片</label><input type="file" id="regPhoto" accept="image/*" style="display:none"><span class="fileName" id="regPhotoName"></span>
     <div style="margin-top:8px"><img id="photoPreview" alt=""></div>
     <p id="photoColorHint" style="display:none;font-size:12px;color:#7a6a3a;margin-top:6px"></p>
     <label>想对它说的一句话（写在碑上）</label>
@@ -437,7 +456,7 @@ const EPOCH_KEY = SAVE_KEY + "__epoch"; /* v0.51：存档代际标记——重�
 let myEpoch = "0"; try{ myEpoch = localStorage.getItem(EPOCH_KEY) || "0"; }catch(e){}
 function bumpEpoch(){ _saveLock = true; myEpoch = String(Date.now()); try{ localStorage.setItem(EPOCH_KEY, myEpoch); }catch(e){} }
 let _saveLock = false; /* v0.53：导入/重置写入新档后上锁，本页残余 save() 不许再覆盖（窗口期竞态，外部审查复现） */
-const SPECIES_EMOJI = { cat:"🐱", dog:"🐶", bird:"🐦", rabbit:"🐰", hamster:"🐹", turtle:"🐢", lizard:"🦎", chinchilla:"🐿️", guineapig:"🐁", hedgehog:"🦔", ferret:"🦦", snake:"🐍", other:"🐾" };
+const SPECIES_EMOJI = { cat:"🐱", dog:"🐶", bird:"🐦", rabbit:"🐰", hamster:"🐹", turtle:"🐢", lizard:"🦎", chinchilla:"🐭", guineapig:"🐹", hedgehog:"🦔", ferret:"🦡", snake:"🐍", other:"🐾" };
 const FOOD_LABEL = { cat:"猫粮", dog:"狗粮", bird:"鸟食", other:"小食" };
 let S = load() || freshState();
 function todayStr(){ const d = new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
@@ -456,7 +475,7 @@ function plotOf(pet){ if(pet.plot) return PLOTS[pet.plot-1] || null; let best=nu
 let selPlot = null, pendingPlot = null;
 (function normalizeSave(){ try{
   S.lastGiftDate = S.lastGiftDate || ""; S.pickDate = S.pickDate || "";
-  if(!S.claimed) S.claimed = { loginSession:false, pioneer:false }; // v0.35 审查修复④：缺字段不再让游戏起不来
+  if(!S.claimed || typeof S.claimed !== "object") S.claimed = { loginSession:false, pioneer:false }; // v0.35 审查修复④：缺字段不再让游戏起不来
   if(S.saveV === undefined) S.saveV = 36; // v0.36：存档版本号
   S.saveV = 36;
   if(!S.inv || typeof S.inv !== "object") S.inv = { food:3, candle:3, flower:2, toy:0, clothes:0 };
@@ -473,7 +492,8 @@ let selPlot = null, pendingPlot = null;
     { const _bn = Number(p.bowl); p.bowl = Number.isFinite(_bn) && _bn > 0 ? Math.min(3, Math.floor(_bn)) : 0; } p.keepsakes = p.keepsakes || [];
     if(!p.daily || typeof p.daily !== "object") p.daily = { d:"", pray:0, play:0 }; p.bowlAt = p.bowlAt || 0;
     p.lastBlessDate = p.lastBlessDate || ""; p.blessWish = p.blessWish || "";
-    p.offerings = p.offerings || []; // v0.8：献供陈设
+    if(!Array.isArray(p.offerings)) p.offerings = []; else p.offerings = p.offerings.filter(o => o && typeof o === "object" && typeof o.kind === "string"); // v0.60 外审P1-4：献供必须是对象数组
+    if(p.photo && (typeof p.photo !== "string" || p.photo.indexOf("data:image/") !== 0)) p.photo = null; // v0.60：照片只收 data 图，外链一律剥掉
     delete p._img; delete p._imgSrc; // 运行时图片缓存绝不能进存档（v0.5 画像纯色的根因）
     // v0.15：不再自动套演示专属包；已存档的 pack="photo" 是真专属包（布偶猫），保留不动
     settleBowl(p);
@@ -536,7 +556,7 @@ function load(){
   try{ const s = JSON.parse(raw); if(s && Array.isArray(s.pets)) return s; throw new Error("bad shape"); }
   catch(e){
     try{ localStorage.setItem(SAVE_KEY + "__corrupt", raw); }catch(_){ } /* v0.52：损坏原文先另存，绝不静默覆盖 */
-    try{ const b = JSON.parse(localStorage.getItem(SAVE_KEY + "__bak") || "null"); if(b && Array.isArray(b.pets) && b.pets.length) return b; }catch(_){ }
+    try{ const b = JSON.parse(localStorage.getItem(SAVE_KEY + "__bak") || "null"); if(b && Array.isArray(b.pets) && b.pets.length){ try{ sessionStorage.setItem("__bakRestored", "1"); }catch(_){ } return b; } }catch(_){ } /* v0.60：恢复要留痕，进园提示 */
     return null;
   }
 }
@@ -597,6 +617,7 @@ let view = { w:0, h:0 };
 let ZOOM = 1; const vw = () => view.w / ZOOM, vh = () => view.h / ZOOM;
 function fitCanvas(){
   const r = canvas.getBoundingClientRect();
+  if(r.width < 2 || r.height < 2) return; // v0.60 外审P1-5：画布藏起来时（人在小屋里）尺寸为 0，别把公园画布缩没了
   const _dpr = Math.min(devicePixelRatio||1, 2); canvas.width = r.width * _dpr; canvas.height = r.height * _dpr; /* v0.52：DPR 封顶 2，与 draw() 同步 */
   view.w = r.width; view.h = r.height;
   ZOOM = clamp(view.w / 860, .42, 1); // v0.25：窄屏自动拉远视野（workbuddy 公式起步）
@@ -615,7 +636,7 @@ canvas.addEventListener("pointerdown", e=>{
   const r = canvas.getBoundingClientRect();
   const cam = camera();
   const wx = cam.x + (e.clientX - r.left) / ZOOM, wy = cam.y + (e.clientY - r.top) / ZOOM;
-  const b = blobs.find(q => (q.state==="drift") && Math.hypot(q.x-wx, q.y-14-wy) < 32); // v0.53：须点中团子本体（原半径 54 且玩家在 95 内点任意地面就直接散，路过误触严重）
+  const b = blobs.find(q => (q.state==="drift") && Math.abs(q.x-wx) < 34 && wy > q.y-56 && wy < q.y+12); /* v0.60 外审P3：按贴图盒判定，上部也点得中 */ // v0.53：须点中团子本体（原半径 54 且玩家在 95 内点任意地面就直接散，路过误触严重）
   if(b){ pendingBlob = b.id; pendingPickup = null; setDest(b.x, b.y); return; } // 点中→追上去，抵近才驱散（blobTick 统一处理）
   const pk = pickups.find(q => Math.hypot(q.x-wx, q.y-10-wy) < 50);
   if(pk){
@@ -681,19 +702,88 @@ function houseWaypoints(x1, y1, x2, y2){ // v0.54：直线穿祈福小屋屋基�
   }
   return best || [sides[0][0], sides[0][1]];
 }
-function setDest(x, y){ // 点对岸时自动绕桥：南岸口→北岸口→目标；任一段穿湖再绕湖
+/* v0.60 外审P1-3：全图网格 A* 寻路——旧版「桥口＋绕湖＋绕屋」拼路在长距离、满园、出生在桥上时都会卡死
+   （绕湖拐点落在河里、撞碑整条路线作废、默认园 42 条路线坏 8 条）。改成：障碍栅格化 → A* → 直线平滑。 */
+const NAV_CELL = 40, NAV_W = 120, NAV_H = 80;
+function navRects(){
+  const rs = [];
   const rT = WORLD.riverY, rB = WORLD.riverY + WORLD.riverH;
-  const ps = player.y < rT ? -1 : (player.y > rB ? 1 : 0);
-  const ts = y < rT ? -1 : (y > rB ? 1 : 0);
-  let pts = [{x:x, y:y}];
-  if(ps && ts && ps !== ts) pts = [ {x:2880, y:(ps<0 ? rT-26 : rB+26)}, {x:2880, y:(ts<0 ? rT-26 : rB+26)}, {x:x, y:y} ];
-  const out = []; let cx = player.x, cy = player.y;
-  for(const p of pts){ let sx = cx, sy = cy;
-    for(const w of pondWaypoints(cx, cy, p.x, p.y)){ out.push(w); sx = w.x; sy = w.y; }
-    for(const w of houseWaypoints(sx, sy, p.x, p.y)) out.push(w);
-    out.push(p); cx = p.x; cy = p.y; }
-  player.destQ = out;
-  const f = player.destQ.shift(); player.tx = f.x; player.ty = f.y;
+  rs.push({ x0: 0, y0: rT, x1: BRIDGE.x0 + 6, y1: rB });   // 河（桥面除外）——v0.60 复测修：带边必须用河面原界，内缩 12 会让 y=1100 一排格心恰好落在界外、A* 误判整排可走
+  rs.push({ x0: BRIDGE.x1 - 6, y0: rT, x1: 4800, y1: rB });
+  rs.push({ x0: POND.x0 - 12, y0: POND.y0 - 12, x1: POND.x1 + 12, y1: POND.y1 + 12 }); // 湖
+  rs.push({ x0: BLESS_HOUSE.x - 192, y0: BLESS_HOUSE.y - 312, x1: BLESS_HOUSE.x + 192, y1: BLESS_HOUSE.y + 38 }); // 祈福小屋
+  for(const pet of S.pets){
+    if(pet.status === "memorial") rs.push({ x0: pet.x - 48, y0: pet.y - 96, x1: pet.x + 48, y1: pet.y + 2 });
+    else rs.push({ x0: pet.x - 62, y0: pet.y - 124, x1: pet.x + 62, y1: pet.y - 26 });
+  }
+  return rs;
+}
+function navSegFree(x1, y1, x2, y2, rs){ for(const r of rs){ if(segRectHit(x1, y1, x2, y2, r.x0, r.y0, r.x1, r.y1)) return false; } return true; }
+function findPath(x1, y1, x2, y2){
+  const rs = navRects();
+  if(navSegFree(x1, y1, x2, y2, rs)) return [{ x: x2, y: y2 }]; // 直线通畅直接走（追团子等高频调用走这里）
+  const blocked = new Uint8Array(NAV_W * NAV_H);
+  for(let cy = 0; cy < NAV_H; cy++) for(let cx = 0; cx < NAV_W; cx++){
+    const px = cx * NAV_CELL + 20, py = cy * NAV_CELL + 20;
+    let b = (px < 30 || px > 4770 || py < 30 || py > 3170) ? 1 : 0;
+    if(!b) for(const r of rs){ if(px > r.x0 && px < r.x1 && py > r.y0 && py < r.y1){ b = 1; break; } }
+    blocked[cy * NAV_W + cx] = b;
+  }
+  const snap = (x, y) => {
+    const cx = Math.max(0, Math.min(NAV_W - 1, Math.floor(x / NAV_CELL))), cy = Math.max(0, Math.min(NAV_H - 1, Math.floor(y / NAV_CELL)));
+    if(!blocked[cy * NAV_W + cx]) return [cx, cy];
+    for(let rad = 1; rad < 14; rad++){
+      let best = null, bd = 1e18;
+      for(let dy = -rad; dy <= rad; dy++) for(let dx = -rad; dx <= rad; dx++){
+        if(Math.max(Math.abs(dx), Math.abs(dy)) !== rad) continue;
+        const nx = cx + dx, ny = cy + dy;
+        if(nx < 0 || ny < 0 || nx >= NAV_W || ny >= NAV_H || blocked[ny * NAV_W + nx]) continue;
+        const d = dx * dx + dy * dy; if(d < bd){ bd = d; best = [nx, ny]; }
+      }
+      if(best) return best;
+    }
+    return [cx, cy];
+  };
+  const [sx, sy] = snap(x1, y1), [gx, gy] = snap(x2, y2);
+  const key = (x, y) => y * NAV_W + x;
+  const gs = new Map(), fs = new Map(), came = new Map(), open = new Map();
+  const hh = (x, y) => Math.hypot(x - gx, y - gy);
+  open.set(key(sx, sy), [sx, sy]); gs.set(key(sx, sy), 0); fs.set(key(sx, sy), hh(sx, sy));
+  const DIRS = [[1,0,1],[-1,0,1],[0,1,1],[0,-1,1],[1,1,1.4142],[1,-1,1.4142],[-1,1,1.4142],[-1,-1,1.4142]];
+  let found = false, guard = 0;
+  while(open.size && guard++ < 30000){
+    let bk = null, bf = 1e18;
+    for(const k of open.keys()){ const f = fs.get(k); if(f < bf){ bf = f; bk = k; } }
+    const cur = open.get(bk); open.delete(bk);
+    const cx = cur[0], cy = cur[1];
+    if(cx === gx && cy === gy){ found = true; break; }
+    const cg = gs.get(bk);
+    for(const d of DIRS){
+      const nx = cx + d[0], ny = cy + d[1];
+      if(nx < 0 || ny < 0 || nx >= NAV_W || ny >= NAV_H || blocked[ny * NAV_W + nx]) continue;
+      if(d[0] && d[1] && (blocked[cy * NAV_W + nx] || blocked[ny * NAV_W + cx])) continue; // 不斜穿墙角
+      const nk = key(nx, ny), ng = cg + d[2];
+      if(ng < (gs.get(nk) === undefined ? 1e18 : gs.get(nk))){ gs.set(nk, ng); fs.set(nk, ng + hh(nx, ny)); came.set(nk, bk); open.set(nk, [nx, ny]); }
+    }
+  }
+  if(!found) return null;
+  const cells = []; let k = key(gx, gy);
+  while(k !== undefined){ cells.push([k % NAV_W, Math.floor(k / NAV_W)]); k = came.get(k); }
+  cells.reverse();
+  const pts = cells.map(c => ({ x: c[0] * NAV_CELL + 20, y: c[1] * NAV_CELL + 20 }));
+  pts[pts.length - 1] = { x: x2, y: y2 };
+  const out = []; let ax = x1, ay = y1, i = 0;
+  while(i < pts.length){
+    let j = pts.length - 1;
+    while(j > i && !navSegFree(ax, ay, pts[j].x, pts[j].y, rs)) j--;
+    out.push(pts[j]); ax = pts[j].x; ay = pts[j].y; i = j + 1;
+  }
+  return out;
+}
+function setDest(x, y){
+  const path = findPath(player.x, player.y, x, y);
+  if(path && path.length){ player.destQ = path.slice(); const f = player.destQ.shift(); player.tx = f.x; player.ty = f.y; }
+  else { player.destQ = []; player.tx = x; player.ty = y; }
 }
 function camera(){
   return { x: clamp(player.x - vw()/2, 0, Math.max(0,WORLD.w-vw())),
@@ -850,7 +940,12 @@ const COATPACKS = {"cat-fold-blue":{"stand":[6,0,81,96,90],"walk1":[93,0,85,96,9
 const _coatImg = {}, _coatCvCache = {};
 function coatPackCanvas(packKey, pose){
   const P = COATPACKS[packKey]; if(!P) return null;
-  const r = P[pose]; if(!r) return null;
+  let r = P[pose];
+  if(!r){ // v0.60 外审P2：鸟包无 stand 帧（仪式里变光团）——缺姿势时映射到最接近的已有帧
+    const alt = packKey.indexOf("bird-") === 0 ? ({ stand: "front", walk1: "hop", walk2: "side0", standUp: "front" })[pose] : "stand";
+    if(alt && P[alt]){ pose = alt; r = P[alt]; }
+  }
+  if(!r) return null;
   let im = _coatImg[packKey];
   if(!im){ if(typeof COATIMG === "undefined" || !COATIMG[packKey]) return null; im = new Image(); im.src = COATIMG[packKey]; _coatImg[packKey] = im; }
   if(!im.complete || !im.naturalWidth) return null;
@@ -863,7 +958,7 @@ function coatPackCanvas(packKey, pose){
 }
 function defaultPackCanvas(pet, pose){ // v0.55：兜底也走真包——按物种/品种取默认花色包出图，绝不再换色平涂（换色只剩图集未加载完一瞬的过渡）
   try{
-    let key = pet.breed ? coatDefaultFor(pet.species, pet.breed) : null;
+    let key = null; if(pet.breed){ const _suf = coatDefaultFor(pet.species, pet.breed); if(_suf) key = COATPACKS[_suf] ? _suf : pet.species + "-" + coatLineFor(pet.species, pet.breed) + "-" + _suf; } /* v0.60 外审P3：后缀要拼成整包 key */
     if(!key) key = { cat:"cat-short-tabby", dog:"dog-std-yellow", bird:"bird-small-blue", rabbit:"rabbit-upright-white", hamster:"hamster-golden-cream", turtle:"turtle-land-yellow", lizard:"lizard-gecko-tan", chinchilla:"chinchilla-std-grey", guineapig:"guineapig-short-solid", hedgehog:"hedgehog-std-standard", ferret:"ferret-std-sable", snake:"snake-std-classic" }[pet.species];
     return key ? coatPackCanvas(key, pose) : null;
   }catch(e){ return null; }
@@ -1207,8 +1302,8 @@ function updateInfoPanel(){
     const c = nearestPet.counts;
     const stats = "被投喂 "+c.fed+" 次 · 被点烛 "+c.candle+" 次 · 被献花 "+(c.flower||0)+" 次 · 被祈福 "+c.pray+" 次 · 被陪玩 "+(c.interact||0)+" 次"+((c.bless||0)>0 ? " · 被祝福 "+c.bless+" 次" : "")+" · 来访 "+c.visits+" 次";
     document.getElementById("infoText").textContent = nearestPet.status==="memorial"
-      ? nearestPet.dates+" · 它住在北岸了｜你写给它的话：「"+nearestPet.line+"」｜"+stats
-      : nearestPet.dates+" · "+nearestPet.line+"｜"+stats;
+      ? nearestPet.dates+" · 它住在北岸了｜"+(nearestPet.line ? "你写给它的话：「"+nearestPet.line+"」｜" : "")+stats /* v0.60：空碑文不挂「」 */
+      : nearestPet.dates+(nearestPet.line ? " · "+nearestPet.line : "")+"｜"+stats;
     document.getElementById("btnConvert").style.display = (isMine(nearestPet) && nearestPet.status==="prereg") ? "" : "none";
     document.getElementById("btnEnter").style.display = ""; document.getElementById("btnGuide").style.display = "";
     document.getElementById("btnRegHere").style.display = "none";
@@ -1218,7 +1313,7 @@ function updateInfoPanel(){
     const mineN = myPets().length;
     document.getElementById("infoText").textContent = "这个碑位还没有登记，安安静静地等着一个小家伙。" + (mineN >= 2 ? "你已经登记满 2 个宝贝了，这个位置留给别的园友吧。" : "如果有一天它先回了星星那儿，可以把它安葬在这里。");
     document.getElementById("btnEnter").style.display = "none"; document.getElementById("btnGuide").style.display = "none"; document.getElementById("btnConvert").style.display = "none";
-    document.getElementById("btnRegHere").style.display = mineN >= 2 ? "none" : "";
+    const _brh = document.getElementById("btnRegHere"); _brh.style.display = ""; _brh.disabled = mineN >= 2; _brh.textContent = mineN >= 2 ? "已登记满 2 个宝贝" : "登记到这个碑位"; /* v0.60 外审P2：满额给禁用态，不再直接消失 */
   } else infoPanel.classList.remove("show");
 }
 document.getElementById("btnEnter").onclick = ()=>{ if(nearestPet) enterHouse(nearestPet); };
@@ -1337,6 +1432,7 @@ function finishCeremony(){
   pet.status = "memorial"; if(pet.dates === "还在家里，活蹦乱跳") pet.dates = "它先回星星那儿了"; /* v0.50：过桥后状态文案同步，不再写「还在家里」 */ pet.x = CER_PLOT.x; pet.y = CER_PLOT.y; if(CER_PLOT.no) pet.plot = CER_PLOT.no;
   save();
   ceremony = null; cerTextKey = "";
+  if(pet.plot){ player.x = pet.x; player.y = pet.y + 70; player.tx = player.x; player.ty = player.y; player.destQ = []; } /* v0.60 外审P2：送玩家到自家碑前，面板立刻是它 */
   document.getElementById("ceremony").classList.remove("show");
   document.body.classList.remove("ceremonyMode"); fitCanvas(); // v0.25：退出全屏
   player.tx = player.x; player.ty = player.y;
@@ -1349,9 +1445,9 @@ function finishCeremony(){
 document.getElementById("btnGuide").onclick = ()=>{ if(nearestPet){ player.tx = nearestPet.x; player.ty = nearestPet.y+56; toast("🦋 蝴蝶带你去找 "+nearestPet.name); } };
 const btnMute = document.getElementById("btnMute");
 function syncMute(){ document.getElementById("muteLabel").textContent = S.muted ? "声音关" : "声音开"; }
-btnMute.onclick = ()=>{ S.muted = !S.muted; syncMute(); save(); if(!S.muted) SFX.pickup(); };
-function syncMusic(){ document.getElementById("musicLabel").textContent = S.musicOff ? "音乐关" : "音乐开"; }
-document.getElementById("btnMusic").onclick = ()=>{ S.musicOff = !S.musicOff; syncMusic(); save(); };
+btnMute.onclick = ()=>{ S.muted = !S.muted; syncMute(); syncMusic(); save(); if(!S.muted) SFX.pickup(); }; /* v0.60：静音切换同步顶栏音乐标 */
+function syncMusic(){ document.getElementById("musicLabel").textContent = (S.muted || S.musicOff) ? "音乐关" : "音乐开"; } /* v0.60：顶栏音乐开关跟总静音同步显示 */
+document.getElementById("btnMusic").onclick = ()=>{ if(S.muted){ toast("背包里的声音总开关关着呢——先把声音打开，音乐才会响 🎵"); return; } S.musicOff = !S.musicOff; syncMusic(); save(); }; /* v0.60：总静音时点音乐开关给说明，不再假切换 */
 syncMusic();
 syncMute();
 window.addEventListener("pointerdown", ()=> SFX.unlock());
@@ -1396,7 +1492,7 @@ function memorialTick(now){
   if(t>1 && t<9.8 && Math.random()<0.6) cer.motes.push({ x: CER_PLOT.x + (Math.random()*80-40), y: CER_PLOT.y + 14 - Math.random()*26, vy: -(0.3+Math.random()*0.6), vx: (Math.random()-0.5)*0.3, life: 1 });
   for(let i=cer.motes.length-1;i>=0;i--){ const m = cer.motes[i]; m.x += m.vx; m.y += m.vy; m.life -= 0.012; if(m.life<=0) cer.motes.splice(i,1); }
   if(t < 3) cerSetText("m1", "它已经先一步过桥了。");
-  else if(t < 7.5) cerSetText("m2", "「" + pet.line + "」");
+  else if(t < 7.5) cerSetText("m2", pet.line ? "「" + pet.line + "」" : "它什么也没说，只是回头看了一眼。") /* v0.60 外审P2：没留话就不挂空引号 */;
   else cerSetText("m3", "");
   if(t >= 10.8) finishCeremony();
 }
@@ -1444,8 +1540,8 @@ importFileEl.onchange = ()=>{ const f = importFileEl.files && importFileEl.files
     if(!obj.inv || typeof obj.inv !== "object") obj.inv = { food:3, candle:3, flower:2, toy:0, clothes:0 };
     for(const _ik of ["food","candle","flower","toy","clothes"]) obj.inv[_ik] = _num(obj.inv[_ik]);
     for(const _tk of ["playerTotal","creditToday","pickToday","disperseTotal","blobSpawned","blobDrops","guardDays","loginDays"]) if(obj[_tk] !== undefined) obj[_tk] = _num(obj[_tk]);
-    for(const p of obj.pets){ if(!p.counts || typeof p.counts !== "object") p.counts = {}; for(const _ck of ["fed","candle","flower","pray","interact","visits","bless","incense"]) p.counts[_ck] = _num(p.counts[_ck]); p.bowl = Math.min(3, _num(p.bowl)); p.bowlAt = _num(p.bowlAt); if(Array.isArray(p.offerings)) p.offerings = p.offerings.filter(x => typeof x === "string"); for(const k of ["name","breed","line","dates","species"]){ if(p[k] != null && typeof p[k] !== "string") p[k] = String(p[k]); if(typeof p[k] === "string" && p[k].length > 120) p[k] = p[k].slice(0, 120); } if(!Array.isArray(p.keepsakes)) p.keepsakes = []; p.keepsakes = p.keepsakes.filter(x => typeof x === "string").slice(0, 24); if(p.outfit != null && typeof p.outfit !== "string") p.outfit = null; } /* v0.47：导入清洗 */ try{ const _cur = localStorage.getItem(SAVE_KEY); if(_cur) localStorage.setItem(SAVE_KEY + "__bak", _cur); }catch(_){ } localStorage.setItem(SAVE_KEY, JSON.stringify(obj)); bumpEpoch(); toast("📥 存档导入成功，正在重新打开园子…"); setTimeout(()=>location.reload(), 700); }catch(e){ toast("这个文件不像园子的存档，没有导入，原来的园子没动"); } }; rd.readAsText(f); importFileEl.value = ""; };
-document.getElementById("btnResetGo").onclick = ()=>{ localStorage.removeItem(SAVE_KEY); bumpEpoch(); location.reload(); };
+    for(const p of obj.pets){ if(!p.counts || typeof p.counts !== "object") p.counts = {}; for(const _ck of ["fed","candle","flower","pray","interact","visits","bless","incense"]) p.counts[_ck] = _num(p.counts[_ck]); p.bowl = Math.min(3, _num(p.bowl)); p.bowlAt = _num(p.bowlAt); p.offerings = (Array.isArray(p.offerings) ? p.offerings : []).filter(o => o && typeof o === "object" && typeof o.kind === "string").map(o => ({ kind: o.kind.slice(0, 24), x: Number.isFinite(Number(o.x)) ? Number(o.x) : 120 })).slice(0, 6); if(p.photo != null && (typeof p.photo !== "string" || p.photo.indexOf("data:image/") !== 0)) p.photo = null; /* v0.60 外审P1-1/P1-4：玩具是对象数组、照片只收 data 图 */ for(const k of ["name","breed","line","dates","species"]){ if(p[k] != null && typeof p[k] !== "string") p[k] = String(p[k]); if(typeof p[k] === "string" && p[k].length > 120) p[k] = p[k].slice(0, 120); } if(!Array.isArray(p.keepsakes)) p.keepsakes = []; p.keepsakes = p.keepsakes.filter(x => typeof x === "string").slice(0, 24); if(p.outfit != null && typeof p.outfit !== "string") p.outfit = null; } /* v0.47：导入清洗 */ try{ const _cur = localStorage.getItem(SAVE_KEY); if(_cur){ const _old = localStorage.getItem(SAVE_KEY + "__bak"); if(_old) localStorage.setItem(SAVE_KEY + "__bak2", _old); localStorage.setItem(SAVE_KEY + "__bak", _cur); } }catch(_){ } /* v0.60：备份轮换两格 */ localStorage.setItem(SAVE_KEY, JSON.stringify(obj)); bumpEpoch(); toast("📥 存档导入成功，正在重新打开园子…"); setTimeout(()=>location.reload(), 700); }catch(e){ toast("这个文件不像园子的存档，没有导入，原来的园子没动"); } }; rd.readAsText(f); importFileEl.value = ""; };
+document.getElementById("btnResetGo").onclick = ()=>{ localStorage.removeItem(SAVE_KEY); try{ localStorage.removeItem(SAVE_KEY + "__bak"); localStorage.removeItem(SAVE_KEY + "__bak2"); localStorage.removeItem(SAVE_KEY + "__corrupt"); }catch(_){ } bumpEpoch(); location.reload(); }; /* v0.60：备份一并清 */
 
 document.body.appendChild(document.getElementById("toast")); // 报告3：toast 提到 body 顶层，小屋里也看得见
 let toastTimer = null;
@@ -1472,9 +1568,9 @@ function enterHouse(pet){
   const av = document.getElementById("houseAvatar");
   av.innerHTML = "";
   if(pet.photo && pet.photo.indexOf("data:image/")===0){ const im = document.createElement("img"); im.src = pet.photo; im.style.cssText = "width:64px;height:64px;border-radius:12px;object-fit:cover;border:2px solid #e7d9a8"; av.appendChild(im); }
-  else { const sp = document.createElement("span"); sp.className = "emojiAvatar"; sp.textContent = SPECIES_EMOJI[pet.species]; av.appendChild(sp); }
+  else { const sp = document.createElement("span"); sp.className = "emojiAvatar"; sp.textContent = (pet.name || "园").charAt(0); av.appendChild(sp); }
   document.getElementById("houseName").textContent = pet.name+" 的小屋" + (isMine(pet) ? "（自家）" : "（客访）");
-  document.getElementById("houseDesc").textContent = pet.dates+" · "+pet.line + (pet.status==="memorial" ? " · 它以灵魂体的样子住在这里" : " · 它正在院子里过日子");
+  document.getElementById("houseDesc").textContent = pet.dates+(pet.line ? " · "+pet.line : "") + (pet.status==="memorial" ? " · 它以灵魂体的样子住在这里" : " · 它正在院子里过日子");
   document.getElementById("btnDress").style.display = isMine(pet) ? "" : "none";
   document.getElementById("btnFurn").style.display = isMine(pet) ? "" : "none";
   document.getElementById("btnCoat").style.display = (isMine(pet) && !pet.photo && (pet.species==="cat"||pet.species==="dog")) ? "" : "none"; // 有照片的宠物：颜色以照片为准，不给换
@@ -1538,7 +1634,7 @@ function leaveHouse(){
   housePet = null; stopSoul(); FXM.clear("house"); sleepPatch = null;
   houseEl.classList.remove("show");
   document.getElementById("hud").style.display = "";
-  document.getElementById("mapWrap").style.display = "";
+  document.getElementById("mapWrap").style.display = "";  fitCanvas(); // v0.60：回园子先把画布尺寸对回来
 }
 document.getElementById("btnLeave").onclick = leaveHouse;
 function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, ch => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[ch])); } /* v0.47：innerHTML 拼接前转义 */
@@ -1549,7 +1645,7 @@ function refreshHouseStats(){
     '<span class="chip">粮 '+S.inv.food+' · 烛 '+S.inv.candle+' · 花 '+S.inv.flower+' · 玩具 '+S.inv.toy+' · 衣服 '+S.inv.clothes+'</span>'+
     (housePet.breed ? '<span class="chip">品种 · '+esc(housePet.breed)+'</span>' : '')+
     (housePet.coat && COAT_LABEL[housePet.coat] ? '<span class="chip">花色 · '+COAT_LABEL[housePet.coat]+'</span>' : '')+
-    '<span class="chip">家具 '+Object.values(furnishOf(housePet)).map(id=>((FURN_ITEMS[id]||{}).name || "家具")).join(" · ")+'</span>'+
+    '<span class="chip">家具 '+Object.values(furnishOf(housePet)).filter(id=>id && id!=="none" && FURN_ITEMS[id]).map(id=>FURN_ITEMS[id].name).join(" · ") || "暂无布置" /* v0.60 外审P3：收回的空位不再凑出「家具」二字 */+'</span>'+
     '<span class="chip">食盆 '+housePet.bowl+'/3</span>'+
     '<span class="chip">被投喂 <b>'+c.fed+'</b></span><span class="chip">被点烛 <b>'+c.candle+'</b></span>'+
     '<span class="chip">被献花 <b>'+c.flower+'</b></span><span class="chip">被祈福 <b>'+c.pray+'</b></span>'+
@@ -1650,7 +1746,7 @@ const soulCanvas = document.getElementById("soul"), sctx = soulCanvas.getContext
 let soulState = { x:440, dir:1, mode:"walk", until:0, reactUntil:0, react:"" };
 function soulStepPx(base){ // v0.55：鸟走路一跳一停——跳跃相位快移、落地相位停住（与画图同相位，平均速度不变）；其余宠物匀速
   if(!housePet || housePet.species !== "bird") return base;
-  return (Date.now() % 460) < 210 ? base * 460 / 210 : 0;
+  return (performance.now() % 460) < 210 ? base * 460 / 210 : 0; // v0.60 外审P2：与画面同用 performance.now，相位才对得上
 }
 function birdHopLift(now){ const ph = now % 460; return ph < 210 ? Math.sin(ph / 210 * Math.PI) * 11 : 0; }
 function soulWalkTo(target, arriveMode, dur){
@@ -1850,7 +1946,7 @@ function finishDisperse(b){
       pickups.push({ x: b.x, y: b.y, type: dropped, emoji: em, born: Date.now(), fromBlob: true });
     }
   }
-  toast(dropped ? "🌫️ 阴影团子化作光尘散开了——它叼着的东西掉在原地，去捡回来吧" : "🌫️ 阴影团子被灯光驱散，化作光尘散开了，园子安静了一点");
+  toast(dropped ? "✨ 阴影团子化作光尘散开了——它叼着的东西掉在原地，去捡回来吧" : "🌫️ 阴影团子被灯光驱散，化作光尘散开了，园子安静了一点");
   refreshHUD(); save();
 }
 function blobTick(dt){
@@ -1953,7 +2049,8 @@ const SFX = (()=>{
     if(document.hidden || (S && S.muted) || (S && S.musicOff)){ if(!bgmEl.paused) bgmEl.pause(); }
     else if(bgmEl.paused){ bgmEl.play().catch(()=>{}); }
   }
-  function bgmStart(){ if(bgmOn) return; bgmOn = true; if(!bgmEl.isConnected) document.body.appendChild(bgmEl); bgmEl.play().catch(()=>{}); bgmTimer = setInterval(bgmTick, 600); }
+  function bgmStart(){ if(bgmOn) return; if(S.muted || S.musicOff || document.hidden) return; // v0.60 外审P2：已存静音的人第一次点屏幕不再漏出半秒音乐
+  bgmOn = true; if(!bgmEl.isConnected) document.body.appendChild(bgmEl); bgmEl.play().catch(()=>{}); bgmTimer = setInterval(bgmTick, 600); document.addEventListener("visibilitychange", bgmTick); } /* v0.60：切后台立即停 */
   return {
     unlock(){ ac(); bgmStart(); },
     bgmActive(){ return bgmOn; },
@@ -2013,8 +2110,8 @@ const FURN_ITEMS = {
   bird_stand2:{ name:"梯子站架", slot:"A", h:240 }, bird_swing2:{ name:"花藤秋千", slot:"B", h:215 },
   grass_nest2:{ name:"棉花小屋", slot:"B", h:110 }, hamster_nest2:{ name:"陶瓷蘑菇屋", slot:"B", h:110 },
   bask2:{ name:"苔藓晒台", slot:"B", h:70 }, cave2:{ name:"暖石洞", slot:"B", h:85 },
-  chin_platform:{ name:"原木跳台", slot:"A", h:150 }, chin_bath:{ name:"砂浴屋", slot:"B", h:80 }, gp_hayrack:{ name:"干草架", slot:"A", h:150 }, gp_tunnel:{ name:"草编隧道", slot:"B", h:70 }, hh_wheel:{ name:"静音跑轮", slot:"A", h:140 }, hh_house:{ name:"躲避小屋", slot:"B", h:75 }, fer_tunnel:{ name:"布隧道", slot:"A", h:90 }, fer_hammock:{ name:"吊床", slot:"B", h:120 }, snk_branch:{ name:"栖木枝", slot:"A", h:160 }, snk_cave:{ name:"躲避洞", slot:"B", h:80 },
-  chin_tower:{ name:"多层瞭望台", slot:"A", h:150 }, chin_bathhouse:{ name:"陶土浴房", slot:"B", h:80 }, gp_haybasket:{ name:"双层干草篮", slot:"A", h:150 }, gp_tunnel2:{ name:"花环隧道", slot:"B", h:70 }, hh_wheel2:{ name:"木纹跑轮", slot:"A", h:140 }, hh_house2:{ name:"蘑菇小屋", slot:"B", h:75 }, fer_tunnel2:{ name:"彩虹布隧道", slot:"A", h:90 }, fer_hammock2:{ name:"星星吊床", slot:"B", h:120 }, snk_branch2:{ name:"开花栖枝", slot:"A", h:160 }, snk_cave2:{ name:"苔藓石洞", slot:"B", h:80 },
+  chin_platform:{ name:"原木跳台", slot:"A", h:150 }, chin_bath:{ name:"砂浴屋", slot:"B", h:80 }, gp_hayrack:{ name:"干草架", slot:"A", h:150 }, gp_tunnel:{ name:"草编隧道", slot:"B", h:70 }, hh_wheel:{ name:"静音跑轮", slot:"A", h:140 }, hh_house:{ name:"躲避小屋", slot:"B", h:75 }, fer_tunnel:{ name:"布隧道", slot:"A", h:90 }, fer_hammock:{ name:"吊床", slot:"B", h:120 }, snk_branch:{ name:"盘栖原木", slot:"A", h:160 }, snk_cave:{ name:"躲避洞", slot:"B", h:80 },
+  chin_tower:{ name:"多层瞭望台", slot:"A", h:150 }, chin_bathhouse:{ name:"陶土浴房", slot:"B", h:80 }, gp_haybasket:{ name:"双层干草篮", slot:"A", h:150 }, gp_tunnel2:{ name:"花环隧道", slot:"B", h:70 }, hh_wheel2:{ name:"木纹跑轮", slot:"A", h:140 }, hh_house2:{ name:"蘑菇小屋", slot:"B", h:75 }, fer_tunnel2:{ name:"彩虹布隧道", slot:"A", h:90 }, fer_hammock2:{ name:"星星吊床", slot:"B", h:120 }, snk_branch2:{ name:"开花盘枝", slot:"A", h:160 }, snk_cave2:{ name:"苔藓石洞", slot:"B", h:80 },
   decor_tree:{ name:"纪念小树", slot:"D", h:0 }, decor_lamp:{ name:"长明小灯", slot:"D", h:0 }
 };
 const FURN_SLOTS = { A:{ x:262, base:66 }, B:{ x:690, base:62 } };
@@ -2184,7 +2281,7 @@ function drawOutfit(c, pet, table, group, only){
 }
 /* ============ v0.36：多标签页存档同步（另一个标签页写了档，本页自动重载跟上） ============ */
 /* v0.53：多标签不再强制整页刷新（登记表/仪式会被打断）——改顶部提示条，用户自行刷新；save() 侧同样只拒写不刷新 */
-function showStale(){ const b = document.getElementById("staleBar"); if(b) b.style.display = "flex"; }
+function showStale(){ const b = document.getElementById("staleBar"); if(b && b.style.display !== "flex"){ b.style.display = "flex"; toast("⚠️ 这个页面已经过期，刚才的操作没有存上——请刷新页面再继续"); } else if(b) b.style.display = "flex"; } /* v0.60 外审P3：被锁要说清操作没存上 */
 document.getElementById("btnStaleReload").onclick = ()=> location.reload();
 window.addEventListener("storage", e => { if((e.key === EPOCH_KEY && e.newValue && e.newValue !== myEpoch) || (e.key === SAVE_KEY && e.newValue)){ _saveLock = true; showStale(); } });
 document.addEventListener("keydown", e=>{ if(e.key !== "Escape") return;
@@ -2548,7 +2645,7 @@ document.getElementById("regBreed").addEventListener("change", syncCoatRow);
 syncCoatRow();
 
 document.getElementById("regPhoto").addEventListener("change", e=>{
-  const f = e.target.files[0]; if(!f) return;
+  const f = e.target.files[0]; if(!f) return; document.getElementById("regPhotoName").textContent = f.name;
   const myTok = ++regPhotoToken;
   if(f.type && f.type.indexOf("image/")!==0){ toast("⚠️ 这个文件不是图片，换一张照片试试"); e.target.value = ""; return; }
   const reader = new FileReader();
@@ -2576,7 +2673,7 @@ document.getElementById("regPhoto").addEventListener("change", e=>{
 function resetRegForm(){ // v0.36：登记表办完/打开都清空——绝不串上一只的名字、碑文和照片
   document.getElementById("regName").value = "";
   document.getElementById("regLine").value = "";
-  document.getElementById("regPhoto").value = "";
+  document.getElementById("regPhoto").value = ""; document.getElementById("regPhotoName").textContent = "";
   regPhotoData = null; regPhotoColor = null; regPhotoToken++; // v0.46：作废在途的照片加载
   const pv = document.getElementById("photoPreview"); pv.style.display = "none"; pv.removeAttribute("src");
   const ph = document.getElementById("photoColorHint"); if(ph) ph.style.display = "none";
@@ -2803,19 +2900,40 @@ regStatusEl.addEventListener("change", syncRegMode); syncRegMode();
 (function backfillCoats(){
   try{
     if(typeof COATPACKS === "undefined" || !S || !S.pets) return;
-    const BY_NAME = { "团团":"cat-short-blue", "啾啾":"bird-small-blue", "阿黄":"dog-std-yellow", "小白":"rabbit-upright-white", "奶糖":"dog-std-cream", "煤球":"cat-short-black" };
-    const BY_SPECIES = { cat:"cat-short-tabby", dog:"dog-std-yellow", bird:"bird-small-blue", rabbit:"rabbit-upright-white", hamster:"hamster-golden-cream", turtle:"turtle-land-yellow", lizard:"lizard-gecko-tan", chinchilla:"chinchilla-std-grey", guineapig:"guineapig-short-solid", hedgehog:"hedgehog-std-standard", ferret:"ferret-std-sable", snake:"snake-std-classic" };
+    /* v0.60 外审P1-2 重写：旧版按名字套样板花色（狗「煤球」变黑猫、白猫变虎斑、玄凤变虎皮，还写回存档）。
+       新规矩：①样板只认「名字+物种」双合；②其余按自家品种线 + 登记毛色就近选包；③跨物种的花色包视为脏数据、按②重推；
+       ④推不出的宁可清空（渲染有品种兜底），绝不写错。原始 breed/color 字段不动，老档下次进园自动修正。 */
+    const SAMPLES = { "团团|cat":"cat-short-blue", "啾啾|bird":"bird-small-blue", "阿黄|dog":"dog-std-yellow", "小白|rabbit":"rabbit-upright-white", "奶糖|dog":"dog-std-cream", "煤球|cat":"cat-short-black" };
+    const COAT_HEX = { black:"#3a3630", white:"#f2ede2", grey:"#9aa0a4", gray:"#9aa0a4", blue:"#7d94b8", orange:"#e08b3a", tabby:"#b08954", cream:"#eed9ae", yellow:"#e5b84f", brown:"#8a6844", green:"#7fae6e", darkgreen:"#4d7a52", pink:"#e5a9b8", red:"#b45a41", gold:"#d9a441", tan:"#c8a878", snow:"#f4f1ea", albino:"#f6f1e7", classic:"#a98a5f", anery:"#6f6a63", sable:"#7a5c40", panda:"#e8e2d2", solid:"#a0855c", cow:"#e9e4da", calico:"#e6d3ae", lilac:"#b7a6c9", cinnamon:"#b57e52", apricot:"#eec39a", pearl:"#e8e0cc", lutino:"#f2d06b", colorful:"#c96f4a", peach:"#e8a58c", silver:"#c9ccd4", silvertabby:"#aeb6bd", colorpoint:"#8a7360", colorpointwhite:"#e9e2d2", redbrown:"#9c5a38", tricolor:"#cbb490", standard:"#8d7d68" };
+    const rgb = h => { const n = parseInt(h.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; };
+    function derive(p){
+      const ln = coatLineFor(p.species, p.breed || "");
+      const list = (COAT_LINES[p.species] || {})[ln] || [];
+      if(!list.length) return null;
+      const suf0 = coatDefaultFor(p.species, p.breed || "");
+      const bySuf = suf => { const k = p.species + "-" + ln + "-" + suf; return COATPACKS[k] ? k : null; };
+      if(p.color && /^#[0-9a-f]{6}$/i.test(p.color)){
+        const t = rgb(p.color); let best = null, bd = 1e18;
+        for(const e of list){ const hx = COAT_HEX[e[0]]; if(!hx) continue; const c = rgb(hx); const d = (c[0]-t[0])**2 + (c[1]-t[1])**2 + (c[2]-t[2])**2; if(d < bd){ bd = d; best = e[0]; } }
+        if(best) return bySuf(best);
+      }
+      return (suf0 && bySuf(suf0)) || bySuf(list[0][0]);
+    }
     let changed = false;
     for(const p of S.pets){
-      if(p.coat && COATPACKS[p.coat]) continue;
-      const k = BY_NAME[p.name] || BY_SPECIES[p.species];
-      if(k && COATPACKS[k]){ p.coat = k; changed = true; }
+      const cur = p.coat;
+      if(cur && COATPACKS[cur] && cur.split("-")[0] === p.species) continue; // 花色包有效且物种对得上，不动
+      let k = SAMPLES[p.name + "|" + p.species];
+      if(!k || !COATPACKS[k]) k = derive(p);
+      if(k && COATPACKS[k] && k !== cur){ p.coat = k; changed = true; }
+      else if(cur){ p.coat = ""; changed = true; }
     }
     if(changed) save();
   }catch(e){}
 })();
 
 /* ============ 启动 ============ */
+try{ if(sessionStorage.getItem("__bakRestored")){ sessionStorage.removeItem("__bakRestored"); setTimeout(()=>toast("📂 上次的存档有点损坏，已经用自动备份恢复好了，宝贝们都在"), 600); } }catch(_){ } /* v0.60：备份恢复要告诉玩家 */
 fitCanvas(); refreshHUD();
 requestAnimationFrame(loop);
 </script>
