@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="icon" href="data:,">
-<title>星星小园 · 原型 v0.63</title>
+<title>星星小园 · 原型 v0.64</title>
 <style>
   :root { --paper:#f5efe1; --card:#fffdf7; --ink:#2a3a2e; --ink2:#5d7057; --pine:#33523d; --gold:#a8842c; --goldsoft:#e7d6a4; --line:#ded2b4; --chip:#fbf7ea; --serif:"Songti SC","STSong","Noto Serif SC","SimSun",serif; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -173,6 +173,9 @@
   .mapDot { position:absolute; transform:translate(-50%,-50%); border-radius:50%; border:2px solid #fffdf7; padding:0; min-height:0; }
   button.mapDot { cursor:pointer; }
   .mapBadge { position:absolute; transform:translate(-50%,-50%); width:31px; height:31px; min-height:0; border-radius:10px; background:#fdf6e9; border:2px solid #b3543f; color:#b3543f; display:flex; align-items:center; justify-content:center; padding:0; cursor:pointer; box-shadow:0 1px 4px rgba(36,50,30,.3); }
+  .avCard { flex-direction:column; gap:4px; }
+  #avatarOverlay > div { max-height:100%; overflow-y:auto; }
+  span.mapDot { pointer-events:none; }
   .mapBadge.home { border-color:#d98a16; color:#c47b16; }
   .mapBadge svg { width:19px; height:19px; }
   .mapTag { position:absolute; left:50%; top:calc(100% + 3px); transform:translateX(-50%); font-size:10px; line-height:1.3; white-space:nowrap; background:rgba(253,246,233,.95); color:#4a3826; border:1px solid #c9bb96; padding:1px 6px; border-radius:7px; pointer-events:none; font-weight:600; }
@@ -182,7 +185,7 @@
 <body>
 <div id="app">
   <header>
-    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.63</span></h1>
+    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.64</span></h1>
   </header>
 
   <div id="hud">
@@ -207,9 +210,9 @@
     <button class="ghost" id="btnBlessGo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-6.5L20 11"/><path d="M6.2 9.5V20h11.6V9.5"/><path d="M10 20v-5h4v5"/></svg> 祈福小屋</button>
     <div class="drawerLabel">礼包与设置</div>
     <div class="setGrid">
-    <button class="ghost span2" id="btnLoginGift"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 10.5h15V20h-15z"/><path d="M3.5 6.5h17v4h-17z"/><path d="M12 6.5V20"/><path d="M12 6.5c-3.8 0-4.8-1.1-4.8-2.4C7.2 2.6 9 2.2 10.2 3c1 .7 1.8 3.5 1.8 3.5z"/><path d="M12 6.5c3.8 0 4.8-1.1 4.8-2.4C16.8 2.6 15 2.2 13.8 3c-1 .7-1.8 3.5-1.8 3.5z"/></svg> 登录礼包（累计 <span id="loginDays">0</span> 天）</button>
+    <button class="ghost span2" id="btnLoginGift"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 10.5h15V20h-15z"/><path d="M3.5 6.5h17v4h-17z"/><path d="M12 6.5V20"/><path d="M12 6.5c-3.8 0-4.8-1.1-4.8-2.4C7.2 2.6 9 2.2 10.2 3c1 .7 1.8 3.5 1.8 3.5z"/><path d="M12 6.5c3.8 0 4.8-1.1 4.8-2.4C16.8 2.6 15 2.2 13.8 3c-1 .7-1.8 3.5-1.8 3.5z"/></svg> <span id="giftLabel">领今日物资</span> · 粮×2 烛×2 花×1</button>
+    <button class="ghost span2" id="btnCheckin"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5.5" width="16" height="15" rx="2"/><path d="M4 10h16"/><path d="M8.5 3.8v3.4M15.5 3.8v3.4"/><path d="M9 15.2l2.2 2.2 4-4.2"/></svg> <span id="checkinLabel">陪伴签到</span> · <span id="tierProgress"></span></button>
     <button class="ghost" id="btnPioneer"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 21.5v-17"/><path d="M5.5 5h11l-2.6 3.5 2.6 3.5h-11"/></svg> 领创始礼包</button>
-    <button class="ghost" id="btnCheckin"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5.5" width="16" height="15" rx="2"/><path d="M4 10h16"/><path d="M8.5 3.8v3.4M15.5 3.8v3.4"/><path d="M9 15.2l2.2 2.2 4-4.2"/></svg> 每日签到（累计 <span id="checkinDays">0</span> 天）</button>
     <button class="ghost" id="btnAvatar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg> 我的造型</button>
     <button class="ghost" id="btnMute" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.8v4.4h3.2L12 18.5v-13L7.2 9.8H4z"/><path d="M15.5 9.2a4 4 0 0 1 0 5.6"/><path d="M18.2 6.8a7.4 7.4 0 0 1 0 10.4"/></svg> <span id="muteLabel">声音开</span></button>
     <button class="warn span2" id="btnReset"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.8 3.4v4h-4"/></svg> 重置存档</button>
@@ -221,6 +224,7 @@
     <details><summary>玩法说明</summary><div class="hintText">点地图、拖左下角的圆盘摇杆，或用 WASD/方向键走动；迷路了就点顶栏的「地图」看全园 · 看到发光的小东西，点它一下就会走过去捡起来（先到先得，每天最多捡 10 件）；灰黑的阴影团子点一下就会追上去驱散净化，它叼走的东西会掉出来· 走近墓碑看介绍，点「进小屋」· 全园都是纪念区：北岸是草甸墓园，南岸是花园墓园，中间过彩虹桥 · 园里有一间祈福小屋，在家的宝贝预登记后可以去那儿祈福 · 任何人的小屋都能进、都能喂——只有换装是主人专属。（注：原型存档只存在你这台设备里，「全园共享」要等正式版联网后才开放。）</div></details>
     <div class="drawerLabel">关于</div>
     <details id="changelog"><summary>原型说明与更新日志（点开看）</summary><div class="changelogBody">
+    原型说明（v0.64）：全园地图可带路到最近空位；背包显示今日物资和下一级碑材质所需的陪伴天数。<br>
     原型说明（v0.63）：🧑‍🌾 <b>造型、回家、签到碑阶（试玩建议批）</b>——①第一次进园先选样子：男女各两款（青/蓝围裙、粉/紫围裙长发），背包里随时能换。②每次进园都落在自家小屋（碑）前，不再从桥头开始走。③顶栏多了「小屋」键，点一下自动走过去进屋；全园地图上自家小屋有橙点，点它也一样。④碑有材质阶梯了：石头→青铜（累计签到 3 天）→白银（7 天）→黄金（14 天）→钻石（30 天），在背包里每日签到攒天数，走到自家碑前就能换；只靠陪伴天数，不花钱、没有排名。另修两个入口流程：标题页「开始游戏」不再强推建档（选完造型先进园逛，点空碑再登记）；「读取存档」先查本机存档、有档直接进、没档先弹提示，不再直接跳到文件里。另：全园地图给建筑加了小房子标记和名字（祈福小屋／自家小屋／彩虹桥），不再只有点；祈福小屋里「上香」和「离开小屋」两个按钮改成等高对齐。<br>
     原型说明（v0.62）：🧭 <b>外部审查清单全量梳理</b>——①宝贝立起（standUp）时补上专属挂件锚点：此前立起借用侧身锚点，项圈、围巾会飘到半空；现按每个物种的立起帧实测标定（猫狗共用组＋兔/仓鼠/龟/蜥蜴/龙猫/豚鼠/刺猬/雪貂/蛇逐个量），立起时小件也戴得稳稳的。②龙猫登记去掉重复选项：龙猫按花色区分，品种与花色本是同一个轴，登记时只留一处选。其余审查项已逐条复核（详见原型说明）。<br>
     原型说明（v0.61）：🐍 <b>修好原色玉米蛇走路没头的问题</b>——第二轮素材重锻时，这一帧的生成原图本身就没画头（只有一截波浪身子）；换回第一轮原图、按原管线重新锻出的完整帧，有头有尾。其余三种花色（白化、炭黑、暴风雪）的蛇已逐帧查过，头都在。<br>
@@ -388,7 +392,7 @@
     <h2 style="font-family:var(--serif);margin:2px 0">全园地图</h2>
     <p class="sub" id="mapSub"></p>
     <div id="mapBox"><img id="mapImg" alt="全园地图"><div id="mapMarks"></div></div>
-    <div class="row" style="margin-top:12px"><button id="btnMapClose">关上地图</button></div>
+    <div class="row" style="margin-top:12px"><button id="btnNearestPlot">带我去最近空位</button> <button class="ghost" id="btnMapClose">关上地图</button></div>
   </div></div>
 
 
@@ -483,7 +487,7 @@
 </div>
 
 
-<script src="packs.js?v=52" defer></script>
+<script id="assetPacks" src="packs.js?v=63" defer></script>
 <script>
 "use strict";
 /* ============ 存档 ============ */
@@ -495,7 +499,14 @@ let _saveLock = false; /* v0.53：导入/重置写入新档后上锁，本页残
 const SPECIES_EMOJI = { cat:"🐱", dog:"🐶", bird:"🐦", rabbit:"🐰", hamster:"🐹", turtle:"🐢", lizard:"🦎", chinchilla:"🐭", guineapig:"🐹", hedgehog:"🦔", ferret:"🦡", snake:"🐍", other:"🐾" };
 const FOOD_LABEL = { cat:"猫粮", dog:"狗粮", bird:"鸟食", other:"小食" };
 let S = load() || freshState();
-function todayStr(){ const d = new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
+function dayKey(year, month, day){ return year + "-" + String(month).padStart(2, "0") + "-" + String(day).padStart(2, "0"); }
+function todayStr(){ const d = new Date(); return dayKey(d.getFullYear(), d.getMonth()+1, d.getDate()); }
+function migrateDayKeys(obj, fields){
+  for(const k of fields){
+    const m = typeof obj[k] === "string" && /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(obj[k]);
+    if(m) obj[k] = dayKey(m[1], m[2], m[3]);
+  }
+}
 /* 食盆按时间戳结算（报告2）：每 20 秒吃掉一格，刷新/重进都按真实时间算 */
 function settleBowl(pet){
   if(pet.bowl > 0){
@@ -517,14 +528,16 @@ let selPlot = null, pendingPlot = null;
   if(!S.inv || typeof S.inv !== "object") S.inv = { food:3, candle:3, flower:2, toy:0, clothes:0 };
   for(const _ik of ["food","candle","flower","toy","clothes"]){ const _n = Number(S.inv[_ik]); S.inv[_ik] = Number.isFinite(_n) && _n > 0 ? Math.floor(_n) : 0; } /* v0.50：数值字段一律转数，堵注入通道 */
   if(!Array.isArray(S.milestonesHit)) S.milestonesHit = [];
-  if(typeof S.avatar !== "string" || !S.avatar) S.avatar = "a1"; /* v0.63：造型/签到（旧档迁移：造型视为已选，不打扰老玩家） */
+  if(!["a1","a2","a3","a4"].includes(S.avatar)) S.avatar = "a1"; /* v0.63：造型/签到（旧档迁移：造型视为已选，不打扰老玩家） */
   if(S.avatarChosen === undefined) S.avatarChosen = true;
   if(!S.checkin || typeof S.checkin.total !== "number" || typeof S.checkin.last !== "string") S.checkin = { total:0, last:"" };
+  S.checkin.total = Number.isSafeInteger(S.checkin.total) && S.checkin.total > 0 ? S.checkin.total : 0;
   if(!Array.isArray(S.petMilestonesHit)) S.petMilestonesHit = [];
   S.petMilestonesHit = S.petMilestonesHit.map(k => (typeof k === "string" && k.indexOf("@") < 0) ? k + "@" + (S.myPetId || "x") : k); // 旧档里程碑键迁移到主宠物名下
   S.disperseTotal = S.disperseTotal || 0; S.blobDate = S.blobDate || ""; S.blobSpawned = S.blobSpawned || 0; S.blobDrops = S.blobDrops || 0; S.guardDays = S.guardDays || 0; S.lastGuardDate = S.lastGuardDate || "";
   if(!Array.isArray(S.titles)) S.titles = [];
   for(const p of S.pets){
+    if(!Number.isInteger(p.stoneTier) || p.stoneTier < 0 || p.stoneTier > 4) p.stoneTier = 0;
     if(!p.counts || typeof p.counts !== "object") p.counts = {}; p.counts.fed = p.counts.fed || 0; p.counts.candle = p.counts.candle || 0; p.counts.flower = p.counts.flower || 0; p.counts.pray = p.counts.pray || 0; p.counts.interact = p.counts.interact || 0; p.counts.visits = p.counts.visits || 0;
     p.counts.bless = p.counts.bless || 0; p.counts.incense = p.counts.incense || 0;
     for(const _ck of ["fed","candle","flower","pray","interact","visits","bless","incense"]){ const _n = Number(p.counts[_ck]); p.counts[_ck] = Number.isFinite(_n) && _n > 0 ? Math.floor(_n) : 0; } /* v0.50：计数转数 */
@@ -558,6 +571,9 @@ let selPlot = null, pendingPlot = null;
   /* v0.41：噗噗认领——传了照片、名叫「噗噗」的猫改走内置专属包（按它的照片单独生成的那套），不再走照片贴图 */
   for(const p of S.pets){ if(p.species === "cat" && p.photo && p.name === "噗噗" && p.pack !== "photo") p.pack = "photo"; }
    for(const p of S.pets){ if(p.coat === undefined) p.coat = ""; } /* v0.42：花色包字段补默认 */
+  migrateDayKeys(S, ["lastGiftDate","pickDate","blobDate","lastGuardDate","incenseDate","creditDate","creditNoteDate"]);
+  migrateDayKeys(S.checkin, ["last"]);
+  for(const p of S.pets){ migrateDayKeys(p, ["lastBlessDate"]); migrateDayKeys(p.daily, ["d"]); }
   rollDay();
  }catch(e){ /* v0.50：兜底先试着从 __bak 恢复好档；备份槽已有好档时绝不覆盖 */
   let _restored = false;
@@ -669,15 +685,15 @@ let pendingHomePet = null;
 function myHomePet(){ const ms = S.pets.filter(p => p.status === "memorial" && isMine(p)); if(!ms.length) return null; return ms.find(p => p.id === S.myPetId) || ms[0]; }
 function spawnHome(){ const pet = myHomePet(); if(!pet) return; player.x = pet.x; player.y = pet.y + 56; player.tx = player.x; player.ty = player.y; }
 spawnHome(); /* v0.63：每次进园都落在自家小屋（碑）前；没有自家宝贝时仍在桥头 */
-function goHome(){ const pet = myHomePet(); if(!pet){ toast("还没有自家宝贝的小屋——先登记一只宝贝吧"); return; } pendingHomePet = pet; pendingPickup = null; pendingBlob = null; setDest(pet.x, pet.y + 56); toast("回 " + pet.name + " 的小屋"); }
+function goHome(){ const pet = myHomePet(); if(!pet){ toast("还没有自家宝贝的小屋——先登记一只宝贝吧"); return; } setDest(pet.x, pet.y + 56, {home:pet}); toast("回 " + pet.name + " 的小屋"); }
 const TIER_REQ = [0, 3, 7, 14, 30];
 const TIER_NAMES = ["石头", "青铜", "白银", "黄金", "钻石"];
 function unlockedTier(){ let t = 0; const tot = (S.checkin && typeof S.checkin.total === "number") ? S.checkin.total : 0; for(let i = 0; i < TIER_REQ.length; i++) if(tot >= TIER_REQ[i]) t = i; return t; }
-function todayStr(){ const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
 const keys = {};
 window.addEventListener("keydown", e=>{ if(/INPUT|TEXTAREA|SELECT/.test((e.target || {}).tagName || "")) return; // v0.36：在输入框里打字不驱动人物
   const k = e.key.toLowerCase();
-  if(["arrowup","arrowdown","arrowleft","arrowright"," "].includes(k) && !/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||"")) e.preventDefault();
+  if(!parkActive()) return;
+  if(["arrowup","arrowdown","arrowleft","arrowright"].includes(k)) e.preventDefault();
   keys[k] = true; });
 window.addEventListener("keyup",   e=>{ keys[e.key.toLowerCase()] = false; });
 window.addEventListener("blur", ()=>{ for(const k in keys) keys[k] = false; });
@@ -686,17 +702,16 @@ canvas.addEventListener("pointerdown", e=>{
   const cam = camera();
   const wx = cam.x + (e.clientX - r.left) / ZOOM, wy = cam.y + (e.clientY - r.top) / ZOOM;
   const b = blobs.find(q => (q.state==="drift") && Math.abs(q.x-wx) < 34 && wy > q.y-56 && wy < q.y+12); /* v0.60 外审P3：按贴图盒判定，上部也点得中 */ // v0.53：须点中团子本体（原半径 54 且玩家在 95 内点任意地面就直接散，路过误触严重）
-  if(b){ pendingBlob = b.id; pendingPickup = null; setDest(b.x, b.y); return; } // 点中→追上去，抵近才驱散（blobTick 统一处理）
+  if(b){ setDest(b.x, b.y, {blob:b.id}); return; } // 点中→追上去，抵近才驱散（blobTick 统一处理）
   const pk = pickups.find(q => Math.hypot(q.x-wx, q.y-10-wy) < 50);
   if(pk){
     if(!pk.fromBlob && S.pickToday>=10){ toast("今天捡满 10 件啦，留些给别人吧 🌿"); return; }
-    pendingPickup = pk; pendingBlob = null; setDest(pk.x, pk.y); return;
+    setDest(pk.x, pk.y, {pickup:pk}); return;
   }
   if(wx > BLESS_HOUSE.x - 195 && wx < BLESS_HOUSE.x + 195 && wy > BLESS_HOUSE.y - 385 && wy < BLESS_HOUSE.y + 30){ // v0.36：判定改对整栋屋身（旧版只圈屋脚，点屋身没反应）
     if(Math.hypot(player.x-BLESS_HOUSE.x, player.y-BLESS_HOUSE.y) < 340){ enterBlessRoom(); return; }
-    pendingBlob = null; pendingPickup = null; setDest(BLESS_HOUSE.x, BLESS_HOUSE.y + 76); toast("🛕 那是祈福小屋，走近了再点它进去"); return;
+    setDest(BLESS_HOUSE.x, BLESS_HOUSE.y + 76); toast("🛕 那是祈福小屋，走近了再点它进去"); return;
   }
-  pendingBlob = null; pendingPickup = null;
   setDest(wx, wy);
 });
 const POND = { x0: 2200, y0: 2140, x1: 3650, y1: 2900 }; // 东南湖面碰撞区（与主循环推挤一致）
@@ -829,7 +844,12 @@ function findPath(x1, y1, x2, y2){
   }
   return out;
 }
-function setDest(x, y){
+function cancelWalk(){
+  player.destQ = []; player.tx = player.x; player.ty = player.y;
+  pendingHomePet = null; pendingPickup = null; pendingBlob = null;
+}
+function setDest(x, y, {home = null, pickup = null, blob = null} = {}){
+  pendingHomePet = home; pendingPickup = pickup; pendingBlob = blob;
   const path = findPath(player.x, player.y, x, y);
   if(path && path.length){ player.destQ = path.slice(); const f = player.destQ.shift(); player.tx = f.x; player.ty = f.y; }
   else { player.destQ = []; player.tx = x; player.ty = y; }
@@ -1263,23 +1283,53 @@ const joyVec = { x: 0, y: 0 };
   joy.addEventListener("pointerup", end); joy.addEventListener("pointercancel", end);
   setInterval(() => { const touch = ("ontouchstart" in window) || navigator.maxTouchPoints > 0; const show = touch && !housePet && !blessTimer && !ceremony; if(!show && (joyVec.x || joyVec.y)){ joyVec.x = 0; joyVec.y = 0; setKnob(0, 0); } joy.style.display = show ? "block" : "none"; }, 600); // v0.36：隐藏时清方向，防残留自走
 })();
+function walkToPlot(plot){
+  closeMap();
+  setDest(plot.x, plot.y + 56);
+  toast("去一园 " + plot.no + " 号空碑位");
+}
+function walkToNearestPlot(emptyPlots){
+  const candidates = emptyPlots.map(plot => ({
+    plot, distance: Math.hypot(plot.x - player.x, plot.y + 56 - player.y)
+  })).sort((a,b) => a.distance - b.distance);
+  let best = null, shortest = Infinity;
+  for(const {plot, distance} of candidates){
+    if(distance >= shortest) break;
+    const path = findPath(player.x, player.y, plot.x, plot.y + 56);
+    if(!path) continue;
+    let length = 0, last = player;
+    for(const step of path){
+      length += Math.hypot(step.x - last.x, step.y - last.y);
+      last = step;
+    }
+    if(length < shortest){ best = plot; shortest = length; }
+  }
+  if(best) walkToPlot(best);
+  else toast("从这里找不到可走的空位，换个位置再试试");
+}
 function openMap(){
   document.getElementById("hudDrawer").classList.remove("open"); // v0.36：地图不再压在没关的抽屉上
   document.getElementById("mapImg").src = PLATE.src;
   const marks = document.getElementById("mapMarks"); marks.innerHTML = "";
   const add = (x, y, color, size, label, fn, border) => { const d = document.createElement(fn ? "button" : "span"); d.className = "mapDot"; d.style.left = (x / WORLD.w * 100) + "%"; d.style.top = (y / WORLD.h * 100) + "%"; d.style.width = size + "px"; d.style.height = size + "px"; d.style.background = color; if(border) d.style.borderColor = border; d.title = label; if(fn) d.onclick = fn; marks.appendChild(d); };
   const HOUSE_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-6.5L20 11"/><path d="M6.2 9.5V20h11.6V9.5"/><path d="M10 20v-5h4v5"/></svg>';
-  const addBadge = (x, y, cls, tag, fn) => { const b = document.createElement("button"); b.className = "mapBadge" + (cls ? " " + cls : ""); b.style.left = (x / WORLD.w * 100) + "%"; b.style.top = (y / WORLD.h * 100) + "%"; b.innerHTML = HOUSE_SVG + '<span class="mapTag">' + tag + "</span>"; b.title = tag; if(fn) b.onclick = fn; marks.appendChild(b); };
+  const addBadge = (x, y, cls, tag, fn) => { const b = document.createElement("button"); b.className = "mapBadge" + (cls ? " " + cls : ""); b.style.left = (x / WORLD.w * 100) + "%"; b.style.top = (y / WORLD.h * 100) + "%"; b.innerHTML = HOUSE_SVG; const name = document.createElement("span"); name.className = "mapTag"; name.textContent = tag; b.appendChild(name); b.title = tag; if(fn) b.onclick = fn; marks.appendChild(b); };
   const addTag = (x, y, text) => { const s = document.createElement("span"); s.className = "mapTagSolo"; s.style.left = (x / WORLD.w * 100) + "%"; s.style.top = (y / WORLD.h * 100) + "%"; s.textContent = text; marks.appendChild(s); };
-  for(const pl of PLOTS){ const occ = S.pets.some(p => p.status === "memorial" && plotOf(p) === pl); add(pl.x, pl.y, occ ? "#a8842c" : "rgba(255,253,247,.5)", occ ? 14 : 11, "一园 " + pl.no + " 号" + (occ ? "" : "（空位）")); }
+  const occupied = new Set(S.pets.filter(p => p.status === "memorial").map(plotOf));
+  const emptyPlots = PLOTS.filter(pl => !occupied.has(pl));
+  const nearest = document.getElementById("btnNearestPlot");
+  nearest.disabled = !emptyPlots.length;
+  nearest.textContent = emptyPlots.length ? "带我去最近空位" : "园内空位已满";
+  nearest.onclick = () => walkToNearestPlot(emptyPlots);
+  for(const pl of PLOTS){ const occ = occupied.has(pl); add(pl.x, pl.y, occ ? "#a8842c" : "rgba(255,253,247,.5)", occ ? 14 : 11, "一园 " + pl.no + " 号" + (occ ? "" : "（空位）"), occ ? null : () => walkToPlot(pl)); }
   for(const p of S.pets){ if(p.status !== "memorial") continue; const pl = plotOf(p); if(!pl) continue; add(pl.x, pl.y - 30, isMine(p) ? "#c2504e" : "#33523d", 18, p.name + " · 一园 " + pl.no + " 号", () => { closeMap(); setDest(p.x, p.y + 56); toast("去 " + p.name + " 那儿（一园 " + pl.no + " 号）"); }); }
   addBadge(BLESS_HOUSE.x, BLESS_HOUSE.y - 10, "", "祈福小屋", () => { closeMap(); setDest(BLESS_HOUSE.x, BLESS_HOUSE.y + 76); toast("去祈福小屋"); });
   addTag(2880, 1620, "彩虹桥");
   for(const p of S.pets){ if(p.status !== "memorial" || !isMine(p)) continue; const pl = plotOf(p); if(!pl) continue; /* v0.63：自家小屋在地图上单独标橙点，点一下走过去直接进屋 */
-    addBadge(pl.x + 36, pl.y - 54, "home", p.name + "的小屋", () => { closeMap(); pendingHomePet = p; pendingPickup = null; pendingBlob = null; setDest(p.x, p.y + 56); toast("去 " + p.name + " 的小屋"); }); }
+    addBadge(pl.x + 36, pl.y - 54, "home", p.name + "的小屋", () => { closeMap(); setDest(p.x, p.y + 56, {home:p}); toast("去 " + p.name + " 的小屋"); }); }
   add(player.x, player.y, "#fffdf7", 14, "我在这里", null, "#33523d");
   const reg = S.pets.filter(p => p.status === "memorial").length;
-  document.getElementById("mapSub").textContent = "一园（春樱园）共 50 个碑位，已登记 " + reg + " 个。红点是自家的碑、绿点是园友的碑，点一下就走过去；带小房子标记的是建筑：祈福小屋和自家小屋，点一下就走过去，自家小屋还会直接进屋；白点是你现在的位置。";
+  document.getElementById("mapSub").textContent = "一园（春樱园）共 50 个碑位，已登记 " + reg + " 个。点浅色空位可以走去登记。红点是自家的碑、绿点是园友的碑；带小房子标记的是建筑：祈福小屋和自家小屋，点一下就走过去，自家小屋还会直接进屋；白点是你现在的位置。";
   document.getElementById("mapOverlay").classList.add("show");
 }
 function closeMap(){ document.getElementById("mapOverlay").classList.remove("show"); }
@@ -1287,16 +1337,22 @@ document.getElementById("btnMap").onclick = openMap;
 document.getElementById("btnMapTop").onclick = openMap; // v0.53：主界面顶栏直达
 document.getElementById("btnMapClose").onclick = closeMap;
 document.getElementById("btnAct").onclick = (e) => { const b = e.currentTarget; if(!b._tgt) return;
-  if(b._mode === "pickup"){ if(!b._tgt.fromBlob && S.pickToday >= 10){ toast("今天捡满 10 件啦，留些给别人吧 🌿"); return; } pendingPickup = b._tgt; pendingBlob = null; setDest(b._tgt.x, b._tgt.y); }
-  else if(b._mode === "blob"){ if(Math.hypot(player.x - b._tgt.x, player.y - b._tgt.y) < 78){ disperseBlob(b._tgt); pendingBlob = null; } else { pendingBlob = b._tgt.id; pendingPickup = null; setDest(b._tgt.x, b._tgt.y); } }
+  if(b._mode === "pickup"){ if(!b._tgt.fromBlob && S.pickToday >= 10){ toast("今天捡满 10 件啦，留些给别人吧 🌿"); return; } setDest(b._tgt.x, b._tgt.y, {pickup:b._tgt}); }
+  else if(b._mode === "blob"){ if(Math.hypot(player.x - b._tgt.x, player.y - b._tgt.y) < 78){ disperseBlob(b._tgt); pendingBlob = null; } else { setDest(b._tgt.x, b._tgt.y, {blob:b._tgt.id}); } }
 };
 /* ============ 主循环 ============ */
 let lastT = performance.now(), nearestPet = null;
+const parkDialogs = ["mapOverlay","dirOverlay","convertOverlay","resetOverlay","firstCandle"].map(id => document.getElementById(id));
+function parkActive(){
+  return !housePet && !blessTimer && titleOverlay.style.display === "none" &&
+    avatarOverlay.style.display === "none" && regOverlay.style.display === "none" &&
+    !parkDialogs.some(panel => panel.classList.contains("show"));
+}
 function loop(t){
   requestAnimationFrame(loop); /* v0.47：先排下一帧——某一帧抛错也不停摆 */
   try{
   const dt = Math.min(.05,(t-lastT)/1000); lastT = t;
-  if(!housePet){
+  if(parkActive()){
     let dx=0, dy=0;
     if(keys["w"]||keys["arrowup"]) dy-=1; if(keys["s"]||keys["arrowdown"]) dy+=1;
     if(keys["a"]||keys["arrowleft"]) dx-=1; if(keys["d"]||keys["arrowright"]) dx+=1;
@@ -1305,10 +1361,10 @@ function loop(t){
     if(dx||dy) player.face = Math.abs(dx)>Math.abs(dy) ? (dx>0?"right":"left") : (dy>0?"down":"up");
     else { const ddx = player.tx-player.x, ddy = player.ty-player.y;
       if(Math.hypot(ddx,ddy)>4){ player.moving = true; player.face = Math.abs(ddx)>Math.abs(ddy) ? (ddx>0?"right":"left") : (ddy>0?"down":"up"); } }
-    if(dx||dy){ player.tx = player.x; player.ty = player.y; player.destQ = []; pendingPickup = null; pendingBlob = null; pendingHomePet = null; const l=Math.hypot(dx,dy), spd=player.speed*Math.min(1,l); player.x+=dx/l*spd*dt; player.y+=dy/l*spd*dt; }
+    if(dx||dy){ cancelWalk(); const l=Math.hypot(dx,dy), spd=player.speed*Math.min(1,l); player.x+=dx/l*spd*dt; player.y+=dy/l*spd*dt; }
     else { if(player.destQ && player.destQ.length && Math.hypot(player.tx-player.x, player.ty-player.y) <= 12){ const nx = player.destQ.shift(); player.tx = nx.x; player.ty = nx.y; }
       const d = Math.hypot(player.tx-player.x, player.ty-player.y);
-      if(d>4){ player.x += (player.tx-player.x)/d*player.speed*dt; player.y += (player.ty-player.y)/d*player.speed*dt; } }
+      if(d>4){ const step = Math.min(d, player.speed*dt); player.x += (player.tx-player.x)/d*step; player.y += (player.ty-player.y)/d*step; } }
     // 河：只能在桥面过
     const inRiver = player.y>WORLD.riverY+6 && player.y<WORLD.riverY+WORLD.riverH-6;
     const onBridge = player.x>BRIDGE.x0 && player.x<BRIDGE.x1;
@@ -1338,7 +1394,7 @@ function loop(t){
       } }
     if(pendingHomePet){ /* v0.63：一键回小屋——走到碑前自动进屋 */
       if(housePet || ceremony) pendingHomePet = null;
-      else if((!player.destQ || !player.destQ.length) && Math.hypot(player.x - pendingHomePet.x, player.y - (pendingHomePet.y + 56)) < 58){ const _hp = pendingHomePet; pendingHomePet = null; enterHouse(_hp); }
+      else if((!player.destQ || !player.destQ.length) && Math.hypot(player.x - pendingHomePet.x, player.y - (pendingHomePet.y + 56)) < 58){ enterHouse(pendingHomePet); return; }
     }
     // 最近的碑
     nearestPet = null; let best = 150;
@@ -1383,7 +1439,13 @@ function updateInfoPanel(){
           const cur = (nearestPet.stoneTier|0) === i;
           b.textContent = nm + (cur ? " ✓" : (i > _un ? "（签到" + TIER_REQ[i] + "天）" : ""));
           b.disabled = i > _un; if(cur){ b.style.borderColor = "#c2a14a"; b.style.color = "#8a6d1f"; }
-          b.onclick = () => { nearestPet.stoneTier = i; save(); _tr._key = ""; updateInfoPanel(); toast(nearestPet.name + " 的碑换成了" + nm + "碑"); };
+          b.onclick = () => {
+            const previous = nearestPet.stoneTier;
+            nearestPet.stoneTier = i;
+            if(!save()){ nearestPet.stoneTier = previous; return; }
+            _tr._key = ""; updateInfoPanel();
+            toast(nearestPet.name + " 的碑换成了" + nm + "碑");
+          };
           _tb.appendChild(b); }); }
     } else _tr.style.display = "none";
   } else if(selPlot){
@@ -1397,7 +1459,7 @@ function updateInfoPanel(){
   } else infoPanel.classList.remove("show");
 }
 document.getElementById("btnEnter").onclick = ()=>{ if(nearestPet) enterHouse(nearestPet); };
-document.getElementById("btnRegHere").onclick = ()=>{ if(!selPlot) return; pendingPlot = selPlot; resetRegForm(); const rs = document.getElementById("regStatus"); rs.value = "memorial"; syncRegMode(); document.getElementById("regOverlay").style.display = "flex"; };
+document.getElementById("btnRegHere").onclick = ()=>{ if(!selPlot) return; resetRegForm(); pendingPlot = selPlot; const rs = document.getElementById("regStatus"); rs.value = "memorial"; syncRegMode(); document.getElementById("regOverlay").style.display = "flex"; };
 /* ============ 过桥转纪念仪式（v0.5）：送行 → 过桥（虹光/光尘）→ 北岸立碑 ============ */
 let ceremony = null;
 const CER_PLOT = { x:2880, y:2320, no:0 };
@@ -1522,7 +1584,7 @@ function finishCeremony(){
   SFX.chime(); offerFirstCandle(pet);
 }
 
-document.getElementById("btnGuide").onclick = ()=>{ if(nearestPet){ player.tx = nearestPet.x; player.ty = nearestPet.y+56; toast("🦋 蝴蝶带你去找 "+nearestPet.name); } };
+document.getElementById("btnGuide").onclick = ()=>{ if(nearestPet){ setDest(nearestPet.x, nearestPet.y+56); toast("🦋 蝴蝶带你去找 "+nearestPet.name); } };
 const btnMute = document.getElementById("btnMute");
 function syncMute(){ document.getElementById("muteLabel").textContent = S.muted ? "声音关" : "声音开"; }
 btnMute.onclick = ()=>{ S.muted = !S.muted; syncMute(); syncMusic(); save(); if(!S.muted) SFX.pickup(); }; /* v0.60：静音切换同步顶栏音乐标 */
@@ -1586,7 +1648,9 @@ function refreshHUD(){
   document.getElementById("playerTotal").textContent = S.playerTotal;
   document.getElementById("pickToday").textContent = S.pickToday;
   document.getElementById("disperseTotal").textContent = S.disperseTotal || 0; document.getElementById("guardDays").textContent = S.guardDays || 0;
-  document.getElementById("loginDays").textContent = S.loginDays;
+  const claimedToday = S.lastGiftDate === todayStr();
+  document.getElementById("giftLabel").textContent = claimedToday ? "今日物资已领" : "领今日物资";
+  document.getElementById("btnLoginGift").disabled = claimedToday;
   document.getElementById("hudTitle").textContent = (S.titles && S.titles.length) ? S.titles[S.titles.length-1] : "";
   const next = PLAYER_MS.find(m=>S.playerTotal < m.n);
   const prev = [...PLAYER_MS].reverse().find(m=>S.playerTotal >= m.n);
@@ -1599,9 +1663,14 @@ function refreshHUD(){
 }
 document.getElementById("btnLoginGift").onclick = ()=>{
   if(S.lastGiftDate === todayStr()){ toast("今天的登录礼包已经领过啦，明天再来 🎁（累计登录 "+S.loginDays+" 天）"); return; }
+  const previousDate = S.lastGiftDate;
   S.lastGiftDate = todayStr(); S.loginDays++; S.inv.food+=2; S.inv.candle+=2; S.inv.flower+=1;
+  if(!save()){
+    S.lastGiftDate = previousDate; S.loginDays--; S.inv.food-=2; S.inv.candle-=2; S.inv.flower-=1;
+    return;
+  }
   toast("🎁 登录礼包：粮×2 烛×2 花×1（累计登录 "+S.loginDays+" 天）");
-  refreshHUD(); save();
+  refreshHUD();
 };
 document.getElementById("btnPioneer").onclick = ()=>{
   if(S.claimed.pioneer) return;
@@ -1615,7 +1684,12 @@ document.getElementById("btnExport").onclick = ()=>{ try{ const raw = JSON.strin
 const importFileEl = document.getElementById("importFile");
 document.getElementById("btnImport").onclick = ()=> importFileEl.click();
 importFileEl.onchange = ()=>{ const f = importFileEl.files && importFileEl.files[0]; if(!f) return; const rd = new FileReader(); rd.onload = ()=>{ try{ const obj = JSON.parse(rd.result); if(!obj || !Array.isArray(obj.pets)) throw new Error("bad save");
-    obj.pets = obj.pets.filter(p => p && typeof p === "object"); if(!obj.pets.length) throw new Error("no valid pets"); /* v0.50：null 宠物直接剔除，空档拒绝导入 */
+    obj.pets = obj.pets.filter(p => p && typeof p === "object"); const ids = new Set();
+    if(!obj.pets.length || !obj.pets.every(p => {
+      if((typeof p.id !== "string" && !Number.isSafeInteger(p.id)) || p.id === "" || ids.has(p.id)) return false;
+      ids.add(p.id);
+      return ["alive","prereg","memorial"].includes(p.status);
+    })) throw new Error("invalid pet records"); /* v0.50：null 宠物直接剔除，空档拒绝导入 */
     const _num = v => { const n = Number(v); return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0; };
     if(!obj.inv || typeof obj.inv !== "object") obj.inv = { food:3, candle:3, flower:2, toy:0, clothes:0 };
     for(const _ik of ["food","candle","flower","toy","clothes"]) obj.inv[_ik] = _num(obj.inv[_ik]);
@@ -1640,6 +1714,7 @@ function pumpToast(){
 let housePet = null, soulAnim = null;
 const houseEl = document.getElementById("house");
 function enterHouse(pet){
+  cancelWalk();
   housePet = pet; pet.counts.visits++;
   document.getElementById("hud").style.display = "none";
   document.getElementById("mapWrap").style.display = "none";
@@ -1721,11 +1796,12 @@ function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, ch => ({ 
 function refreshHouseStats(){
   if(!housePet) return; const c = housePet.counts;
   settleBowl(housePet);
+  const furnitureNames = Object.values(furnishOf(housePet)).filter(id=>id && id!=="none" && FURN_ITEMS[id]).map(id=>FURN_ITEMS[id].name).join(" · ");
   document.getElementById("houseStats").innerHTML =
     '<span class="chip">粮 '+S.inv.food+' · 烛 '+S.inv.candle+' · 花 '+S.inv.flower+' · 玩具 '+S.inv.toy+' · 衣服 '+S.inv.clothes+'</span>'+
     (housePet.breed ? '<span class="chip">品种 · '+esc(housePet.breed)+'</span>' : '')+
     (housePet.coat && COAT_LABEL[housePet.coat] ? '<span class="chip">花色 · '+COAT_LABEL[housePet.coat]+'</span>' : '')+
-    '<span class="chip">家具 '+Object.values(furnishOf(housePet)).filter(id=>id && id!=="none" && FURN_ITEMS[id]).map(id=>FURN_ITEMS[id].name).join(" · ") || "暂无布置" /* v0.60 外审P3：收回的空位不再凑出「家具」二字 */+'</span>'+
+    '<span class="chip">'+(furnitureNames ? "家具 "+furnitureNames : "暂无布置")+'</span>'+
     '<span class="chip">食盆 '+housePet.bowl+'/3</span>'+
     '<span class="chip">被投喂 <b>'+c.fed+'</b></span><span class="chip">被点烛 <b>'+c.candle+'</b></span>'+
     '<span class="chip">被献花 <b>'+c.flower+'</b></span><span class="chip">被祈福 <b>'+c.pray+'</b></span>'+
@@ -2057,7 +2133,7 @@ function blobTick(dt){
     const b = blobs.find(q => q.id === pendingBlob);
     if(!b) pendingBlob = null;
     else if(Math.hypot(player.x - b.x, player.y - b.y) < 78){ disperseBlob(b); pendingBlob = null; }
-    else if(Math.hypot(player.tx - b.x, player.ty - b.y) > 34) setDest(b.x, b.y); // 团子会漂移，追赶目标跟着它走
+    else if(Math.hypot(player.tx - b.x, player.ty - b.y) > 34) setDest(b.x, b.y, {blob:b.id}); // 团子会漂移，追赶目标跟着它走
   }
 }
 function drawBlobs(now){
@@ -2760,6 +2836,7 @@ document.getElementById("regPhoto").addEventListener("change", e=>{
   reader.readAsDataURL(f);
 });
 function resetRegForm(){ // v0.36：登记表办完/打开都清空——绝不串上一只的名字、碑文和照片
+  pendingPlot = null;
   document.getElementById("regName").value = "";
   document.getElementById("regLine").value = "";
   document.getElementById("regPhoto").value = ""; document.getElementById("regPhotoName").textContent = "";
@@ -2771,6 +2848,7 @@ function resetRegForm(){ // v0.36：登记表办完/打开都清空——绝不�
   const _st = document.getElementById("regStatus"); if(_st) _st.value = "memorial";
   const _rc = document.getElementById("regColor"); if(_rc) _rc.value = "#e8a04c";
   if(typeof syncCoatRow === "function") syncCoatRow();
+  syncRegMode();
 }
 document.getElementById("btnRegCancel").onclick = ()=>{ regOverlay.style.display = "none"; resetRegForm(); };
 document.getElementById("btnRegister").onclick = ()=>{
@@ -2794,31 +2872,54 @@ document.getElementById("btnRegister").onclick = ()=>{
   if(status==="memorial"){ startMemorialCeremony(mine); } // 报告9：建档时已离开的，也给一场立碑仪式
   else toast("📝 "+name+" 预登记好了，祈福小屋的墙上也给它挂上了牌子。它还在家里陪着你。去园子右下角樱花树旁的祈福小屋，可以为它祈福攒福气；将来真到了那一天，在祈福小屋的牌位前送它过桥，这份档案就转成纪念档。");
 };
-if(S.myPetId){ regOverlay.style.display = "none"; const mine = S.pets.find(p=>p.id===S.myPetId); if(mine) mine.mine = true; if(mine && mine.status==="memorial"){ player.x=mine.x; player.y=mine.y+70; player.tx=player.x; player.ty=player.y; } }
+if(S.myPetId){ const mine = S.pets.find(p=>p.id===S.myPetId); if(mine) mine.mine = true; }
 // v0.57 标题页：进门先见标题——开始游戏（建档）/ 读取存档；已有自己的宝贝时主按钮变「继续游戏」
 const titleOverlay = document.getElementById("titleOverlay");
 document.getElementById("titleArt").src = TITLE_SRC;
 const btnTitleMain = document.getElementById("btnTitleMain");
-if(S.myPetId){ btnTitleMain.textContent = "继续游戏"; document.getElementById("titleHint").textContent = "园子里的一切都在等你回来"; }
+const hasLocalProgress = !!(S.myPetId || S.avatarChosen);
+if(hasLocalProgress){ btnTitleMain.textContent = "继续游戏"; document.getElementById("titleHint").textContent = "园子里的一切都在等你回来"; }
 regOverlay.style.display = "none";
 titleOverlay.style.display = "flex";
 /* ============ v0.63：造型选择 / 每日签到 / 顶栏小屋键 ============ */
 const avatarOverlay = document.getElementById("avatarOverlay");
 let avatarNext = null;
 function drawAvatarPreviews(){ document.querySelectorAll("#avatarGrid .avCard").forEach(card => { const cv = card.querySelector("canvas"); const cx2 = cv.getContext("2d"); const im = avImg(card.dataset.av); const draw = () => { const r = PLAYR.down_0; cx2.clearRect(0, 0, cv.width, cv.height); cx2.imageSmoothingEnabled = false; cx2.drawImage(im, r[0], r[1], r[2], r[3], Math.round((cv.width - r[2] * 2) / 2), Math.round((cv.height - r[3] * 2) / 2), r[2] * 2, r[3] * 2); }; if(im.complete && im.naturalWidth) draw(); else im.onload = draw; }); }
-function openAvatarPicker(){ avatarOverlay.style.display = "flex"; drawAvatarPreviews(); }
-document.querySelectorAll("#avatarGrid .avCard").forEach(card => card.onclick = () => { S.avatar = card.dataset.av; S.avatarChosen = true; save(); avatarOverlay.style.display = "none"; toast("就这个样子了"); if(avatarNext === "enter"){ avatarNext = null; toast("欢迎来到星星小园，先四处逛逛；点一块空碑，就能把宝贝接进来"); } });
+document.getElementById("assetPacks").addEventListener("load", () => {
+  if(avatarOverlay.style.display === "flex") drawAvatarPreviews();
+});
+function openAvatarPicker(){
+  draw();
+  avatarOverlay.style.display = "flex";
+  drawAvatarPreviews();
+}
+document.querySelectorAll("#avatarGrid .avCard").forEach(card => card.onclick = () => { S.avatar = card.dataset.av; S.avatarChosen = true; save(); avatarOverlay.style.display = "none"; toast("就这个样子了"); if(avatarNext === "enter"){ avatarNext = null; toast("欢迎来小园逛逛。想为宝贝选址时，打开全园地图，就能带你去最近的空位"); } });
 document.getElementById("btnAvatar").onclick = () => { avatarNext = null; openAvatarPicker(); };
-function refreshCheckin(){ const el = document.getElementById("checkinDays"); if(el) el.textContent = (S.checkin && S.checkin.total) || 0; const b = document.getElementById("btnCheckin"); if(b){ const done = !!(S.checkin && S.checkin.last === todayStr()); b.disabled = done; b.style.opacity = done ? .55 : ""; } }
-document.getElementById("btnCheckin").onclick = () => { if(!S.checkin) S.checkin = { total:0, last:"" }; if(S.checkin.last === todayStr()){ toast("今天已经签过到啦，明天再来"); return; } const before = unlockedTier(); S.checkin.total++; S.checkin.last = todayStr(); const after = unlockedTier(); save(); refreshCheckin(); if(after > before) toast("签到成功，累计 " + S.checkin.total + " 天——解锁「" + TIER_NAMES[after] + "碑」！走到自家碑前点它就能换上"); else toast("签到成功，累计陪伴 " + S.checkin.total + " 天"); };
+function refreshCheckin(){
+  const total = S.checkin?.total || 0;
+  const done = S.checkin?.last === todayStr();
+  const next = TIER_REQ.findIndex(days => days > total);
+  document.getElementById("btnCheckin").disabled = done;
+  document.getElementById("checkinLabel").textContent = done ? "今日已签到" : "陪伴签到";
+  document.getElementById("tierProgress").textContent = next < 0
+    ? "已陪伴 " + total + " 天 · 碑材质已集齐"
+    : "距" + TIER_NAMES[next] + "碑还差 " + (TIER_REQ[next] - total) + " 天";
+}
+document.getElementById("btnCheckin").onclick = () => { if(!S.checkin) S.checkin = { total:0, last:"" }; if(S.checkin.last === todayStr()){ toast("今天已经签过到啦，明天再来"); return; } const before = unlockedTier(), previous = S.checkin;
+  S.checkin = {total:previous.total + 1, last:todayStr()};
+  if(!save()){ S.checkin = previous; return; }
+   const after = unlockedTier(); refreshCheckin(); if(after > before) toast("签到成功，累计 " + S.checkin.total + " 天——解锁「" + TIER_NAMES[after] + "碑」！走到自家碑前点它就能换上"); else toast("签到成功，累计陪伴 " + S.checkin.total + " 天"); };
 refreshCheckin();
+let checkinDisplayDay = todayStr();
 const btnHome = document.getElementById("btnHome");
 btnHome.onclick = goHome;
-setInterval(() => { const show = !!myHomePet() && !housePet && !ceremony; const d = show ? "" : "none"; if(btnHome.style.display !== d) btnHome.style.display = d; }, 900);
-btnTitleMain.onclick = ()=>{ titleOverlay.style.display = "none"; if(!S.myPetId){ if(!S.avatarChosen){ avatarNext = "enter"; openAvatarPicker(); } else { toast("欢迎来到星星小园，先四处逛逛；点一块空碑，就能把宝贝接进来"); } } }; /* v0.63 修：新玩家先入园，不再在门口强推建档 */
+setInterval(() => {
+  const day = todayStr();
+  if(day !== checkinDisplayDay){ checkinDisplayDay = day; refreshCheckin(); refreshHUD(); }
+  const show = !!myHomePet() && !housePet && !ceremony; const d = show ? "" : "none"; if(btnHome.style.display !== d) btnHome.style.display = d; }, 900);
+btnTitleMain.onclick = ()=>{ titleOverlay.style.display = "none"; if(!S.myPetId){ if(!S.avatarChosen){ avatarNext = "enter"; openAvatarPicker(); } else { toast("欢迎来小园逛逛。想为宝贝选址时，打开全园地图，就能带你去最近的空位"); } } }; /* v0.63 修：新玩家先入园，不再在门口强推建档 */
 document.getElementById("btnTitleLoad").onclick = ()=>{ /* v0.63 修：先查本机存档，没档先提示，不再直接跳文件选择 */
-  let has = false; try{ const raw = localStorage.getItem(SAVE_KEY); if(raw){ const o = JSON.parse(raw); has = !!(o && o.myPetId); } }catch(e){}
-  if(has){ titleOverlay.style.display = "none"; toast("已读取这台设备上的存档"); }
+  if(hasLocalProgress){ titleOverlay.style.display = "none"; toast("已读取这台设备上的存档"); }
   else { document.getElementById("loadChoiceOverlay").style.display = "flex"; }
 };
 document.getElementById("btnLoadClose").onclick = ()=>{ document.getElementById("loadChoiceOverlay").style.display = "none"; };
@@ -2858,8 +2959,8 @@ function blessWish(wish, pet){
 }
 document.getElementById("btnBlessLeave").onclick = leaveBlessRoom;
 document.getElementById("btnDrawer").onclick = () => document.getElementById("hudDrawer").classList.toggle("open");
-document.getElementById("btnBlessGo").onclick = () => { setDest(BLESS_HOUSE.x, BLESS_HOUSE.y + 76); toast("🛕 祈福小屋在园子右下角的樱花树旁，往东南走就到"); };
-function openDir(){ renderDir(""); document.getElementById("dirOverlay").classList.add("show"); }
+document.getElementById("btnBlessGo").onclick = () => { document.getElementById("hudDrawer").classList.remove("open"); setDest(BLESS_HOUSE.x, BLESS_HOUSE.y + 76); toast("🛕 祈福小屋在园子右下角的樱花树旁，往东南走就到"); };
+function openDir(){ document.getElementById("hudDrawer").classList.remove("open"); document.getElementById("dirSearch").value = ""; renderDir(""); document.getElementById("dirOverlay").classList.add("show"); }
 function renderDir(q){
   const list = document.getElementById("dirList"); list.innerHTML = "";
   const pets = S.pets.filter(p => p.status === "memorial" && (!q || p.name.includes(q)));
@@ -2887,6 +2988,7 @@ const blessCanvas = document.getElementById("blessCanvas");
 const bctx = blessCanvas.getContext("2d");
 let blessTimer = null, selPlaque = null, selSlot = -1, wallPage = 0, plaqueRects = [], incenseFxT0 = 0;
 function enterBlessRoom(){
+  cancelWalk();
   document.getElementById("hud").style.display = "none";
   document.getElementById("mapWrap").style.display = "none";
   infoPanel.classList.remove("show");
@@ -2900,7 +3002,7 @@ function leaveBlessRoom(){
   if(blessTimer){ clearInterval(blessTimer); blessTimer = null; }
   document.getElementById("blessRoom").classList.remove("show");
   document.getElementById("hud").style.display = "";
-  document.getElementById("mapWrap").style.display = "";
+  document.getElementById("mapWrap").style.display = ""; fitCanvas();
 }
 function wallPets(){ return S.pets; }
 function isMine(pet){ return !!pet && (pet.mine === true || pet.id === S.myPetId); }
