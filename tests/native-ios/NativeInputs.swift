@@ -24,9 +24,30 @@ final class NativeInputs: XCTestCase {
         item.lifetime = .keepAlways
         add(item)
     }
+    func tapGardenTitle() {
+        let start = button("开始游戏")
+        let load = button("读取存档")
+        let window = safari.frame
+        var lastFrame = CGRect.null
+        let settled = NSPredicate { _, _ in
+            guard start.exists, load.exists, start.isHittable else { return false }
+            let frame = start.frame
+            let ready = frame == lastFrame && frame.width > window.width / 2
+                && window.contains(frame) && frame.midY > window.midY && load.frame.minY >= frame.maxY
+            lastFrame = frame
+            return ready
+        }
+        let rendered = XCTNSPredicateExpectation(predicate: settled, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [rendered], timeout: 60), .completed)
+        let frame = start.frame
+        capture("garden-native-title")
+        // Safari can return a stale default hit point during its initial page navigation.
+        let origin = safari.coordinate(withNormalizedOffset: .zero)
+        origin.withOffset(CGVector(dx: frame.midX - window.minX, dy: frame.midY - window.minY)).tap()
+    }
     func testGardenTouch() {
         openGame("https://cyber-cemetery-proto.pages.dev/")
-        press("开始游戏")
+        tapGardenTitle()
         press("紫围裙")
         press("地图")
         press("带我去最近空位")
