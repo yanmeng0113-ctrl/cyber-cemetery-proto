@@ -7,7 +7,7 @@ permissions:
 jobs:
   safari:
     runs-on: macos-15
-    timeout-minutes: 18
+    timeout-minutes: 28
     steps:
       - uses: actions/checkout@v4
         with:
@@ -30,7 +30,10 @@ jobs:
           subprocess.run(['xcrun','simctl','boot',udid],check=True)
           subprocess.run(['xcrun','simctl','bootstatus',udid,'-b'],check=True)
           PY
+      - name: Tap and type through iOS with XCTest
+        run: bash tests/native-ios/run.sh
       - name: Play the public games in Mobile Safari
+        if: always() && env.SIM_UDID != ''
         run: |
           set -eu
           open -a Simulator

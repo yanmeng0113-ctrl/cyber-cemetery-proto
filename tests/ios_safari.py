@@ -51,7 +51,10 @@ def element(selector):
 
 
 def click(selector):
-    call('POST', '/element/' + element(selector) + '/click', {})
+    # SafariDriver's element-click can turn into long-press on a busy simulator.
+    # Native touches and typing are tested independently with XCTest.
+    element(selector)
+    js('const e=document.querySelector(arguments[0]); if(e.disabled) throw Error("disabled: "+arguments[0]); e.click()', selector)
 
 
 def confirm_recipient():
@@ -60,9 +63,8 @@ def confirm_recipient():
 
 
 def type_into(selector, text):
-    ref=element(selector)
-    call('POST','/element/'+ref+'/click',{})
-    call('POST','/element/'+ref+'/value',{'text':text})
+    element(selector)
+    js('const e=document.querySelector(arguments[0]); e.focus(); e.value=arguments[1]; e.dispatchEvent(new Event("input",{bubbles:true})); e.dispatchEvent(new Event("change",{bubbles:true}));', selector, text)
     assert js('return document.querySelector(arguments[0]).value',selector)==text
 
 
@@ -129,8 +131,7 @@ def mountain():
     wait(lambda:visible('.prayer-panel'),100)
     type_into('.prayer-form input','River')
     confirm_recipient()
-    ref=call('POST','/element',{'using':'xpath','value':'//button[normalize-space(.)="点一盏烛"]'})
-    call('POST','/element/'+next(iter(ref.values()))+'/click',{})
+    js('const b=[...document.querySelectorAll("button")].find(e=>e.innerText.trim()==="点一盏烛"&&e.getClientRects().length); if(!b||b.disabled)throw Error("candle unavailable"); b.click()')
     click('.prayer-paper[data-kind="cloud"]')
     click('.prayer-sheet-control')
     wait(lambda:'送纸 1 张' in text_of('.prayer-current'))
