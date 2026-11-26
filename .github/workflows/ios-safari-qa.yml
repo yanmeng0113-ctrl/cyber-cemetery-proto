@@ -16,6 +16,7 @@ jobs:
         run: |
           set -eu
           xcodebuild -version
+          defaults write com.apple.iphonesimulator ConnectHardwareKeyboard -bool NO
           xcrun simctl list devices available -j > "$RUNNER_TEMP/devices.json"
           python3 - <<'PY'
           import json, os, subprocess
@@ -39,6 +40,9 @@ jobs:
           driver_pid=$!
           trap 'kill "$driver_pid" 2>/dev/null || true' EXIT
           python3 tests/ios_safari.py
+      - name: Test embedded WKWebView and background recovery
+        if: always() && env.SIM_UDID != ''
+        run: bash tests/embedded-ios/run.sh
       - uses: actions/upload-artifact@v4
         if: always()
         with:

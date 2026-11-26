@@ -54,6 +54,11 @@ def click(selector):
     call('POST', '/element/' + element(selector) + '/click', {})
 
 
+def confirm_recipient():
+    click('.prayer-form button[type=submit]')
+    wait(lambda:'River' in text_of('.prayer-current'))
+
+
 def type_into(selector, text):
     ref=element(selector)
     call('POST','/element/'+ref+'/click',{})
@@ -116,18 +121,14 @@ def mountain():
     click('.mpAct[data-hot="hall"]')
     wait(lambda:visible('.prayer-panel'),100)
     type_into('.prayer-form input','River')
-    button = js('return [...document.querySelectorAll(".prayer-form button")].find(e=>e.innerText.trim()==="确认对象")?.id || ""')
-    if button:
-        click('#'+button)
-    else:
-        ref = call('POST','/element',{'using':'xpath','value':'//button[normalize-space(.)="确认对象"]'})
-        call('POST','/element/'+next(iter(ref.values()))+'/click',{})
-    wait(lambda:'River' in text_of('.prayer-current'))
+    confirm_recipient()
     screenshot('mountain-hall')
     click('#mgExit')
     click('#btnMap')
     click('.mpAct[data-hot="qin"]')
     wait(lambda:visible('.prayer-panel'),100)
+    type_into('.prayer-form input','River')
+    confirm_recipient()
     ref=call('POST','/element',{'using':'xpath','value':'//button[normalize-space(.)="点一盏烛"]'})
     call('POST','/element/'+next(iter(ref.values()))+'/click',{})
     click('.prayer-paper[data-kind="cloud"]')
