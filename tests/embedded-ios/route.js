@@ -38,6 +38,7 @@
       await wait(() => visible("#tripSkip") || visible("#btnMap"))
       if (visible("#tripSkip")) await click("#tripSkip")
       await click("#btnMap")
+      await click("#mapDirectoryToggle")
       await click('.mpAct[data-hot="hall"]')
       await wait(() => visible(".prayer-panel"))
       find(".prayer-form input").value = "River"
