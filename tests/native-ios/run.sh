@@ -19,8 +19,8 @@ if ! ruby -rxcodeproj -e 'exit 0' 2>/dev/null; then
 fi
 ruby -rxcodeproj - <<'RUBY'
 project = Xcodeproj::Project.new('Inputs.xcodeproj')
-host = project.new_target(:application, 'InputHost', :ios, '16.0')
-suite = project.new_target(:ui_test_bundle, 'InputTests', :ios, '16.0')
+host = project.new_target(:application, 'InputHost', :ios, '16.4')
+suite = project.new_target(:ui_test_bundle, 'InputTests', :ios, '16.4')
 suite.add_dependency(host)
 [[host,'App.swift'],[suite,'NativeInputs.swift']].each do |target,file|
   target.source_build_phase.add_file_reference(project.main_group.new_file(file))

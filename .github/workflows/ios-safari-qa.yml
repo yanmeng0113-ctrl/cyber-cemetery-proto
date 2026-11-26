@@ -7,7 +7,11 @@ permissions:
 jobs:
   safari:
     runs-on: macos-15
-    timeout-minutes: 28
+    timeout-minutes: 24
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [native-inputs, safari-gameplay, embedded]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -31,9 +35,10 @@ jobs:
           subprocess.run(['xcrun','simctl','bootstatus',udid,'-b'],check=True)
           PY
       - name: Tap and type through iOS with XCTest
+        if: matrix.mode == 'native-inputs'
         run: bash tests/native-ios/run.sh
       - name: Play the public games in Mobile Safari
-        if: always() && env.SIM_UDID != ''
+        if: matrix.mode == 'safari-gameplay'
         run: |
           set -eu
           open -a Simulator
@@ -44,12 +49,12 @@ jobs:
           trap 'kill "$driver_pid" 2>/dev/null || true' EXIT
           python3 tests/ios_safari.py
       - name: Test embedded WKWebView and background recovery
-        if: always() && env.SIM_UDID != ''
+        if: matrix.mode == 'embedded'
         run: bash tests/embedded-ios/run.sh
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: simulator-evidence
+          name: simulator-evidence-${{ matrix.mode }}
           path: safari-evidence/
           if-no-files-found: ignore
           retention-days: 1

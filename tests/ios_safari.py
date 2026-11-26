@@ -54,6 +54,7 @@ def click(selector):
     # SafariDriver's element-click can turn into long-press on a busy simulator.
     # Native touches and typing are tested independently with XCTest.
     element(selector)
+    wait(lambda: not js('return !!document.querySelector(arguments[0]).disabled',selector))
     js('const e=document.querySelector(arguments[0]); if(e.disabled) throw Error("disabled: "+arguments[0]); e.click()', selector)
 
 
@@ -95,7 +96,11 @@ def garden():
     click('.mapBadge.home')
     click('[data-act=feed]')
     click('[data-act=play]')
-    wait(lambda:'被投喂 1' in text_of('#houseStats') and '被陪玩 1' in text_of('#houseStats'))
+    def care_recorded():
+        counts=js("return document.querySelector('#houseStats').textContent").split()
+        compact=''.join(counts)
+        return '被投喂1' in compact and '被陪玩1' in compact
+    wait(care_recorded)
     screenshot('garden-house')
     click('#btnLeave')
     click('#btnDrawer')
@@ -163,6 +168,10 @@ def main():
         except Exception:
             traceback.print_exc()
             report['games'][fn.__name__]='FAIL'
+            try:
+                print('Visible game state:',js("return document.body.innerText.slice(0,750)"),flush=True)
+            except Exception:
+                pass
             screenshot(fn.__name__+'-failure')
         print(fn.__name__,report['games'][fn.__name__],flush=True)
     (evidence/'results.json').write_text(json.dumps(report,indent=2))
