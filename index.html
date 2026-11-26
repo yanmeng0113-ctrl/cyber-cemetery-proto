@@ -2960,11 +2960,15 @@ function drawAvatarPreviews(){
 avatarPreviews.addEventListener("load", () => {
   if(avatarOverlay.style.display === "flex") drawAvatarPreviews();
 });
+function paintPickerBackground(){
+  if(avatarOverlay.style.display === "flex" && !housePet && !blessTimer) draw();
+}
+PLATE.addEventListener("load", paintPickerBackground);
 function openAvatarPicker(){
   avatarOverlay.style.display = "flex";
   drawAvatarPreviews();
-  // 在选造型时预取园区底图，人物和场景道具由实际绘制触发。
-  requestArt(PLATE);
+  // 选人卡先显示，底图就绪时再把桥头绘在卡片背后。
+  if(artReady(PLATE)) paintPickerBackground();
 }
 document.querySelectorAll("#avatarGrid .avCard").forEach(card => card.onclick = () => { S.avatar = card.dataset.av; S.avatarChosen = true; save(); avatarOverlay.style.display = "none"; toast("就这个样子了"); if(avatarNext === "enter"){ avatarNext = null; toast("欢迎来小园逛逛。想为宝贝选址时，打开全园地图，就能带你去最近的空位"); } });
 document.getElementById("btnAvatar").onclick = () => { avatarNext = null; openAvatarPicker(); };
