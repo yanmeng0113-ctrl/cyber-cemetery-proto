@@ -150,8 +150,10 @@ def mountain():
     js('const b=[...document.querySelectorAll("button")].find(e=>e.innerText.trim()==="点一盏烛"&&e.getClientRects().length); if(!b||b.disabled)throw Error("candle unavailable"); b.click()')
     click('.prayer-paper[data-kind="cloud"]')
     click('.prayer-sheet-control')
-    wait(lambda:'送纸 1 张' in text_of('.prayer-current'))
+    wait(lambda:'已为River送出一个元宝' in text_of('.prayer-status'))
     screenshot('mountain-offering')
+    click('.prayer-ledger summary')
+    wait(lambda:'送纸 1 张' in text_of('.prayer-ledger'))
 
 
 def main():
