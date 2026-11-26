@@ -1,0 +1,48 @@
+name: iOS Safari playtest
+on:
+  push:
+    branches: [qa/ios-safari-20261126]
+permissions:
+  contents: read
+jobs:
+  safari:
+    runs-on: macos-15
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Start an iPhone simulator
+        run: |
+          set -eu
+          xcodebuild -version
+          xcrun simctl list devices available -j > "$RUNNER_TEMP/devices.json"
+          python3 - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+          devices=json.loads((Path(os.environ['RUNNER_TEMP'])/'devices.json').read_text())['devices']
+          sdk=subprocess.check_output(['xcrun','--sdk','iphonesimulator','--show-sdk-version'],text=True).strip()
+          choices=[(not runtime.endswith('iOS-'+sdk.replace('.','-')), device['name']!='iPhone 16',runtime,device['name'],device['udid']) for runtime,items in devices.items() if '.iOS-' in runtime for device in items if device['name'].startswith('iPhone') and device['isAvailable']]
+          _,_,runtime,name,udid=min(choices)
+          print(name,runtime)
+          with open(os.environ['GITHUB_ENV'],'a') as f: print('SIM_UDID='+udid,file=f)
+          subprocess.run(['xcrun','simctl','boot',udid],check=True)
+          subprocess.run(['xcrun','simctl','bootstatus',udid,'-b'],check=True)
+          PY
+      - name: Play the public games in Mobile Safari
+        run: |
+          set -eu
+          open -a Simulator
+          xcrun simctl spawn "$SIM_UDID" defaults write com.apple.mobilesafari AllowRemoteAutomation -bool YES
+          sudo /usr/bin/safaridriver --enable
+          /usr/bin/safaridriver -p 4444 > "$RUNNER_TEMP/safaridriver.log" 2>&1 &
+          driver_pid=$!
+          trap 'kill "$driver_pid" 2>/dev/null || true' EXIT
+          python3 tests/ios_safari.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: simulator-evidence
+          path: safari-evidence/
+          if-no-files-found: ignore
+          retention-days: 1
