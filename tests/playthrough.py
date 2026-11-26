@@ -44,7 +44,7 @@ def play(browser, url, mobile, screenshots):
     page.clock.set_fixed_time("2027-04-01T12:00:00+08:00")
     delayed = []
     if not mobile:
-        page.route("**/packs.js*", lambda route: delayed.append(route))
+        page.route("**/avatar-previews.webp", lambda route: delayed.append(route))
     page.goto(url, wait_until="commit")
     wait("typeof openAvatarPicker === 'function' && document.getElementById('titleOverlay').style.display === 'flex'")
     click("#btnTitleLoad")
@@ -54,7 +54,7 @@ def play(browser, url, mobile, screenshots):
         assert delayed
         pending = delayed.pop()
         pending.fulfill(response=pending.fetch())
-        page.unroute("**/packs.js*")
+        page.unroute("**/avatar-previews.webp")
     wait("Array.from(document.querySelectorAll('.avCard canvas')).every(c => "
          "c.getContext('2d').getImageData(0,0,c.width,c.height).data.some(v=>v))")
     snap("avatars")
@@ -100,6 +100,16 @@ def play(browser, url, mobile, screenshots):
     walking_done()
     expect(el("#btnRegHere")).to_be_visible()
     expect(el("#regOverlay")).to_be_hidden()
+    # Once the visitor is standing still, the same plot should not repaint its text every frame.
+    assert page.evaluate("""async () => {
+        const panel = document.getElementById('infoPanel');
+        let changes = 0;
+        const observer = new MutationObserver(records => { changes += records.length; });
+        observer.observe(panel, {childList: true, subtree: true});
+        for (let i = 0; i < 5; i++) await new Promise(requestAnimationFrame);
+        observer.disconnect();
+        return changes === 0;
+    }""")
     mapped("button[title='一园 1 号（空位）']")
     walking_done()
     expect(el("#infoName")).to_contain_text("1 号碑位")
