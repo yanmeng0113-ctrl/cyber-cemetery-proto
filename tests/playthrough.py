@@ -33,6 +33,20 @@ def play(browser, url, mobile, screenshots):
         click("#btnMapTop")
         click(selector)
 
+    def choose_plot(label):
+        click("#btnMapTop")
+        zones = el("#mapZones button")
+        for index in range(zones.count()):
+            zones.nth(index).click()
+            target = el("#plotChoices").get_by_role("button", name=label, exact=label[0].isdigit())
+            if target.count():
+                target.click()
+                expect(target).to_have_attribute("aria-pressed","true")
+                click("#btnWalkPlot")
+                return
+            click("#btnMapOverview")
+        raise AssertionError("Missing plot " + label)
+
     def walking_done():
         wait("!player.destQ.length && Math.hypot(player.tx-player.x,player.ty-player.y)<=4",
              timeout=35000)
@@ -47,8 +61,16 @@ def play(browser, url, mobile, screenshots):
         page.route("**/avatar-previews.webp", lambda route: delayed.append(route))
     page.goto(url, wait_until="commit")
     wait("typeof openAvatarPicker === 'function' && document.getElementById('titleOverlay').style.display === 'flex'")
+    expect(el("#btnTitleMain")).to_be_focused()
+    for key, selector in [("Tab","#btnTitleLoad"),("Tab","#btnTitleMain"),("Shift+Tab","#btnTitleLoad")]:
+        page.keyboard.press(key)
+        expect(el(selector)).to_be_focused()
     click("#btnTitleLoad")
     expect(el("#loadChoiceOverlay")).to_be_visible()
+    expect(el("#btnLoadNew")).to_be_focused()
+    page.keyboard.press("Escape")
+    expect(el("#btnTitleLoad")).to_be_focused()
+    click("#btnTitleLoad")
     click("#btnLoadNew")
     if not mobile:
         assert delayed
@@ -110,14 +132,54 @@ def play(browser, url, mobile, screenshots):
         observer.disconnect();
         return changes === 0;
     }""")
-    mapped("button[title='一园 1 号（空位）']")
+    click("#btnMapTop")
+    seen = []
+    for i in range(4):
+        el("#mapZones button").nth(i).click()
+        assert page.evaluate("getComputedStyle(mapScene).transform.startsWith('matrix(2,')")
+        bounds = el("#plotChoices button").evaluate_all("""buttons => buttons.map(button => {
+            const {left,top,right,bottom,width,height} = button.getBoundingClientRect();
+            return {n:Number(button.dataset.plot),left,top,right,bottom,width,height};
+        })""")
+        assert bounds and all(b["width"] >= 44 and b["height"] >= 44 for b in bounds)
+        for n,a in enumerate(bounds):
+            for b in bounds[n+1:]:
+                assert a["right"]<=b["left"] or b["right"]<=a["left"] or a["bottom"]<=b["top"] or b["bottom"]<=a["top"]
+        seen.extend(b["n"] for b in bounds)
+        if i == 0:
+            point = page.evaluate("""() => {
+                const crop = mapBox.getBoundingClientRect(), scene = mapScene.getBoundingClientRect();
+                const plot = PLOTS.find(p => p.no === 1);
+                return {x:scene.left-crop.left+scene.width*plot.x/WORLD.w,
+                        y:scene.top-crop.top+scene.height*plot.y/WORLD.h};
+            }""")
+            el("#mapBox").click(position=point)
+            expect(el("#btnWalkPlot")).to_contain_text("1 号空位")
+            expect(el("#plotChoices [data-plot='1']")).to_have_attribute("aria-pressed","true")
+            expect(el("#mapMarks .mapNumber")).to_have_text("1 号")
+        click("#btnMapOverview")
+    assert sorted(seen) == list(range(1,51))
+    click("#btnMapClose")
+    choose_plot("1 号 · 空位")
     walking_done()
     expect(el("#infoName")).to_contain_text("1 号碑位")
     click("#btnRegHere")
+    expect(el("#regStatus")).to_have_value("")
+    expect(el("#regMemorialOnly")).to_be_hidden()
+    el("#regName").fill("未选择")
+    click("#btnRegister")
+    expect(el("#regStatus")).to_be_focused()
+    assert page.evaluate("myPets().length === 0")
     el("#regStatus").select_option("prereg")
     click("#btnRegCancel")
     click("#btnRegHere")
+    expect(el("#regStatus")).to_have_value("")
+    el("#regStatus").select_option("memorial")
     expect(el("#regMemorialOnly")).to_be_visible()
+    expect(el("#regBreed")).to_be_hidden()
+    click("#regAppearance summary")
+    expect(el("#regBreed")).to_be_visible()
+    click("#regAppearance summary")
     expect(el("#btnRegister")).to_have_text("建档，送它入园")
     pet_name = "星<月>&"
     el("#regName").fill(pet_name)
@@ -126,6 +188,11 @@ def play(browser, url, mobile, screenshots):
     click("#btnSkipCer")
     click("#btnFirstCandle")
     expect(el("#infoName")).to_contain_text(pet_name)
+    expect(el("#infoText")).to_have_text("碑前的烛光亮着。 「记得我们一起走过的路。」")
+    expect(el("#careStats")).to_be_hidden()
+    click("#careRecord summary")
+    expect(el("#careStats")).to_contain_text("被点烛 1 次")
+    click("#careRecord summary")
     assert page.evaluate("myHomePet().plot === 1 && myHomePet().counts.candle === 1")
     click("#btnMapTop")
     expect(el(".mapTag").filter(has_text=pet_name)).to_have_text(pet_name+"的小屋")
@@ -165,6 +232,11 @@ def play(browser, url, mobile, screenshots):
                 el("#tierBtns button").nth(unlocked).click()
                 assert page.evaluate("myHomePet().stoneTier") == unlocked
                 click("#btnDrawer")
+    expect(el("#btnReset")).to_be_hidden()
+    click("#saveManagement summary")
+    click("#btnReset")
+    expect(el("#resetOverlay")).to_be_visible()
+    click("#btnResetCancel")
     with page.expect_download() as download:
         click("#btnExport")
     backup = download.value.path().read_bytes()
@@ -179,10 +251,10 @@ def play(browser, url, mobile, screenshots):
     print("PASS daily rollover, four tier boundaries, switching and reload", flush=True)
 
     # Change the destination after starting a trip home, then visit the same grave normally.
-    mapped("button.mapDot[title^='团团']")
+    choose_plot("团团")
     walking_done()
     click("#btnHome")
-    mapped("button.mapDot[title^='团团']")
+    choose_plot("团团")
     walking_done()
     assert page.evaluate("pendingHomePet === null")
     click("#btnDrawer")
@@ -216,6 +288,7 @@ def play(browser, url, mobile, screenshots):
     el("#blessCanvas").click(position={"x":(plaque["x"]+plaque["w"]/2)*rect["width"]/880,
                                       "y":(plaque["y"]+plaque["h"]/2)*rect["height"]/500})
     el("#plaqueInfo button").click()
+    expect(el("#regStatus")).to_have_value("prereg")
     el("#regName").fill("小羽")
     el("#regSpecies").select_option("bird")
     el("#regStatus").select_option("prereg")
@@ -260,6 +333,7 @@ def play(browser, url, mobile, screenshots):
     expect(imported.locator("#btnLoginGift")).to_be_disabled()
     assert imported.evaluate("S.loginDays === 4 && S.checkin.total === 30 && myHomePet().stoneTier === 4")
     stored = imported.evaluate("localStorage.getItem(SAVE_KEY)")
+    imported.click("#saveManagement summary")
     with imported.expect_file_chooser() as chooser:
         imported.click("#btnImport")
     chooser.value.set_files({"name":"incomplete.json","mimeType":"application/json",
