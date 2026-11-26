@@ -30,7 +30,11 @@ final class NativeInputs: XCTestCase {
         press("紫围裙")
         press("地图")
         press("带我去最近空位")
-        press("登记到这个碑位", timeout: 85)
+        let register = button("登记到这个碑位")
+        XCTAssertTrue(register.waitForExistence(timeout: 85))
+        XCTAssertTrue(register.isHittable, "登记按钮应在 Safari 工具栏上方直接可点")
+        capture("garden-native-register")
+        register.tap()
         let field = safari.webViews.textFields.firstMatch
         XCTAssertTrue(field.waitForExistence(timeout: 15))
         field.tap()
@@ -47,7 +51,7 @@ final class NativeInputs: XCTestCase {
         XCTAssertEqual(nickname.value as? String, "River")
         capture("mountain-native-keyboard")
         press("从岔路口开始")
-        XCTAssertTrue(button("跳过，保留原貌").waitForExistence(timeout: 45))
+        XCTAssertTrue(button("选好了").waitForExistence(timeout: 45))
         capture("mountain-native-entry")
     }
 }
