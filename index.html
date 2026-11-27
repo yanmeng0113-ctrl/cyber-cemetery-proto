@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="icon" href="data:,">
-<title>星星小园 · 原型 v0.66</title>
+<title>星星小园 · 原型 v0.66.1</title>
 <link rel="preload" as="image" href="assets/v65/avatar-previews.webp">
 <style>
   :root { --paper:#f5efe1; --card:#fffdf7; --ink:#2a3a2e; --ink2:#5d7057; --pine:#33523d; --gold:#a8842c; --goldsoft:#e7d6a4; --line:#ded2b4; --chip:#fbf7ea; --serif:"Songti SC","STSong","Noto Serif SC","SimSun",serif; }
@@ -230,7 +230,7 @@
 <button type="button" id="artRetry" hidden>画面未载入 · 重试</button>
 <div id="app">
   <header>
-    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.66</span></h1>
+    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.66.1</span></h1>
   </header>
 
   <div id="hud">
@@ -271,7 +271,7 @@
     <details><summary>玩法说明</summary><div class="hintText">点地图、拖左下角的圆盘摇杆，或用 WASD/方向键走动；迷路了就点顶栏的「地图」看全园 · 看到发光的小东西，点它一下就会走过去捡起来（先到先得，每天最多捡 10 件）；灰黑的阴影团子点一下就会追上去驱散净化，它叼走的东西会掉出来· 走近墓碑看介绍，点「进小屋」· 全园都是纪念区：北岸是草甸墓园，南岸是花园墓园，中间过彩虹桥 · 园里有一间祈福小屋，在家的宝贝预登记后可以去那儿祈福 · 任何人的小屋都能进、都能喂——只有换装是主人专属。（注：原型存档只存在你这台设备里，「全园共享」要等正式版联网后才开放。）</div></details>
     <div class="drawerLabel">关于</div>
     <details id="changelog"><summary>原型说明与更新日志（点开看）</summary><div class="changelogBody">
-    原型说明（v0.66）：封面与造型优先载入，小屋和花色按需加载。<br>
+    原型说明（v0.66.1）：封面与造型优先载入，小屋和花色按需加载。<br>
     原型说明（v0.64.1）：手机到达空碑后，可直接点碑号旁的登记按钮。全园地图可带路到最近空位；背包显示今日物资和下一级碑材质所需的陪伴天数。<br>
     原型说明（v0.63）：🧑‍🌾 <b>造型、回家、签到碑阶（试玩建议批）</b>——①第一次进园先选样子：男女各两款（青/蓝围裙、粉/紫围裙长发），背包里随时能换。②每次进园都落在自家小屋（碑）前，不再从桥头开始走。③顶栏多了「小屋」键，点一下自动走过去进屋；全园地图上自家小屋有橙点，点它也一样。④碑有材质阶梯了：石头→青铜（累计签到 3 天）→白银（7 天）→黄金（14 天）→钻石（30 天），在背包里每日签到攒天数，走到自家碑前就能换；只靠陪伴天数，不花钱、没有排名。另修两个入口流程：标题页「开始游戏」不再强推建档（选完造型先进园逛，点空碑再登记）；「读取存档」先查本机存档、有档直接进、没档先弹提示，不再直接跳到文件里。另：全园地图给建筑加了小房子标记和名字（祈福小屋／自家小屋／彩虹桥），不再只有点；祈福小屋里「上香」和「离开小屋」两个按钮改成等高对齐。<br>
     原型说明（v0.62）：🧭 <b>外部审查清单全量梳理</b>——①宝贝立起（standUp）时补上专属挂件锚点：此前立起借用侧身锚点，项圈、围巾会飘到半空；现按每个物种的立起帧实测标定（猫狗共用组＋兔/仓鼠/龟/蜥蜴/龙猫/豚鼠/刺猬/雪貂/蛇逐个量），立起时小件也戴得稳稳的。②龙猫登记去掉重复选项：龙猫按花色区分，品种与花色本是同一个轴，登记时只留一处选。其余审查项已逐条复核（详见原型说明）。<br>
@@ -602,7 +602,7 @@ function rollDay(){ const t = todayStr(); if(S.pickDate !== t){ S.pickDate = t; 
 /* ============ 碑位系统（v0.31）：一园 · 春樱园，50 个碑位，带门牌号 ============ */
 const PLOTS = (()=>{ const rows=[[470,[560,1240,1920,3280,3960]],[730,[560,900,1240,1580,1920,2260,2600,2940,3280,3620,3960,4300]],[990,[730,1410,2090,2770,3450,4130]],[2330,[560,900,1240,1580,1920,3960,4300]],[2590,[560,900,1240,1580,1920,4300]],[2850,[560,900,1240,1580,1920]],[3070,[560,900,1240,1580,1920,2260,2600,2940,3280]]]; const out=[]; for(const [y,xs] of rows) for(const x of xs){ const n=out.length; out.push({ no:n+1, x:x+(((n*67)%53)-26), y:y+(((n*41)%33)-16) }); } return out; })();
 function plotOf(pet){ if(pet.plot) return PLOTS[pet.plot-1] || null; let best=null, bd=1e9; for(const pl of PLOTS){ const d=Math.hypot(pet.x-pl.x, pet.y-pl.y); if(d<bd){ bd=d; best=pl; } } return bd<160 ? best : null; }
-let selPlot = null, pendingPlot = null;
+let selPlot = null, pendingPlot = null, walkPlotTarget = null;
 (function normalizeSave(){ try{
   S.lastGiftDate = S.lastGiftDate || ""; S.pickDate = S.pickDate || "";
   if(!S.claimed || typeof S.claimed !== "object") S.claimed = { loginSession:false, pioneer:false }; // v0.35 审查修复④：缺字段不再让游戏起不来
@@ -934,10 +934,12 @@ function findPath(x1, y1, x2, y2){
 }
 function cancelWalk(){
   player.destQ = []; player.tx = player.x; player.ty = player.y;
-  pendingHomePet = null; pendingPickup = null; pendingBlob = null;
+  pendingHomePet = null; pendingPickup = null; pendingBlob = null; walkPlotTarget = null;
 }
-function setDest(x, y, {home = null, pickup = null, blob = null} = {}){
+function setDest(x, y, {home = null, pickup = null, blob = null, plot = null} = {}){
   pendingHomePet = home; pendingPickup = pickup; pendingBlob = blob;
+  walkPlotTarget = plot;
+  if(plot){ nearestPet = null; selPlot = null; hideInfoPanel(); }
   const path = findPath(player.x, player.y, x, y);
   if(path && path.length){ player.destQ = path.slice(); const f = player.destQ.shift(); player.tx = f.x; player.ty = f.y; }
   else { player.destQ = []; player.tx = x; player.ty = y; }
@@ -1383,7 +1385,7 @@ const joyVec = { x: 0, y: 0 };
 })();
 function walkToPlot(plot){
   closeMap();
-  setDest(plot.x, plot.y + 56);
+  setDest(plot.x, plot.y + 56, {plot});
   toast("去一园 " + plot.no + " 号空碑位");
 }
 function walkToNearestPlot(emptyPlots){
@@ -1485,7 +1487,7 @@ function openMap(){
     if(!selected) return;
     const pet = occupants.get(selected);
     if(!pet){ walkToPlot(selected); return; }
-    closeMap(); setDest(pet.x,pet.y + 56); toast("去 " + pet.name + " 那儿（一园 " + selected.no + " 号）");
+    closeMap(); setDest(pet.x,pet.y + 56,{plot:selected}); toast("去 " + pet.name + " 那儿（一园 " + selected.no + " 号）");
   };
   function showRegion(zone){
     activeZone = zone; selected = null; choices.replaceChildren();
@@ -1601,11 +1603,22 @@ function loop(t){
       if(housePet || ceremony) pendingHomePet = null;
       else if((!player.destQ || !player.destQ.length) && Math.hypot(player.x - pendingHomePet.x, player.y - (pendingHomePet.y + 56)) < 58){ enterHouse(pendingHomePet); return; }
     }
-    // 最近的碑
-    nearestPet = null; let best = 150;
-    for(const pet of S.pets){ const d = Math.hypot(player.x-pet.x, player.y-pet.y); if(d<best){ best=d; nearestPet=pet; } }
-    selPlot = null;
-    if(!nearestPet){ let bp = 150; for(const pl of PLOTS){ if(S.pets.some(p => p.status === "memorial" && plotOf(p) === pl)) continue; const d = Math.hypot(player.x-pl.x, player.y-pl.y); if(d<bp){ bp=d; selPlot=pl; } } }
+    // 引路经过别的碑时，登记入口只在本程结束后出现。自由行走仍按距离显示。
+    nearestPet = null; selPlot = null;
+    if(walkPlotTarget){
+      if(!player.destQ.length && Math.hypot(player.tx-player.x,player.ty-player.y)<=4){
+        const plot = walkPlotTarget;
+        walkPlotTarget = null;
+        if(Math.hypot(player.x-plot.x,player.y-plot.y-56)<16){
+          nearestPet = S.pets.find(pet => pet.status === "memorial" && plotOf(pet) === plot) || null;
+          selPlot = nearestPet ? null : plot;
+        } else toast("这次没能走到 " + plot.no + " 号碑位，可以重新选址。");
+      }
+    } else {
+      let best = 150;
+      for(const pet of S.pets){ const d = Math.hypot(player.x-pet.x, player.y-pet.y); if(d<best){ best=d; nearestPet=pet; } }
+      if(!nearestPet){ let bp = 150; for(const pl of PLOTS){ if(S.pets.some(p => p.status === "memorial" && plotOf(p) === pl)) continue; const d = Math.hypot(player.x-pl.x, player.y-pl.y); if(d<bp){ bp=d; selPlot=pl; } } }
+    }
     const actBtn = document.getElementById("btnAct");
     if(actBtn){ if(ceremony) actBtn.style.display = "none";
       else { let mode = null, tgt = null, bd = 135;

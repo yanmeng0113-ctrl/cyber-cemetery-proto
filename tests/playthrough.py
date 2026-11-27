@@ -160,8 +160,21 @@ def play(browser, url, mobile, screenshots):
         click("#btnMapOverview")
     assert sorted(seen) == list(range(1,51))
     click("#btnMapClose")
+    page.evaluate("""() => {
+        window.shownOnRoute = [];
+        window.traceRegistration = new MutationObserver(() => {
+            if (document.querySelector('#mapOverlay.show') || !document.querySelector('#infoPanel.show') ||
+                !document.querySelector('#btnRegHere').getClientRects().length) return;
+            const name = document.querySelector('#infoName').textContent;
+            if (window.shownOnRoute.at(-1) !== name) window.shownOnRoute.push(name);
+        });
+        traceRegistration.observe(document.querySelector('#infoPanel'),{subtree:true,childList:true,attributes:true});
+    }""")
     choose_plot("1 号 · 空位")
+    expect(el("#btnRegHere")).to_be_visible(timeout=35000)
+    expect(el("#infoName")).to_have_text("一园 · 1 号碑位")
     walking_done()
+    assert page.evaluate("traceRegistration.disconnect(); shownOnRoute") == ["一园 · 1 号碑位"]
     expect(el("#infoName")).to_contain_text("1 号碑位")
     click("#btnRegHere")
     expect(el("#regStatus")).to_have_value("")
