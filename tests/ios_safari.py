@@ -79,7 +79,7 @@ def text_of(selector):
 
 def garden():
     call('POST','/url',{'url':'https://cyber-cemetery-proto.pages.dev/'})
-    assert call('GET','/title').endswith('v0.66.1')
+    assert call('GET','/title').endswith('v0.66.2')
     click('#btnTitleMain')
     click('[data-av=a4]')
     click('#btnMapTop')
