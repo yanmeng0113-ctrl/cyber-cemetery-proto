@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="data:,">
 <title>星星小园 · 原型 v0.66.2</title>
 <link rel="preload" as="image" href="assets/v65/avatar-previews.webp">
@@ -127,6 +127,9 @@
   #regCard input[type=text], #regCard input[type=date], #regCard select { width:100%; padding:11px 10px; min-height:44px; border:1px solid #cbbd97; border-radius:10px; font-size:14px; background:#fffef9; }
   #regCard input[type=color] { width:56px; height:34px; border:none; background:none; }
   #photoPreview { width:84px; height:84px; border-radius:12px; object-fit:cover; display:none; border:2px solid var(--goldsoft); }
+  .photoStatus:not(:empty) { margin:6px 0; color:var(--ink2); font-size:13px; line-height:1.5; }
+  .photoStatus[data-error] { color:#894c43; }
+  #btnRegPhotoRemove[hidden] { display:none; }
   #regCard .big { width:100%; padding:12px; font-size:15px; margin-top:16px; }
   #regCard .regActions { position:sticky; bottom:-20px; margin:14px -20px -20px; padding:12px 20px calc(14px + env(safe-area-inset-bottom)); background:var(--card); border-top:1px solid var(--line); border-radius:0 0 16px 16px; }
   #regCard .regActions .big { margin-top:0; }
@@ -210,6 +213,16 @@
   #saveManagement { border-top:1px solid var(--line); margin-top:4px; }
   #saveManagement summary, #careRecord summary, #regCard summary { cursor:pointer; align-content:center; color:var(--pine); }
   #saveManagement .resetLink { background:transparent; color:#894c43; border:0; box-shadow:none; justify-self:start; }
+  #savePreviewOverlay { position:fixed; inset:0; z-index:89; display:none; align-items:center; justify-content:center; padding:16px; background:rgba(22,34,24,.74); }
+  #savePreviewOverlay.show { display:flex; }
+  #savePreviewCard { width:min(100%,440px); max-height:100%; overflow:auto; padding:18px; border-radius:16px; background:var(--card); }
+  #savePreviewCard h2 { font:700 19px var(--serif); margin-bottom:8px; }
+  #savePreviewCard p { margin:8px 0; }
+  #savePreviewCard dl { display:grid; gap:6px; margin:12px 0; }
+  #savePreviewCard dt { font-weight:700; }
+  #savePreviewCard dd { margin:0 0 4px; font-size:13px; line-height:1.6; overflow-wrap:anywhere; }
+  #savePreviewError { color:#894c43; }
+  #btnRestore[hidden], #btnTitleRestore[hidden] { display:none; }
   #regAppearance { border-block:1px solid var(--line); margin:12px 0; }
   #careRecord { margin-top:5px; font-size:13px; color:#4c5a47; }
   #careRecord summary { width:fit-content; }
@@ -264,6 +277,7 @@
     <details id="saveManagement"><summary>存档管理</summary><div class="setGrid">
         <button class="ghost" id="btnExport">导出存档（备份）</button>
         <button class="ghost" id="btnImport">导入存档文件</button>
+        <button class="ghost span2" id="btnRestore" hidden>恢复上次替换前的存档</button>
         <p class="sub span2">换设备或游戏入口前，可导出一份备份，到新入口导入。</p>
         <button class="resetLink span2" id="btnReset">重置本机存档…</button>
         <input type="file" id="importFile" accept=".json,application/json" style="display:none">
@@ -314,7 +328,6 @@
   <div id="mapWrap">
     <canvas id="map"></canvas>
     <div id="toast" aria-live="polite"></div>
-    <div id="staleBar" style="display:none; position:fixed; top:10px; left:50%; transform:translateX(-50%); z-index:210; background:#fff8ec; border:1px solid #d9b36a; color:#6b5320; border-radius:12px; padding:8px 12px; font-size:14px; align-items:center; gap:10px; box-shadow:0 4px 18px rgba(0,0,0,.18)">🔄 存档已在另一个标签页更新<button id="btnStaleReload">点此刷新</button></div>
     <div id="joy"><div id="joyKnob"></div></div>
     <button id="btnAct" style="display:none">捡起</button>
   </div>
@@ -347,6 +360,7 @@
       <h2 id="photoBigName">画像</h2>
       <div><img id="photoBig" alt=""><div id="photoBigEmpty" style="display:none">🐾</div></div>
       <p id="photoBigHint"></p>
+      <p class="photoStatus" id="housePhotoStatus" role="status"></p>
       <div class="row">
         <button class="ghost" id="btnPhotoClose">关闭</button>
         <button id="btnPhotoChange" style="display:none">更换照片</button>
@@ -467,7 +481,24 @@
   <div class="tBtns">
     <button class="tBtn main" id="btnTitleMain">开始游戏</button>
     <button class="tBtn sub" id="btnTitleLoad">读取存档</button>
+    <button class="tBtn sub" id="btnTitleRestore" hidden>恢复上次替换前的存档</button>
     <div class="tHint" id="titleHint">存档只存在这台设备上，进园后可在背包里导出备份</div>
+  </div>
+</div>
+<div id="staleBar" style="display:none; position:fixed; top:10px; left:50%; transform:translateX(-50%); z-index:210; background:#fff8ec; border:1px solid #d9b36a; color:#6b5320; border-radius:12px; padding:8px 12px; font-size:14px; align-items:center; gap:10px; box-shadow:0 4px 18px rgba(0,0,0,.18)"><span role="status">存档已在另一个标签页更新</span><button id="btnStaleReload">刷新页面</button></div>
+<div id="savePreviewOverlay" role="dialog" aria-modal="true" aria-labelledby="savePreviewTitle">
+  <div id="savePreviewCard">
+    <h2 id="savePreviewTitle"></h2>
+    <p id="savePreviewIntro" class="sub"></p>
+    <dl>
+      <dt>当前园子</dt><dd id="savePreviewCurrent"></dd>
+      <dt id="savePreviewNextLabel">文件中的园子</dt><dd id="savePreviewNext"></dd>
+    </dl>
+    <p id="savePreviewError" role="alert" hidden></p>
+    <div class="row">
+      <button class="ghost" id="btnSavePreviewCancel">取消</button>
+      <button id="btnSavePreviewConfirm">确认导入</button>
+    </div>
   </div>
 </div>
 <div id="avatarOverlay" style="display:none;position:fixed;inset:0;background:rgba(24,32,24,.55);z-index:86;align-items:center;justify-content:center;padding:18px">
@@ -531,11 +562,14 @@
     <label for="regLine">想写在碑上的话（选填）</label>
     <input type="text" id="regLine" placeholder="比如：慢慢来，我们不赶时间" maxlength="30">
     <label for="regPhoto">小屋里的照片（选填，只存本机）</label>
-    <input type="file" id="regPhoto" accept="image/*"><span class="fileName" id="regPhotoName"></span>
+    <input type="file" id="regPhoto" accept="image/*" aria-describedby="regPhotoStatus"><span class="fileName" id="regPhotoName"></span>
+    <p class="photoStatus" id="regPhotoStatus" role="status"></p>
+    <button type="button" class="ghost" id="btnRegPhotoRemove" hidden>不使用这张照片</button>
     <div style="margin-top:8px"><img id="photoPreview" alt=""></div>
     <p id="photoColorHint" style="display:none;font-size:12px;color:#7a6a3a;margin-top:6px"></p>
     </div>
     <div class="regActions">
+    <p class="photoStatus" id="regSaveStatus" role="status" data-error></p>
     <button class="big" id="btnRegister">建档，送它入园</button>
     <button class="ghost" id="btnRegCancel" style="margin-top:8px;width:100%">先不登记，去园里逛逛</button>
     </div>
@@ -564,11 +598,18 @@ function requestArt(image){
 function artReady(image){
   return requestArt(image).complete && image.naturalWidth > 0;
 }
+let artRetryAttempt = 0;
 function retryArt(){
+  if(!failedArt.size) return;
   const retry = Array.from(failedArt);
   failedArt.clear();
   artRetry.hidden = true;
-  for(const image of retry) image.src = image.dataset.source || image.src;
+  const attempt = Date.now() + "-" + ++artRetryAttempt;
+  for(const image of retry){
+    const url = new URL(image.dataset.source || image.src, document.baseURI);
+    url.searchParams.set("retry", attempt);
+    image.src = url.href;
+  }
 }
 artRetry.onclick = retryArt;
 window.addEventListener("online", retryArt);
@@ -578,10 +619,33 @@ if(cover.complete && !cover.naturalWidth){ failedArt.add(cover); artRetry.hidden
 /* ============ 存档 ============ */
 let infoNeedsRender = true;
 const SAVE_KEY = "cyberCemeteryProtoV1";
-const EPOCH_KEY = SAVE_KEY + "__epoch"; /* v0.51：存档代际标记——重置/导入后旧标签页不得把旧档写回（多标签复活缓解） */
+const EPOCH_KEY = SAVE_KEY + "__epoch";
+const RECOVERY_FIELD = "__gardenRecovery";
+const RECOVERY_PREFIX = SAVE_KEY + "__recovery_";
+const LEGACY_BACKUPS = [SAVE_KEY + "__bak", SAVE_KEY + "__bak2"];
+const REPLACE_GUARD = SAVE_KEY + "__replacing";
 let myEpoch = "0"; try{ myEpoch = localStorage.getItem(EPOCH_KEY) || "0"; }catch(e){}
-function bumpEpoch(){ _saveLock = true; myEpoch = String(Date.now()); try{ localStorage.setItem(EPOCH_KEY, myEpoch); }catch(e){} }
-let _saveLock = false; /* v0.53：导入/重置写入新档后上锁，本页残余 save() 不许再覆盖（窗口期竞态，外部审查复现） */
+let lastSavedRaw = null, recoveryRefs = [], recoveredAtLoad = false;
+let _saveLock = false;
+function isRecoveryKey(key){
+  return typeof key === "string" && key.startsWith(RECOVERY_PREFIX)
+    && /^[\d]+-[a-z0-9]+$/.test(key.slice(RECOVERY_PREFIX.length));
+}
+function primaryJson(state, refs){
+  return JSON.stringify(refs.length ? {...state,[RECOVERY_FIELD]:refs} : state);
+}
+function checkPrimary(){
+  if(_saveLock || (localStorage.getItem(EPOCH_KEY) || "0") !== myEpoch || localStorage.getItem(SAVE_KEY) !== lastSavedRaw){
+    _saveLock = true;
+    showStale();
+    return false;
+  }
+  return true;
+}
+function activeReplacement(){
+  const raw = localStorage.getItem(REPLACE_GUARD);
+  return raw && Number(raw.split("-")[0]) > performance.timeOrigin + performance.now() ? raw : null;
+}
 const SPECIES_EMOJI = { cat:"🐱", dog:"🐶", bird:"🐦", rabbit:"🐰", hamster:"🐹", turtle:"🐢", lizard:"🦎", chinchilla:"🐭", guineapig:"🐹", hedgehog:"🦔", ferret:"🦡", snake:"🐍", other:"🐾" };
 const FOOD_LABEL = { cat:"猫粮", dog:"狗粮", bird:"鸟食", other:"小食" };
 let S = load() || freshState();
@@ -606,7 +670,7 @@ function rollDay(){ const t = todayStr(); if(S.pickDate !== t){ S.pickDate = t; 
 const PLOTS = (()=>{ const rows=[[470,[560,1240,1920,3280,3960]],[730,[560,900,1240,1580,1920,2260,2600,2940,3280,3620,3960,4300]],[990,[730,1410,2090,2770,3450,4130]],[2330,[560,900,1240,1580,1920,3960,4300]],[2590,[560,900,1240,1580,1920,4300]],[2850,[560,900,1240,1580,1920]],[3070,[560,900,1240,1580,1920,2260,2600,2940,3280]]]; const out=[]; for(const [y,xs] of rows) for(const x of xs){ const n=out.length; out.push({ no:n+1, x:x+(((n*67)%53)-26), y:y+(((n*41)%33)-16) }); } return out; })();
 function plotOf(pet){ if(pet.plot) return PLOTS[pet.plot-1] || null; let best=null, bd=1e9; for(const pl of PLOTS){ const d=Math.hypot(pet.x-pl.x, pet.y-pl.y); if(d<bd){ bd=d; best=pl; } } return bd<160 ? best : null; }
 let selPlot = null, pendingPlot = null, walkPlotTarget = null;
-(function normalizeSave(){ try{
+function normalizeSave(){
   S.lastGiftDate = S.lastGiftDate || ""; S.pickDate = S.pickDate || "";
   if(!S.claimed || typeof S.claimed !== "object") S.claimed = { loginSession:false, pioneer:false }; // v0.35 审查修复④：缺字段不再让游戏起不来
   if(S.saveV === undefined) S.saveV = 36; // v0.36：存档版本号
@@ -661,14 +725,12 @@ let selPlot = null, pendingPlot = null, walkPlotTarget = null;
   migrateDayKeys(S.checkin, ["last"]);
   for(const p of S.pets){ migrateDayKeys(p, ["lastBlessDate"]); migrateDayKeys(p.daily, ["d"]); }
   rollDay();
- }catch(e){ /* v0.50：兜底先试着从 __bak 恢复好档；备份槽已有好档时绝不覆盖 */
-  let _restored = false;
-  try{ const _bak = JSON.parse(localStorage.getItem(SAVE_KEY + "__bak") || "null");
-    if(_bak && Array.isArray(_bak.pets) && _bak.pets.length && _bak.pets.every(p => p && typeof p === "object")){ S = _bak; _restored = true;
-      /* v0.53：恢复档写回主槽、重进一遍完整规整（旧备份不再跳过迁移）；sessionStorage 防重入死循环 */
-      if(!sessionStorage.getItem("__bakTried")){ try{ sessionStorage.setItem("__bakTried", "1"); localStorage.setItem(SAVE_KEY, JSON.stringify(_bak)); location.reload(); }catch(_){ } } } }catch(_){ }
-  if(!_restored){ try{ if(!localStorage.getItem(SAVE_KEY + "__bak")) localStorage.setItem(SAVE_KEY + "__bak", localStorage.getItem(SAVE_KEY) || ""); }catch(_){ } S = freshState(); } } // 兜底：能恢复就恢复，绝不白屏、绝不静默丢档
-})();
+}
+try{ normalizeSave(); }
+catch(_){
+  S = loadRecovery() || freshState();
+  try{ normalizeSave(); }catch(_){ S = freshState(); normalizeSave(); }
+}
 function freshState(){
   return {
     mapV:2, saveV:36, playerTotal:0, creditDate:"", creditToday:0, creditNoteDate:"", loginDays:0, pickToday:0, lastGiftDate:"", pickDate:"", disperseTotal:0, guardDays:0, lastGuardDate:"", blobDate:"", blobSpawned:0, blobDrops:0, muted:false, musicOff:false, avatar:"a1", avatarChosen:false, checkin:{ total:0, last:"" },
@@ -692,17 +754,63 @@ function mkPet(name,species,status,color,x,y,dates,line){
            stoneTier:0, counts:{fed:0,candle:0,flower:0,pray:0,interact:0,visits:0,bless:0,incense:0} };
 }
 function load(){
-  let raw = null; try{ raw = localStorage.getItem(SAVE_KEY); }catch(e){ return null; }
-  if(!raw) return null;
-  try{ const s = JSON.parse(raw); if(s && Array.isArray(s.pets)) return s; throw new Error("bad shape"); }
-  catch(e){
-    try{ localStorage.setItem(SAVE_KEY + "__corrupt", raw); }catch(_){ } /* v0.52：损坏原文先另存，绝不静默覆盖 */
-    try{ const b = JSON.parse(localStorage.getItem(SAVE_KEY + "__bak") || "null"); if(b && Array.isArray(b.pets) && b.pets.length){ try{ sessionStorage.setItem("__bakRestored", "1"); }catch(_){ } return b; } }catch(_){ } /* v0.60：恢复要留痕，进园提示 */
-    return null;
+  try{ lastSavedRaw = localStorage.getItem(SAVE_KEY); }catch(_){ return null; }
+  if(!lastSavedRaw) return null;
+  try{
+    const data = JSON.parse(lastSavedRaw);
+    const refs = data?.[RECOVERY_FIELD];
+    if(Array.isArray(refs)) recoveryRefs = [...new Set(refs.filter(isRecoveryKey))].slice(0,2);
+    return validateSave(data);
+  }catch(_){ return loadRecovery(); }
+}
+function findRecovery(keys = [...recoveryRefs,...LEGACY_BACKUPS], exclude = null){
+  for(const key of keys){
+    const raw = localStorage.getItem(key);
+    if(!raw) continue;
+    try{
+      const state = parseSave(raw);
+      if(!exclude || !exclude.has(saveSignature(state))) return {key, raw, state};
+    }catch(_){ }
+  }
+  return null;
+}
+function loadRecovery(){
+  try{ localStorage.setItem(SAVE_KEY + "__corrupt", lastSavedRaw); }catch(_){ }
+  try{
+    // 只有主档损坏且引用读不出来时，才扫描此前保存的恢复快照。
+    const keys = recoveryRefs.length ? recoveryRefs : Object.keys(localStorage)
+      .filter(isRecoveryKey).sort((a,b) => b.localeCompare(a));
+    const backup = findRecovery([...keys,...LEGACY_BACKUPS]);
+    if(backup){
+      recoveredAtLoad = true;
+      return backup.state;
+    }
+  }catch(_){ }
+  return null;
+}
+function save(){
+  infoNeedsRender = true;
+  if(_saveLock) return false;
+  try{
+    const raw = primaryJson(S,recoveryRefs);
+    if(!checkPrimary()) return false;
+    if(activeReplacement()){
+      toast("另一个标签页正在替换存档，这次操作没有存上，请稍后重试。");
+      return false;
+    }
+    localStorage.setItem(SAVE_KEY, raw);
+    lastSavedRaw = raw;
+    return true;
+  }catch(_){
+    const now = Date.now();
+    if(now-(window._saveWarnAt||0) > 10000){
+      window._saveWarnAt = now;
+      toast("⚠️ 存档没存上，浏览器存储空间可能不足。刷新后可能会丢失这次进度。");
+    }
+    return false;
   }
 }
 try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(_){ } /* v0.50：申请持久存储，降低 iOS 回收 localStorage 的风险 */
-function save(){ infoNeedsRender = true; if(_saveLock) return false; try{ if((localStorage.getItem(EPOCH_KEY) || "0") !== myEpoch){ showStale(); return false; } }catch(e){} try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); return true; }catch(e){ const now = Date.now(); if(now-(window._saveWarnAt||0) > 10000){ window._saveWarnAt = now; toast("⚠️ 存档没存上：浏览器存储空间不够（照片太大最常见），这次进度刷新后可能会丢"); } return false; } }
 
 /* ============ 里程碑表（方案 §9.4 低门槛版） ============ */
 const PLAYER_MS = [
@@ -1555,7 +1663,7 @@ document.getElementById("btnAct").onclick = (e) => { const b = e.currentTarget; 
 };
 /* ============ 主循环 ============ */
 let lastT = performance.now(), nearestPet = null;
-const parkDialogs = ["mapOverlay","dirOverlay","convertOverlay","resetOverlay","firstCandle"].map(id => document.getElementById(id));
+const parkDialogs = ["mapOverlay","dirOverlay","convertOverlay","resetOverlay","firstCandle","savePreviewOverlay"].map(id => document.getElementById(id));
 function parkActive(){
   return !housePet && !blessTimer && titleOverlay.style.display === "none" &&
     avatarOverlay.style.display === "none" && regOverlay.style.display === "none" &&
@@ -1931,20 +2039,224 @@ document.getElementById("btnReset").onclick = ()=> document.getElementById("rese
 document.getElementById("btnResetCancel").onclick = ()=> document.getElementById("resetOverlay").classList.remove("show");
 document.getElementById("btnExport").onclick = ()=>{ try{ const raw = JSON.stringify(S); /* v0.46：导出以内存现行档为准，本地存储在保存失败时是旧档 */ const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([raw], { type:"application/json" })); a.download = "星星小园存档.json"; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href), 4000); toast("📦 存档已导出——收好这个文件，换手机或清缓存后用「导入存档」就能把园子搬回来"); }catch(e){ toast("导出没成功，截图发我看看"); } };
 const importFileEl = document.getElementById("importFile");
-document.getElementById("btnImport").onclick = ()=> importFileEl.click();
-importFileEl.onchange = ()=>{ const f = importFileEl.files && importFileEl.files[0]; if(!f) return; const rd = new FileReader(); rd.onload = ()=>{ try{ const obj = JSON.parse(rd.result); if(!obj || !Array.isArray(obj.pets)) throw new Error("bad save");
-    obj.pets = obj.pets.filter(p => p && typeof p === "object"); const ids = new Set();
-    if(!obj.pets.length || !obj.pets.every(p => {
-      if((typeof p.id !== "string" && !Number.isSafeInteger(p.id)) || p.id === "" || ids.has(p.id)) return false;
-      ids.add(p.id);
-      return ["alive","prereg","memorial"].includes(p.status);
-    })) throw new Error("invalid pet records"); /* v0.50：null 宠物直接剔除，空档拒绝导入 */
-    const _num = v => { const n = Number(v); return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0; };
-    if(!obj.inv || typeof obj.inv !== "object") obj.inv = { food:3, candle:3, flower:2, toy:0, clothes:0 };
-    for(const _ik of ["food","candle","flower","toy","clothes"]) obj.inv[_ik] = _num(obj.inv[_ik]);
-    for(const _tk of ["playerTotal","creditToday","pickToday","disperseTotal","blobSpawned","blobDrops","guardDays","loginDays"]) if(obj[_tk] !== undefined) obj[_tk] = _num(obj[_tk]);
-    for(const p of obj.pets){ if(!p.counts || typeof p.counts !== "object") p.counts = {}; for(const _ck of ["fed","candle","flower","pray","interact","visits","bless","incense"]) p.counts[_ck] = _num(p.counts[_ck]); p.bowl = Math.min(3, _num(p.bowl)); p.bowlAt = _num(p.bowlAt); p.offerings = (Array.isArray(p.offerings) ? p.offerings : []).filter(o => o && typeof o === "object" && typeof o.kind === "string").map(o => ({ kind: o.kind.slice(0, 24), x: Number.isFinite(Number(o.x)) ? Number(o.x) : 120 })).slice(0, 6); if(p.photo != null && (typeof p.photo !== "string" || p.photo.indexOf("data:image/") !== 0)) p.photo = null; /* v0.60 外审P1-1/P1-4：玩具是对象数组、照片只收 data 图 */ for(const k of ["name","breed","line","dates","species"]){ if(p[k] != null && typeof p[k] !== "string") p[k] = String(p[k]); if(typeof p[k] === "string" && p[k].length > 120) p[k] = p[k].slice(0, 120); } if(!Array.isArray(p.keepsakes)) p.keepsakes = []; p.keepsakes = p.keepsakes.filter(x => typeof x === "string").slice(0, 24); if(p.outfit != null && typeof p.outfit !== "string") p.outfit = null; } /* v0.47：导入清洗 */ try{ const _cur = localStorage.getItem(SAVE_KEY); if(_cur){ const _old = localStorage.getItem(SAVE_KEY + "__bak"); if(_old) localStorage.setItem(SAVE_KEY + "__bak2", _old); localStorage.setItem(SAVE_KEY + "__bak", _cur); } }catch(_){ } /* v0.60：备份轮换两格 */ localStorage.setItem(SAVE_KEY, JSON.stringify(obj)); bumpEpoch(); toast("📥 存档导入成功，正在重新打开园子…"); setTimeout(()=>location.reload(), 700); }catch(e){ toast("这个文件不像园子的存档，没有导入，原来的园子没动"); } }; rd.readAsText(f); importFileEl.value = ""; };
-document.getElementById("btnResetGo").onclick = ()=>{ localStorage.removeItem(SAVE_KEY); try{ localStorage.removeItem(SAVE_KEY + "__bak"); localStorage.removeItem(SAVE_KEY + "__bak2"); localStorage.removeItem(SAVE_KEY + "__corrupt"); }catch(_){ } bumpEpoch(); location.reload(); }; /* v0.60：备份一并清 */
+function validateSave(obj){
+  if(!obj || !Array.isArray(obj.pets)) throw new Error("bad save");
+  delete obj[RECOVERY_FIELD];
+  obj.pets = obj.pets.filter(pet => pet && typeof pet === "object");
+  const ids = new Set();
+  if(!obj.pets.length || !obj.pets.every(pet => {
+    if((typeof pet.id !== "string" && !Number.isSafeInteger(pet.id)) || pet.id === "" || ids.has(pet.id)) return false;
+    ids.add(pet.id);
+    return ["alive","prereg","memorial"].includes(pet.status);
+  })) throw new Error("invalid pet records");
+  const number = value => {
+    const n = Number(value);
+    return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0;
+  };
+  const starter = {food:3, candle:3, flower:2, toy:0, clothes:0};
+  if(!obj.inv || typeof obj.inv !== "object" || Array.isArray(obj.inv)) obj.inv = starter;
+  for(const key of Object.keys(starter)) obj.inv[key] = number(obj.inv[key]);
+  for(const key of ["playerTotal","creditToday","pickToday","disperseTotal","blobSpawned","blobDrops","guardDays","loginDays"]) obj[key] = number(obj[key]);
+  for(const pet of obj.pets){
+    if(!pet.counts || typeof pet.counts !== "object" || Array.isArray(pet.counts)) pet.counts = {};
+    for(const key of ["fed","candle","flower","pray","interact","visits","bless","incense"]) pet.counts[key] = number(pet.counts[key]);
+    pet.bowl = Math.min(3,number(pet.bowl));
+    pet.bowlAt = number(pet.bowlAt);
+    pet.offerings = (Array.isArray(pet.offerings) ? pet.offerings : [])
+      .filter(item => item && typeof item.kind === "string")
+      .map(item => ({kind:item.kind.slice(0,24),x:Number.isFinite(Number(item.x)) ? Number(item.x) : 120})).slice(0,6);
+    if(pet.photo != null && (typeof pet.photo !== "string" || !pet.photo.startsWith("data:image/"))) pet.photo = null;
+    for(const key of ["name","breed","line","dates","species"]) pet[key] = String(pet[key] ?? "").slice(0,120);
+    if(!pet.name) pet.name = "未命名的宝贝";
+    pet.keepsakes = Array.isArray(pet.keepsakes) ? pet.keepsakes.filter(key => typeof key === "string").slice(0,24) : [];
+    if(pet.outfit != null && typeof pet.outfit !== "string") pet.outfit = null;
+  }
+  return obj;
+}
+function parseSave(raw){ return validateSave(JSON.parse(raw)); }
+function saveSignature(state){
+  return JSON.stringify(state, (key,value) => {
+    if(!value || typeof value !== "object" || Array.isArray(value)) return value;
+    return Object.fromEntries(Object.keys(value).sort().map(name => [name,value[name]]));
+  });
+}
+function currentSaveSignatures(){
+  const signatures = new Set([saveSignature(parseSave(JSON.stringify(S)))]);
+  try{ signatures.add(saveSignature(parseSave(lastSavedRaw))); }catch(_){ }
+  return signatures;
+}
+function ownSavedPets(state){ return state.pets.filter(pet => pet.mine === true || pet.id === state.myPetId); }
+function hasProgress(state){
+  return ownSavedPets(state).length || state.avatarChosen || state.checkin?.total > 0
+    || state.playerTotal || state.loginDays || state.disperseTotal || state.guardDays || state.pickToday
+    || state.claimed?.pioneer || state.claimed?.loginSession || state.muted || state.musicOff
+    || state.inv.food !== 3 || state.inv.candle !== 3 || state.inv.flower !== 2 || state.inv.toy || state.inv.clothes
+    || state.pets.some(pet => Object.values(pet.counts).some(Boolean) || pet.offerings.length);
+}
+function describeSave(state){
+  const names = ownSavedPets(state).map(pet => pet.name + (pet.status === "memorial" ? "（纪念）" : "（预登记）"));
+  const candles = state.pets.reduce((sum,pet) => sum + pet.counts.candle,0);
+  const total = Number(state.checkin?.total) || 0;
+  return (names.length ? names.join("、") : "还没有自家宝贝") + "。"
+    + ["陪伴签到 " + total + " 天","点烛 " + candles + " 次","累计心意 " + (state.playerTotal || 0) + " 次"].join(" · ");
+}
+
+const savePreview = document.getElementById("savePreviewOverlay");
+const previewConfirm = document.getElementById("btnSavePreviewConfirm");
+const previewCancel = document.getElementById("btnSavePreviewCancel");
+const previewError = document.getElementById("savePreviewError");
+const restoreButtons = ["btnRestore","btnTitleRestore"].map(id => document.getElementById(id));
+let importOrigin = null, importRevision = 0, pendingReplacement = null;
+function chooseImport(event){
+  importOrigin = event.currentTarget;
+  importRevision++;
+  importFileEl.click();
+}
+function cancelTitleImport(){
+  if(importOrigin?.id === "btnLoadImport"){ importRevision++; importOrigin = null; }
+}
+document.getElementById("btnImport").onclick = chooseImport;
+importFileEl.onchange = async () => {
+  const file = importFileEl.files?.[0], origin = importOrigin, revision = importRevision;
+  importFileEl.value = "";
+  if(!file) return;
+  let state;
+  try{ state = parseSave(await file.text()); }
+  catch(_){ if(revision === importRevision) toast("无法读取这个园子存档文件，没有导入"); return; }
+  if(revision !== importRevision) return;
+  if(currentSaveSignatures().has(saveSignature(state))){
+    toast("这个文件已是当前园子的存档，原有备份已保留。");
+    return;
+  }
+  const change = {state, origin, expectedRaw:lastSavedRaw, revision};
+  if(hasProgress(S)) openSavePreview(change);
+  else applyReplacement(change);
+};
+function updateRestoreAvailability(){
+  let available = false;
+  try{ available = !!findRecovery(undefined,currentSaveSignatures()); }catch(_){ }
+  for(const button of restoreButtons) button.hidden = !available;
+}
+for(const button of restoreButtons) button.onclick = () => {
+  try{
+    const backup = findRecovery(undefined,currentSaveSignatures());
+    if(backup) openSavePreview({...backup, origin:button, expectedRaw:lastSavedRaw});
+    else { updateRestoreAvailability(); toast("暂时没有找到有效的本机备份。"); }
+  }catch(_){ toast("无法读取本机备份。"); }
+};
+function openSavePreview(change){
+  const restore = !!change.key;
+  pendingReplacement = change;
+  document.getElementById("savePreviewTitle").textContent = restore ? "恢复上次替换前的存档？" : "导入文件，替换当前园子？";
+  document.getElementById("savePreviewIntro").textContent = "确认后会重新打开园子。当前进度会留作本机备份，可以再恢复。";
+  document.getElementById("savePreviewCurrent").textContent = describeSave(S);
+  document.getElementById("savePreviewNextLabel").textContent = restore ? "备份中的园子" : "文件中的园子";
+  document.getElementById("savePreviewNext").textContent = describeSave(change.state);
+  previewConfirm.textContent = restore ? "确认恢复" : "确认导入";
+  previewError.hidden = true;
+  previewConfirm.disabled = previewCancel.disabled = false;
+  savePreview.classList.add("show");
+}
+function closeSavePreview(){
+  if(previewCancel.disabled) return;
+  const origin = pendingReplacement?.origin;
+  pendingReplacement = null;
+  savePreview.classList.remove("show");
+  syncLayerFocus();
+  if(origin?.getClientRects().length) origin.focus({preventScroll:true});
+}
+function replacementError(message){
+  if(!pendingReplacement){ toast(message); return; }
+  previewError.textContent = message;
+  previewError.hidden = false;
+}
+function serializeReplacement(run){
+  return navigator.locks ? navigator.locks.request(REPLACE_GUARD,run) : run();
+}
+function withReplacementGuard(run){
+  if(activeReplacement()) return false;
+  const token = Math.floor(performance.timeOrigin + performance.now() + 30000) + "-" + Math.random().toString(36).slice(2);
+  localStorage.setItem(REPLACE_GUARD,token);
+  try{
+    if(localStorage.getItem(REPLACE_GUARD) !== token) return false;
+    return run(token);
+  }finally{
+    try{ if(localStorage.getItem(REPLACE_GUARD) === token) localStorage.removeItem(REPLACE_GUARD); }catch(_){ }
+  }
+}
+async function applyReplacement(change){
+  const previewed = pendingReplacement === change;
+  if(previewed){ previewConfirm.disabled = true; previewError.hidden = true; }
+  try{
+    await serializeReplacement(() => {
+      if((previewed && pendingReplacement !== change) || (change.revision !== undefined && change.revision !== importRevision)) return;
+      if(!checkPrimary() || lastSavedRaw !== change.expectedRaw || (change.key && localStorage.getItem(change.key) !== change.raw)){
+        replacementError("本机存档已更新。请刷新页面后重新选择。");
+        return;
+      }
+      const keepCurrent = previewed;
+      const oldRefs = recoveryRefs;
+      const key = keepCurrent ? RECOVERY_PREFIX + Date.now() + "-" + Math.random().toString(36).slice(2) : null;
+      const snapshot = keepCurrent ? JSON.stringify(S) : null;
+      const excluded = currentSaveSignatures();
+      excluded.add(saveSignature(change.state));
+      const prior = findRecovery(oldRefs,excluded);
+      const refs = prior ? [prior.key] : [];
+      if(key) refs.unshift(key);
+      const nextRefs = refs.slice(0,2);
+      const raw = primaryJson(change.state,nextRefs);
+      const success = withReplacementGuard(token => {
+        let staged = false;
+        try{
+          // 先写入独立的快照，再用一次主档写入同时生效新进度和恢复引用。
+          if(key){ localStorage.setItem(key,snapshot); staged = true; }
+          if(!checkPrimary() || localStorage.getItem(REPLACE_GUARD) !== token) return false;
+          localStorage.setItem(SAVE_KEY,raw);
+          staged = false;
+          lastSavedRaw = raw;
+          recoveryRefs = nextRefs;
+          _saveLock = true;
+          for(const retired of oldRefs.filter(ref => !nextRefs.includes(ref))){
+            try{ localStorage.removeItem(retired); }catch(_){ }
+          }
+          return true;
+        }finally{
+          if(staged){ try{ localStorage.removeItem(key); }catch(_){ } }
+        }
+      });
+      if(!success){
+        replacementError(_saveLock ? "本机存档已更新。请刷新页面后重新选择。" : "另一个标签页正在替换存档。请稍后重试。");
+        return;
+      }
+      previewCancel.disabled = true;
+      toast(change.key ? "备份已恢复，正在重新打开园子…" : "存档已导入，正在重新打开园子…");
+      setTimeout(() => location.reload(),450);
+    });
+  }catch(_){
+    replacementError("无法写入备份或新存档。当前园子已保留，请先导出存档或腾出浏览器存储空间。");
+  }finally{
+    if(previewed && !_saveLock) previewConfirm.disabled = false;
+  }
+}
+previewCancel.onclick = closeSavePreview;
+previewConfirm.onclick = () => { if(pendingReplacement) applyReplacement(pendingReplacement); };
+document.getElementById("btnResetGo").onclick = async () => {
+  try{
+    await serializeReplacement(() => withReplacementGuard(() => {
+      if(!checkPrimary()) return false;
+      const nextEpoch = Date.now() + "-" + Math.random().toString(36).slice(2);
+      localStorage.setItem(EPOCH_KEY,nextEpoch);
+      localStorage.removeItem(SAVE_KEY);
+      myEpoch = nextEpoch;
+      _saveLock = true;
+      for(const key of [...LEGACY_BACKUPS,SAVE_KEY + "__corrupt",...Object.keys(localStorage).filter(isRecoveryKey)]){
+        try{ localStorage.removeItem(key); }catch(_){ }
+      }
+      location.reload();
+      return true;
+    }));
+  }catch(_){ toast("无法清空存档，请刷新后重试。"); }
+};
 
 document.body.appendChild(document.getElementById("toast")); // 报告3：toast 提到 body 顶层，小屋里也看得见
 let toastTimer = null;
@@ -1985,7 +2297,75 @@ function enterHouse(pet){
   window.scrollTo({ top:0, behavior:"smooth" });
 }
 /* v0.48：相框大图查看器——点小屋墙上的相框打开；主人可给纪念宝贝放/换照片（预登记不挂照片，沿用登记的压缩规格） */
-let housePhotoToken = 0;
+const PHOTO_MAX_BYTES = 10 * 1024 * 1024;
+const PHOTO_MAX_PIXELS = 50000000;
+const PHOTO_MAX_EDGE = 12000;
+const PHOTO_SAVED_EDGE = 480;
+class LocalPhotoError extends Error {}
+async function readLocalPhoto(file, signal){
+  if(!file.size) throw new LocalPhotoError("这张照片是空文件，请换一张。");
+  if(file.size > PHOTO_MAX_BYTES) throw new LocalPhotoError("照片超过 10 MB，请换一张较小的照片。");
+  if(file.type && (!file.type.startsWith("image/") || file.type === "image/svg+xml")){
+    throw new LocalPhotoError("请选择 JPG、PNG 或 WebP 等照片文件。");
+  }
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+  let abort, timer;
+  try{
+    await new Promise((resolve, reject) => {
+      abort = () => reject(new DOMException("Photo selection changed", "AbortError"));
+      signal.addEventListener("abort", abort, {once:true});
+      if(signal.aborted){ abort(); return; }
+      img.onload = resolve;
+      img.onerror = () => reject(new LocalPhotoError("这张照片读不出来，请换成可打开的 JPG、PNG 或 WebP 照片。"));
+      timer = setTimeout(() => reject(new LocalPhotoError("读取照片超时，请重试或换一张。")), 15000);
+      img.src = url;
+    });
+    const {naturalWidth:width, naturalHeight:height} = img;
+    if(!width || !height) throw new LocalPhotoError("这张照片没有有效尺寸，请换一张。");
+    if(Math.max(width,height) > PHOTO_MAX_EDGE || width * height > PHOTO_MAX_PIXELS){
+    throw new LocalPhotoError("照片尺寸太大，请先缩小再选。");
+    }
+    const scale = Math.min(1, PHOTO_SAVED_EDGE / Math.max(width,height));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(width * scale));
+    canvas.height = Math.max(1, Math.round(height * scale));
+    const context = canvas.getContext("2d");
+    context.fillStyle = "#fff";
+    context.fillRect(0,0,canvas.width,canvas.height);
+    context.drawImage(img,0,0,canvas.width,canvas.height);
+    const data = canvas.toDataURL("image/jpeg",.85);
+    if(!data.startsWith("data:image/jpeg;base64,")) throw new LocalPhotoError("照片暂时无法处理，请换一张。");
+    return {canvas,data};
+  }finally{
+    clearTimeout(timer);
+    signal.removeEventListener("abort", abort);
+    img.onload = img.onerror = null;
+    img.removeAttribute("src");
+    URL.revokeObjectURL(url);
+  }
+}
+function setPhotoStatus(node, message = "", error = false){
+  node.textContent = message;
+  node.toggleAttribute("data-error", error);
+}
+function photoErrorMessage(error){
+  return error instanceof LocalPhotoError ? error.message : "照片暂时无法处理，请换一张。";
+}
+
+const photoOverlay = document.getElementById("photoOverlay");
+const housePhotoEl = document.getElementById("housePhoto");
+const housePhotoStatus = document.getElementById("housePhotoStatus");
+let housePhotoRequest = null, housePhotoTarget = null;
+function cancelHousePhoto(){
+  housePhotoRequest?.abort();
+  housePhotoRequest = housePhotoTarget = null;
+  setPhotoStatus(housePhotoStatus);
+}
+function closePhotoViewer(){
+  cancelHousePhoto();
+  photoOverlay.classList.remove("show");
+}
 function openPhotoViewer(){
   if(!housePet) return;
   const pet = housePet;
@@ -1998,42 +2378,47 @@ function openPhotoViewer(){
   ch.style.display = mine ? "" : "none";
   ch.textContent = pet.photo ? "更换照片" : "放上它的照片";
   document.getElementById("photoBigHint").textContent = pet.photo ? "这张照片挂在小屋的墙上，也作它的头像。" : (mine ? "墙上还没有它的照片，放一张上去吧。" : "它还没有留下照片。");
-  document.getElementById("photoOverlay").classList.add("show");
+  photoOverlay.classList.add("show");
 }
-document.getElementById("btnPhotoClose").onclick = ()=> document.getElementById("photoOverlay").classList.remove("show");
-document.getElementById("photoOverlay").addEventListener("click", e=>{ if(e.target.id==="photoOverlay") e.target.classList.remove("show"); });
-const housePhotoEl = document.getElementById("housePhoto");
-let housePhotoTarget = null; /* v0.50：选图时锁定目标宠物，读图再慢也不会写到别家 */
-document.getElementById("btnPhotoChange").onclick = ()=>{ housePhotoTarget = housePet; housePhotoEl.click(); };
-housePhotoEl.addEventListener("change", e=>{
-  const f = e.target.files[0]; if(!f) return;
-  const myTok = ++housePhotoToken;
-  if(f.type && f.type.indexOf("image/")!==0){ toast("⚠️ 这个文件不是图片，换一张照片试试"); e.target.value = ""; return; }
-  const reader = new FileReader();
-  reader.onload = ()=>{
-    const im = new Image();
-    im.onerror = ()=> toast("⚠️ 这张照片读不出来（格式可能不支持，比如 HEIC），换一张试试");
-    im.onload = ()=>{
-      const target = housePhotoTarget; if(myTok !== housePhotoToken || !target) return;
-      const MAX = 480, sc = Math.min(1, MAX/Math.max(im.width, im.height));
-      const cv = document.createElement("canvas"); cv.width = Math.max(1, Math.round(im.width*sc)); cv.height = Math.max(1, Math.round(im.height*sc));
-      const _cx = cv.getContext("2d"); _cx.fillStyle = "#fff"; _cx.fillRect(0, 0, cv.width, cv.height); _cx.drawImage(im, 0, 0, cv.width, cv.height);
-      target.photo = cv.toDataURL("image/jpeg", .85);
-      const savedOk = save(); /* v0.50：存档失败必须如实说，不许报假成功 */
-      if(housePet === target){
-        const av = document.getElementById("houseAvatar"); av.innerHTML = "";
-        const him = document.createElement("img"); him.src = target.photo; him.style.cssText = "width:64px;height:64px;border-radius:12px;object-fit:cover;border:2px solid #e7d9a8"; av.appendChild(him);
-        document.getElementById("btnCoat").style.display = (isMine(target) && !target.photo && (target.species==="cat"||target.species==="dog")) ? "" : "none";
-        openPhotoViewer();
-      }
-      toast(savedOk ? "🖼 照片放好了——墙上的相框和头像都是它了" : "⚠️ 照片先挂上了，但存档没存进去（存储空间可能不够）——刷新后会不见，重要照片请先导出存档备份");
-    };
-    im.src = reader.result;
-  };
-  reader.readAsDataURL(f);
-  e.target.value = "";
+document.getElementById("btnPhotoClose").onclick = closePhotoViewer;
+photoOverlay.addEventListener("click", event => { if(event.target === photoOverlay) closePhotoViewer(); });
+document.getElementById("btnPhotoChange").onclick = () => {
+  cancelHousePhoto();
+  housePhotoTarget = housePet;
+  housePhotoEl.click();
+};
+housePhotoEl.addEventListener("change", async event => {
+  const file = event.target.files[0], target = housePhotoTarget;
+  event.target.value = "";
+  if(!file || !isMine(target) || target.status !== "memorial") return;
+  housePhotoRequest?.abort();
+  const request = housePhotoRequest = new AbortController();
+  const current = () => housePhotoRequest === request && housePet === target && photoOverlay.classList.contains("show");
+  setPhotoStatus(housePhotoStatus,"正在读取照片，请稍候…");
+  try{
+    const {data} = await readLocalPhoto(file,request.signal);
+    if(!current()) return;
+    const previous = target.photo;
+    target.photo = data;
+    if(!save()){
+      target.photo = previous;
+      setPhotoStatus(housePhotoStatus,"照片未能保存，原来的画像已保留。请重试或换一张较小的照片。",true);
+      return;
+    }
+    const avatar = document.createElement("img");
+    avatar.src = data;
+    document.getElementById("houseAvatar").replaceChildren(avatar);
+    document.getElementById("btnCoat").style.display = "none";
+    openPhotoViewer();
+    setPhotoStatus(housePhotoStatus,"新照片已保存。");
+  }catch(error){
+    if(current()) setPhotoStatus(housePhotoStatus,photoErrorMessage(error),true);
+  }finally{
+    if(housePhotoRequest === request) housePhotoRequest = null;
+  }
 });
 function leaveHouse(){
+  closePhotoViewer();
   if(housePet){ housePet.soulX = Math.round(soulState.x); housePet.soulMode = soulState.mode==="sleep" ? "sleep" : "walk"; save(); }
   housePet = null; stopSoul(); FXM.clear("house"); sleepPatch = null;
   houseEl.classList.remove("show");
@@ -2688,9 +3073,26 @@ function drawOutfit(c, pet, table, group, only){
 }
 /* ============ v0.36：多标签页存档同步（另一个标签页写了档，本页自动重载跟上） ============ */
 /* v0.53：多标签不再强制整页刷新（登记表/仪式会被打断）——改顶部提示条，用户自行刷新；save() 侧同样只拒写不刷新 */
-function showStale(){ const b = document.getElementById("staleBar"); if(b && b.style.display !== "flex"){ b.style.display = "flex"; toast("⚠️ 这个页面已经过期，刚才的操作没有存上——请刷新页面再继续"); } else if(b) b.style.display = "flex"; } /* v0.60 外审P3：被锁要说清操作没存上 */
+function moveStaleBar(){
+  const bar = document.getElementById("staleBar");
+  const parent = activeLayer?.node || document.body;
+  if(bar.parentElement !== parent) parent.appendChild(bar);
+}
+function showStale(){
+  const bar = document.getElementById("staleBar");
+  if(bar.style.display === "flex") return;
+  moveStaleBar();
+  bar.style.display = "flex";
+  toast("这个页面的存档已过期。刚才的操作没有存上，请刷新后再继续。");
+}
 document.getElementById("btnStaleReload").onclick = ()=> location.reload();
-window.addEventListener("storage", e => { if((e.key === EPOCH_KEY && e.newValue && e.newValue !== myEpoch) || (e.key === SAVE_KEY && e.newValue)){ _saveLock = true; showStale(); } });
+window.addEventListener("storage", e => {
+  if((e.key === EPOCH_KEY && (e.newValue || "0") !== myEpoch)
+    || (e.key === SAVE_KEY && e.newValue !== lastSavedRaw) || e.key === null){
+    _saveLock = true;
+    showStale();
+  }
+});
 document.addEventListener("keydown", e=>{ if(e.key !== "Escape") return;
   const _ids = ["photoOverlay", "furnOverlay", "dirOverlay", "convertOverlay", "resetOverlay"];
   const _vis = _ids.map(id => document.getElementById(id)).filter(el => el && el.classList.contains("show"));
@@ -2886,11 +3288,14 @@ function drawSoul(pet){
 
 /* ============ 注册 ============ */
 const regOverlay = document.getElementById("regOverlay");
-let regPhotoData = null, regPhotoColor = null, regPhotoToken = 0; // v0.46：照片加载代次——换照片/取消后，迟到的旧加载结果作废
+const regPhoto = document.getElementById("regPhoto"), regPhotoPreview = document.getElementById("photoPreview");
+const regPhotoStatus = document.getElementById("regPhotoStatus"), regPhotoRemove = document.getElementById("btnRegPhotoRemove");
+const regSaveStatus = document.getElementById("regSaveStatus");
+let regPhotoData = null, regPhotoColor = null, regPhotoRequest = null, regPhotoAppearance = null, regPhotoState = "";
 const COAT_SNAP = [ ["#f2ede4","奶白"], ["#e8e0d0","米白"], ["#d9a45b","橘"], ["#b8b0a8","灰"], ["#8a6642","棕"], ["#33333a","黑"], ["#7fb6d9","蓝"] ];
 function snapCoatFromCanvas(cv){
   const cx = cv.getContext("2d"), W = cv.width, H = cv.height;
-  const d = cx.getImageData(Math.round(W*0.25), Math.round(H*0.25), Math.round(W*0.5), Math.round(H*0.5)).data;
+  const d = cx.getImageData(Math.floor(W*0.25), Math.floor(H*0.25), Math.max(1,Math.floor(W*0.5)), Math.max(1,Math.floor(H*0.5))).data;
   let r = 0, g = 0, b = 0, n = 0;
   for(let i = 0; i < d.length; i += 16){ r += d[i]; g += d[i+1]; b += d[i+2]; n++; }
   r /= n; g /= n; b /= n;
@@ -3058,40 +3463,71 @@ document.getElementById("regSpecies").addEventListener("change", syncCoatRow);
 document.getElementById("regBreed").addEventListener("change", syncCoatRow);
 syncCoatRow();
 
-document.getElementById("regPhoto").addEventListener("change", e=>{
-  const f = e.target.files[0]; if(!f) return; document.getElementById("regPhotoName").textContent = f.name;
-  const myTok = ++regPhotoToken;
-  if(f.type && f.type.indexOf("image/")!==0){ toast("⚠️ 这个文件不是图片，换一张照片试试"); e.target.value = ""; return; }
-  const reader = new FileReader();
-  reader.onload = ()=>{
-    const im = new Image();
-    im.onerror = ()=>{ toast("⚠️ 这张照片读不出来（格式可能不支持，比如 HEIC），换一张试试"); };
-    im.onload = ()=>{
-      if(myTok !== regPhotoToken) return; // v0.46：这张照片已被换掉或取消，迟到的结果作废
-      const MAX = 480, sc = Math.min(1, MAX/Math.max(im.width, im.height));
-      const cv = document.createElement("canvas"); cv.width = Math.max(1, Math.round(im.width*sc)); cv.height = Math.max(1, Math.round(im.height*sc));
-      const _cx = cv.getContext("2d"); _cx.fillStyle = "#fff"; _cx.fillRect(0, 0, cv.width, cv.height); _cx.drawImage(im, 0, 0, cv.width, cv.height);
-      regPhotoData = cv.toDataURL("image/jpeg", .85); // 报告1：先压缩再存，大照片不再撑爆存档
-      const snap = snapCoatFromCanvas(cv); regPhotoColor = snap[0]; // 毛色按照片自动定
-      document.getElementById("regColor").value = snap[0];
-      preselectCoatByColor(snap[0]); // v0.42：按照片主色预选最接近的花色包
-      const hint = document.getElementById("photoColorHint");
-      hint.style.display = "block";
-      hint.textContent = "🐾 照片会挂进小屋的画框作画像；灵魂体的花色已按照片主色预选了最接近的一套（可以在下面「花色」里改）。";
-      const img = document.getElementById("photoPreview"); img.src = regPhotoData; img.style.display="block";
-    };
-    im.src = reader.result;
-  };
-  reader.readAsDataURL(f);
+function showRegPhotoState(state = "", message = ""){
+  regPhotoState = state;
+  regPhotoRemove.hidden = !state;
+  setPhotoStatus(regPhotoStatus,message,state === "error");
+  syncRegMode();
+}
+function clearRegPhoto(){
+  regPhotoRequest?.abort();
+  regPhotoRequest = regPhotoData = regPhotoColor = null;
+  regPhoto.value = "";
+  document.getElementById("regPhotoName").textContent = "";
+  regPhotoPreview.removeAttribute("src");
+  regPhotoPreview.style.display = "none";
+  document.getElementById("photoColorHint").style.display = "none";
+  if(regPhotoAppearance){
+    const {color,coat,originalColor,originalCoat,autoColor,autoCoat,species,breed} = regPhotoAppearance;
+    if(color.value === autoColor) color.value = originalColor;
+    if(coat.value === autoCoat && document.getElementById("regSpecies").value === species && document.getElementById("regBreed").value === breed) coat.value = originalCoat;
+    regPhotoAppearance = null;
+  }
+  regSaveStatus.textContent = "";
+  showRegPhotoState();
+}
+regPhotoRemove.onclick = () => { clearRegPhoto(); regPhoto.focus({preventScroll:true}); };
+regPhoto.addEventListener("click", () => {
+  if(!regPhotoRequest) return;
+  clearRegPhoto();
+  showRegPhotoState("error","请选择另一张照片，或不使用照片后继续登记。");
+});
+regPhoto.addEventListener("change", async event => {
+  const file = event.target.files[0];
+  if(!file) return;
+  clearRegPhoto();
+  const request = regPhotoRequest = new AbortController();
+  document.getElementById("regPhotoName").textContent = file.name;
+  showRegPhotoState("loading","正在读取照片，请稍候…");
+  try{
+    const {data,canvas} = await readLocalPhoto(file,request.signal);
+    if(regPhotoRequest !== request) return;
+    const [sample] = snapCoatFromCanvas(canvas);
+    const color = document.getElementById("regColor"), coat = document.getElementById("regCoat");
+    const originalColor = color.value, originalCoat = coat.value;
+    color.value = sample;
+    preselectCoatByColor(sample);
+    regPhotoAppearance = {color,coat,originalColor,originalCoat,autoColor:color.value,autoCoat:coat.value,
+      species:document.getElementById("regSpecies").value,breed:document.getElementById("regBreed").value};
+    regPhotoData = data;
+    regPhotoColor = sample;
+    regPhotoPreview.src = data;
+    regPhotoPreview.style.display = "block";
+    const hint = document.getElementById("photoColorHint");
+    hint.textContent = "照片会挂在小屋里。已按照片主色预选花色，可以在「补充它的样子」里调整。";
+    hint.style.display = "block";
+    showRegPhotoState("ready");
+  }catch(error){
+    if(regPhotoRequest === request) showRegPhotoState("error",photoErrorMessage(error));
+  }finally{
+    if(regPhotoRequest === request) regPhotoRequest = null;
+  }
 });
 function resetRegForm(){ // v0.36：登记表办完/打开都清空——绝不串上一只的名字、碑文和照片
   pendingPlot = null;
   document.getElementById("regName").value = "";
   document.getElementById("regLine").value = "";
-  document.getElementById("regPhoto").value = ""; document.getElementById("regPhotoName").textContent = "";
-  regPhotoData = null; regPhotoColor = null; regPhotoToken++; // v0.46：作废在途的照片加载
-  const pv = document.getElementById("photoPreview"); pv.style.display = "none"; pv.removeAttribute("src");
-  const ph = document.getElementById("photoColorHint"); if(ph) ph.style.display = "none";
+  clearRegPhoto();
   const br = document.getElementById("regBreed"); if(br) br.value = "";
   const _sp = document.getElementById("regSpecies"); if(_sp){ _sp.value = "cat"; _sp.dispatchEvent(new Event("change", { bubbles:true })); } /* v0.50：物种/状态/毛色一并复位 */
   document.getElementById("regStatus").value = "";
@@ -3103,6 +3539,7 @@ function resetRegForm(){ // v0.36：登记表办完/打开都清空——绝不�
 }
 document.getElementById("btnRegCancel").onclick = ()=>{ regOverlay.style.display = "none"; resetRegForm(); };
 document.getElementById("btnRegister").onclick = ()=>{
+  regSaveStatus.textContent = "";
   if(myPets().length >= 2){ toast("每位玩家最多登记 2 个宝贝——先陪好现在这两位吧 💛"); return; }
   const nameInput = document.getElementById("regName"), name = nameInput.value.trim();
   if(!name){ toast("先给它起个名字吧 🐾"); nameInput.focus(); return; }
@@ -3112,21 +3549,27 @@ document.getElementById("btnRegister").onclick = ()=>{
   if(status !== "prereg" && status !== "memorial"){
     document.getElementById("regStatus").focus(); toast("请选择想为它祈福，还是在这里纪念它。"); return;
   }
+  if(status === "memorial" && (regPhotoState === "loading" || regPhotoState === "error")) return;
   const color = (regPhotoData && regPhotoColor) ? regPhotoColor : document.getElementById("regColor").value; // 有照片：毛色以照片为准
   const line = status === "memorial" ? document.getElementById("regLine").value.trim() : "";
   const birthday = document.getElementById("regBirthday").value;
   if(birthday && birthday > todayStr()){ toast("生日不能是未来的日子哦"); document.getElementById("regBirthday").focus(); return; }
-  let spawnX = -999, spawnY = -999;
-  if(status==="memorial"){ const pl = allocPlot(); spawnX = pl.x; spawnY = pl.y; CER_PLOT.x = pl.x; CER_PLOT.y = pl.y; CER_PLOT.no = pl.no; }
-  const mine = mkPet(name, species, status, color, spawnX, spawnY, status==="memorial" ? "它先回星星那儿了" : "还在家里，活蹦乱跳", line);
+  const previousPlot = pendingPlot, plot = status === "memorial" ? allocPlot() : null;
+  const mine = mkPet(name, species, status, color, plot?.x ?? -999, plot?.y ?? -999, status==="memorial" ? "它先回星星那儿了" : "还在家里，活蹦乱跳", line);
   mine.photo = status==="memorial" ? regPhotoData : null; // 预登记不收照片（创作者定：祈福不挂照片）
   mine.breed = breed; mine.mine = true;
   if(birthday) mine.birthday = birthday; // v0.66.2：生日（选填），预登记转纪念时随档带过去
   if(COAT_LINES[species]){ const _ln = coatLineFor(species, breed); const _ct = document.getElementById("regCoat").value || coatDefaultFor(species, breed); const _k = species + "-" + _ln + "-" + _ct; if(COATPACKS[_k]) mine.coat = _k; } // v0.42：花色包
    // v0.15→v0.42：形象层不收费——登记选品种＋花色走预制花色包；没选到包走通用灵魂体＋照片吸取毛色；照片原图只作画像；噗噗由认领规则走专属包
+  const previousPetId = S.myPetId, previousToy = S.inv.toy;
   S.pets.push(mine); S.myPetId = mine.id; S.inv.toy += 1; // 新手包：玩具×1，第一天就能陪它玩
-  if(status==="memorial"){ player.x = mine.x; player.y = mine.y + 70; player.tx = player.x; player.ty = player.y; }
-  save(); regOverlay.style.display = "none"; refreshHUD(); resetRegForm();
+  if(!save()){
+    S.pets.pop(); S.myPetId = previousPetId; S.inv.toy = previousToy; pendingPlot = previousPlot;
+    regSaveStatus.textContent = "档案未能保存，已保留表单内容。请重试，或移除照片后再试。";
+    return;
+  }
+  if(plot){ Object.assign(CER_PLOT, plot); player.x = player.tx = mine.x; player.y = player.ty = mine.y + 70; }
+  regOverlay.style.display = "none"; refreshHUD(); resetRegForm();
   if(status==="memorial"){ startMemorialCeremony(mine); } // 报告9：建档时已离开的，也给一场立碑仪式
   else toast("📝 "+name+" 预登记好了，祈福小屋的墙上也给它挂上了牌子。它还在家里陪着你。去园子右下角樱花树旁的祈福小屋，可以为它祈福攒福气；将来真到了那一天，在祈福小屋的牌位前送它过桥，这份档案就转成纪念档。");
 };
@@ -3134,7 +3577,7 @@ if(S.myPetId){ const mine = S.pets.find(p=>p.id===S.myPetId); if(mine) mine.mine
 // v0.57 标题页：进门先见标题——开始游戏（建档）/ 读取存档；已有自己的宝贝时主按钮变「继续游戏」
 const titleOverlay = document.getElementById("titleOverlay");
 const btnTitleMain = document.getElementById("btnTitleMain");
-const hasLocalProgress = !!(S.myPetId || S.avatarChosen);
+const hasLocalProgress = !!hasProgress(S);
 if(hasLocalProgress){ btnTitleMain.textContent = "继续游戏"; document.getElementById("titleHint").textContent = "园子里的一切都在等你回来"; }
 regOverlay.style.display = "none";
 titleOverlay.style.display = "flex";
@@ -3194,9 +3637,9 @@ document.getElementById("btnTitleLoad").onclick = ()=>{ /* v0.63 修：先查本
   if(hasLocalProgress){ titleOverlay.style.display = "none"; toast("已读取这台设备上的存档"); }
   else { document.getElementById("loadChoiceOverlay").style.display = "flex"; }
 };
-document.getElementById("btnLoadClose").onclick = ()=>{ document.getElementById("loadChoiceOverlay").style.display = "none"; };
-document.getElementById("btnLoadNew").onclick = ()=>{ document.getElementById("loadChoiceOverlay").style.display = "none"; btnTitleMain.onclick(); };
-document.getElementById("btnLoadImport").onclick = ()=>{ document.getElementById("loadChoiceOverlay").style.display = "none"; importFileEl.click(); };
+document.getElementById("btnLoadClose").onclick = ()=>{ cancelTitleImport(); document.getElementById("loadChoiceOverlay").style.display = "none"; };
+document.getElementById("btnLoadNew").onclick = ()=>{ cancelTitleImport(); document.getElementById("loadChoiceOverlay").style.display = "none"; btnTitleMain.onclick(); };
+document.getElementById("btnLoadImport").onclick = chooseImport;
 
 /* ============ v0.22：祈福小屋＋碑名录＋地块分配 ============ */
 const ATLAS_BLESS = gameArt("assets/v65/shrine-exterior.webp");
@@ -3376,12 +3819,15 @@ function syncRegMode(){
   const status = regStatusEl.value, memorial = status === "memorial";
   document.getElementById("regMemorialOnly").style.display = memorial ? "" : "none";
   document.getElementById("regTint").hidden = !memorial;
-  document.getElementById("btnRegister").textContent = memorial ? "建档，送它入园" : status === "prereg" ? "先预登记" : "登记";
+  const register = document.getElementById("btnRegister");
+  register.disabled = memorial && (regPhotoState === "loading" || regPhotoState === "error");
+  register.textContent = memorial ? "建档，送它入园" : status === "prereg" ? "先预登记" : "登记";
 }
 regStatusEl.addEventListener("change", syncRegMode); syncRegMode();
 
 // Each entrance screen owns the focus until the player leaves it.
 const focusLayers = [
+  ["savePreviewOverlay","#btnSavePreviewCancel"],
   ["loadChoiceOverlay","#btnLoadNew"],["avatarOverlay",".avCard"],["titleOverlay","#btnTitleMain"],
   ["regOverlay","#regHeading"],["resetOverlay","#btnResetCancel"],["mapOverlay","#btnMapClose"]
 ].map(([id,first]) => ({node:document.getElementById(id),first}));
@@ -3393,6 +3839,7 @@ function syncLayerFocus(){
   const previous = activeLayer;
   activeLayer = next;
   gameApp.inert = !!next && !gameApp.contains(next.node);
+  moveStaleBar();
   if(next){
     next.node.setAttribute("role","dialog");
     next.node.setAttribute("aria-modal","true");
@@ -3413,6 +3860,7 @@ document.addEventListener("keydown",event => {
     if(node.id === "mapOverlay") closeMap();
     if(node.id === "loadChoiceOverlay") document.getElementById("btnLoadClose").click();
     if(node.id === "regOverlay") document.getElementById("btnRegCancel").click();
+    if(node.id === "savePreviewOverlay") closeSavePreview();
     return;
   }
   if(event.key !== "Tab") return;
@@ -3420,9 +3868,9 @@ document.addEventListener("keydown",event => {
   if(!artRetry.hidden) items.push(artRetry);
   if(!items.length) return;
   const i = items.indexOf(document.activeElement);
-  if(event.shiftKey ? i <= 0 : i === items.length - 1 || !node.contains(document.activeElement)){
-    event.preventDefault(); items[event.shiftKey ? items.length - 1 : 0].focus();
-  }
+  event.preventDefault();
+  const next = i < 0 ? (event.shiftKey ? items.length - 1 : 0) : (i + (event.shiftKey ? -1 : 1) + items.length) % items.length;
+  items[next].focus();
 });
 syncLayerFocus();
 
@@ -3463,7 +3911,8 @@ syncLayerFocus();
 })();
 
 /* ============ 启动 ============ */
-try{ if(sessionStorage.getItem("__bakRestored")){ sessionStorage.removeItem("__bakRestored"); setTimeout(()=>toast("📂 上次的存档有点损坏，已经用自动备份恢复好了，宝贝们都在"), 600); } }catch(_){ } /* v0.60：备份恢复要告诉玩家 */
+if(recoveredAtLoad) setTimeout(() => toast("上次的存档无法读取，已从可用的本机备份打开园子。"),600);
+updateRestoreAvailability();
 fitCanvas(); refreshHUD();
 requestAnimationFrame(loop);
 </script>
