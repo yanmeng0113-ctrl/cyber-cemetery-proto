@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="icon" href="data:,">
-<title>星星小园 · 原型 v0.66.1</title>
+<title>星星小园 · 原型 v0.66.2</title>
 <link rel="preload" as="image" href="assets/v65/avatar-previews.webp">
 <style>
   :root { --paper:#f5efe1; --card:#fffdf7; --ink:#2a3a2e; --ink2:#5d7057; --pine:#33523d; --gold:#a8842c; --goldsoft:#e7d6a4; --line:#ded2b4; --chip:#fbf7ea; --serif:"Songti SC","STSong","Noto Serif SC","SimSun",serif; }
@@ -124,7 +124,7 @@
   #regCard h2 { font-family:var(--serif); letter-spacing:.03em; font-size:18px; margin-bottom:6px; }
   #regCard p.sub { font-size:12px; color:var(--ink2); margin-bottom:12px; line-height:1.6; }
   #regCard label { display:block; font-size:13px; margin:10px 0 4px; color:#44543f; }
-  #regCard input[type=text], #regCard select { width:100%; padding:11px 10px; min-height:44px; border:1px solid #cbbd97; border-radius:10px; font-size:14px; background:#fffef9; }
+  #regCard input[type=text], #regCard input[type=date], #regCard select { width:100%; padding:11px 10px; min-height:44px; border:1px solid #cbbd97; border-radius:10px; font-size:14px; background:#fffef9; }
   #regCard input[type=color] { width:56px; height:34px; border:none; background:none; }
   #photoPreview { width:84px; height:84px; border-radius:12px; object-fit:cover; display:none; border:2px solid var(--goldsoft); }
   #regCard .big { width:100%; padding:12px; font-size:15px; margin-top:16px; }
@@ -213,7 +213,7 @@
   #regAppearance { border-block:1px solid var(--line); margin:12px 0; }
   #careRecord { margin-top:5px; font-size:13px; color:#4c5a47; }
   #careRecord summary { width:fit-content; }
-  #regCard input[type=text], #regCard select { font-size:16px; }
+  #regCard input[type=text], #regCard input[type=date], #regCard select { font-size:16px; }
   :focus-visible { outline:3px solid #946b1e; outline-offset:2px; }
   .avCard { flex-direction:column; gap:4px; }
   #avatarOverlay > div { max-height:100%; overflow-y:auto; }
@@ -230,7 +230,7 @@
 <button type="button" id="artRetry" hidden>画面未载入 · 重试</button>
 <div id="app">
   <header>
-    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.66.1</span></h1>
+    <h1><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.9l-5.4 2.8 1.2-5.9L3.4 9.7l6-.7z"/></svg>星星小园<span class="ver">原型 v0.66.2</span></h1>
   </header>
 
   <div id="hud">
@@ -271,6 +271,7 @@
     <details><summary>玩法说明</summary><div class="hintText">点地图、拖左下角的圆盘摇杆，或用 WASD/方向键走动；迷路了就点顶栏的「地图」看全园 · 看到发光的小东西，点它一下就会走过去捡起来（先到先得，每天最多捡 10 件）；灰黑的阴影团子点一下就会追上去驱散净化，它叼走的东西会掉出来· 走近墓碑看介绍，点「进小屋」· 全园都是纪念区：北岸是草甸墓园，南岸是花园墓园，中间过彩虹桥 · 园里有一间祈福小屋，在家的宝贝预登记后可以去那儿祈福 · 任何人的小屋都能进、都能喂——只有换装是主人专属。（注：原型存档只存在你这台设备里，「全园共享」要等正式版联网后才开放。）</div></details>
     <div class="drawerLabel">关于</div>
     <details id="changelog"><summary>原型说明与更新日志（点开看）</summary><div class="changelogBody">
+    原型说明（v0.66.2）：登记表单补上「生日」字段（选填）——预登记和纪念登记都能填，日后转纪念时随档案带过去；碑前的相伴记录和小屋里都能看到。日期输入框字号同步 16px，手机上点开不会放大页面。<br>
     原型说明（v0.66.1）：封面与造型优先载入，小屋和花色按需加载。<br>
     原型说明（v0.64.1）：手机到达空碑后，可直接点碑号旁的登记按钮。全园地图可带路到最近空位；背包显示今日物资和下一级碑材质所需的陪伴天数。<br>
     原型说明（v0.63）：🧑‍🌾 <b>造型、回家、签到碑阶（试玩建议批）</b>——①第一次进园先选样子：男女各两款（青/蓝围裙、粉/紫围裙长发），背包里随时能换。②每次进园都落在自家小屋（碑）前，不再从桥头开始走。③顶栏多了「小屋」键，点一下自动走过去进屋；全园地图上自家小屋有橙点，点它也一样。④碑有材质阶梯了：石头→青铜（累计签到 3 天）→白银（7 天）→黄金（14 天）→钻石（30 天），在背包里每日签到攒天数，走到自家碑前就能换；只靠陪伴天数，不花钱、没有排名。另修两个入口流程：标题页「开始游戏」不再强推建档（选完造型先进园逛，点空碑再登记）；「读取存档」先查本机存档、有档直接进、没档先弹提示，不再直接跳到文件里。另：全园地图给建筑加了小房子标记和名字（祈福小屋／自家小屋／彩虹桥），不再只有点；祈福小屋里「上香」和「离开小屋」两个按钮改成等高对齐。<br>
@@ -517,6 +518,8 @@
       <option value="snake">蛇</option>
       <option value="other">其他小动物</option>
     </select>
+    <label for="regBirthday">它的生日（选填）</label>
+    <input type="date" id="regBirthday">
     <details id="regAppearance"><summary>补充它的样子（选填）</summary>
     <label id="regBreedRow" for="regBreed" style="display:none">品种</label>
     <select id="regBreed" style="display:none"></select>
@@ -1640,6 +1643,12 @@ function hideInfoPanel(){
   lastInfoTarget = null;
   infoPanel.classList.remove("show");
 }
+function birthdayText(pet){ // v0.66.2：生日显示（存档为 yyyy-mm-dd）
+  if(!pet || !pet.birthday) return "";
+  const p = String(pet.birthday).split("-");
+  if(p.length !== 3) return "";
+  return "生日：" + (+p[0]) + " 年 " + (+p[1]) + " 月 " + (+p[2]) + " 日";
+}
 function updateInfoPanel(){
   const target = ceremony ? null : nearestPet || selPlot;
   if(target === lastInfoTarget && !infoNeedsRender) return;
@@ -1657,7 +1666,7 @@ function updateInfoPanel(){
     const stats = "被投喂 "+c.fed+" 次 · 被点烛 "+c.candle+" 次 · 被献花 "+(c.flower||0)+" 次 · 被祈福 "+c.pray+" 次 · 被陪玩 "+(c.interact||0)+" 次"+((c.bless||0)>0 ? " · 被祝福 "+c.bless+" 次" : "")+" · 来访 "+c.visits+" 次";
     const candleText = nearestPet.status === "memorial" && c.candle > 0 ? "碑前的烛光亮着。" : "";
     document.getElementById("infoText").textContent = [candleText, nearestPet.line ? "「" + nearestPet.line + "」" : nearestPet.dates].filter(Boolean).join(" ");
-    document.getElementById("careStats").textContent = [nearestPet.dates,stats].filter(Boolean).join(" · ");
+    document.getElementById("careStats").textContent = [nearestPet.dates,birthdayText(nearestPet),stats].filter(Boolean).join(" · ");
     document.getElementById("btnConvert").style.display = (isMine(nearestPet) && nearestPet.status==="prereg") ? "" : "none";
     document.getElementById("btnEnter").style.display = ""; document.getElementById("btnGuide").style.display = "";
     document.getElementById("btnRegHere").style.display = "none";
@@ -1960,7 +1969,7 @@ function enterHouse(pet){
   if(pet.photo && pet.photo.indexOf("data:image/")===0){ const im = document.createElement("img"); im.src = pet.photo; im.style.cssText = "width:64px;height:64px;border-radius:12px;object-fit:cover;border:2px solid #e7d9a8"; av.appendChild(im); }
   else { const sp = document.createElement("span"); sp.className = "emojiAvatar"; sp.textContent = (pet.name || "园").charAt(0); av.appendChild(sp); }
   document.getElementById("houseName").textContent = pet.name+" 的小屋" + (isMine(pet) ? "（自家）" : "（客访）");
-  document.getElementById("houseDesc").textContent = pet.dates+(pet.line ? " · "+pet.line : "") + (pet.status==="memorial" ? " · 它以灵魂体的样子住在这里" : " · 它正在院子里过日子");
+  document.getElementById("houseDesc").textContent = pet.dates+(pet.line ? " · "+pet.line : "") + (birthdayText(pet) ? " · "+birthdayText(pet) : "") + (pet.status==="memorial" ? " · 它以灵魂体的样子住在这里" : " · 它正在院子里过日子");
   document.getElementById("btnDress").style.display = isMine(pet) ? "" : "none";
   document.getElementById("btnFurn").style.display = isMine(pet) ? "" : "none";
   document.getElementById("btnCoat").style.display = (isMine(pet) && !pet.photo && (pet.species==="cat"||pet.species==="dog")) ? "" : "none"; // 有照片的宠物：颜色以照片为准，不给换
@@ -3081,6 +3090,7 @@ function resetRegForm(){ // v0.36：登记表办完/打开都清空——绝不�
   const br = document.getElementById("regBreed"); if(br) br.value = "";
   const _sp = document.getElementById("regSpecies"); if(_sp){ _sp.value = "cat"; _sp.dispatchEvent(new Event("change", { bubbles:true })); } /* v0.50：物种/状态/毛色一并复位 */
   document.getElementById("regStatus").value = "";
+  document.getElementById("regBirthday").value = "";
   document.getElementById("regAppearance").open = false;
   const _rc = document.getElementById("regColor"); if(_rc) _rc.value = "#e8a04c";
   if(typeof syncCoatRow === "function") syncCoatRow();
@@ -3099,11 +3109,14 @@ document.getElementById("btnRegister").onclick = ()=>{
   }
   const color = (regPhotoData && regPhotoColor) ? regPhotoColor : document.getElementById("regColor").value; // 有照片：毛色以照片为准
   const line = status === "memorial" ? document.getElementById("regLine").value.trim() : "";
+  const birthday = document.getElementById("regBirthday").value;
+  if(birthday && birthday > todayStr()){ toast("生日不能是未来的日子哦"); document.getElementById("regBirthday").focus(); return; }
   let spawnX = -999, spawnY = -999;
   if(status==="memorial"){ const pl = allocPlot(); spawnX = pl.x; spawnY = pl.y; CER_PLOT.x = pl.x; CER_PLOT.y = pl.y; CER_PLOT.no = pl.no; }
   const mine = mkPet(name, species, status, color, spawnX, spawnY, status==="memorial" ? "它先回星星那儿了" : "还在家里，活蹦乱跳", line);
   mine.photo = status==="memorial" ? regPhotoData : null; // 预登记不收照片（创作者定：祈福不挂照片）
   mine.breed = breed; mine.mine = true;
+  if(birthday) mine.birthday = birthday; // v0.66.2：生日（选填），预登记转纪念时随档带过去
   if(COAT_LINES[species]){ const _ln = coatLineFor(species, breed); const _ct = document.getElementById("regCoat").value || coatDefaultFor(species, breed); const _k = species + "-" + _ln + "-" + _ct; if(COATPACKS[_k]) mine.coat = _k; } // v0.42：花色包
    // v0.15→v0.42：形象层不收费——登记选品种＋花色走预制花色包；没选到包走通用灵魂体＋照片吸取毛色；照片原图只作画像；噗噗由认领规则走专属包
   S.pets.push(mine); S.myPetId = mine.id; S.inv.toy += 1; // 新手包：玩具×1，第一天就能陪它玩
