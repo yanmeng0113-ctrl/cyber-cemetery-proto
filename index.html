@@ -181,9 +181,9 @@
   #mapScene { transform-origin:0 0; }
   #mapImg { object-fit:fill; }
   #mapZones { display:grid; grid-template:1fr 1fr / 1fr 1fr; }
-  #mapZones button { border:1px solid rgba(255,253,241,.65); border-radius:0; background:transparent; color:#304830; padding:8px; display:flex; align-items:flex-start; justify-content:flex-start; }
+  #mapZones button { border:1px solid rgba(255,253,241,.65); border-radius:0; background:transparent; color:#304830; padding:8px; display:flex; align-items:flex-end; justify-content:flex-start; }
   #mapZones button:nth-child(even) { justify-content:flex-end; }
-  #mapZones button:nth-child(n+3) { align-items:flex-end; }
+  #mapZones button:nth-child(n+3) { align-items:flex-start; }
   #mapZones button:focus-visible { outline-offset:-4px; }
   #mapZones span { padding:3px 9px; border-radius:12px; background:#fff9ebf2; box-shadow:0 1px 4px #2c452e38; font-size:13px; }
   .mapDot { position:absolute; transform:translate(-50%,-50%); }
@@ -768,7 +768,10 @@ function fitCanvas(){
   view.w = r.width; view.h = r.height;
   ZOOM = clamp(view.w / 860, .42, 1); // v0.25：窄屏自动拉远视野（workbuddy 公式起步）
 }
-window.addEventListener("resize", fitCanvas);
+window.addEventListener("resize", () => {
+  fitCanvas();
+  if(document.getElementById("firstCandle").classList.contains("show")) draw();
+});
 
 const player = { x:3050, y:1990, tx:3050, ty:1990, speed:340, face:"down", moving:false, destQ:[] };
 /* ============ v0.63：出生点回家 + 一键回小屋 + 碑材质阶梯 ============ */
@@ -1822,6 +1825,8 @@ function finishCeremony(){
   document.getElementById("ceremony").classList.remove("show");
   document.body.classList.remove("ceremonyMode"); fitCanvas(); // v0.25：退出全屏
   player.tx = player.x; player.ty = player.y;
+  // 跳过仪式时先重绘园景，首烛弹窗会暂停园区循环。
+  draw();
   if(cerMode === "memorial") toast("🕯️ 碑立好了。" + pet.name + " 在园里安顿下来了——想它的时候，就来看看。");
   else toast("🌈 " + pet.name + " 在园里住下了。想它的时候，过桥来看看。");
   refreshHUD();
