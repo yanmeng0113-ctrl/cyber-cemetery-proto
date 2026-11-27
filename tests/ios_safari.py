@@ -79,7 +79,7 @@ def text_of(selector):
 
 def garden():
     call('POST','/url',{'url':'https://cyber-cemetery-proto.pages.dev/'})
-    assert 'v0.66' in call('GET','/title')
+    assert call('GET','/title').endswith('v0.66.1')
     click('#btnTitleMain')
     click('[data-av=a4]')
     click('#btnMapTop')
@@ -88,6 +88,7 @@ def garden():
     assert '1 号空位' in text_of('#btnWalkPlot')
     click('#btnWalkPlot')
     wait(lambda:visible('#btnRegHere'),60)
+    assert text_of('#infoName') == '一园 · 1 号碑位'
     click('#btnRegHere')
     type_into('#regName','Momo')
     screenshot('garden-name-keyboard')
